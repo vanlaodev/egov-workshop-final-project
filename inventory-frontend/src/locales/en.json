@@ -1,0 +1,12 @@
+{
+    "assetMgmtSystem": "Asset management system",
+    "inventoryOfAssets": "Inventory of assets",
+    "takeInventory": "Take inventory",
+    "createInventoryForm": "Create inventory form",
+    "inventoryFormManagement": "Inventory form management",
+    "userProfile": "User profile",
+    "signOut": "Sign out",
+    "dashboard": "Dashboard",
+    "msg_appStartup": "Application starting up, please wait.",
+    "msg_pageNotFound": "Page not found."
+}
