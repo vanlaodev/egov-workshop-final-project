@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
+import Inquiry from '../views/Inquiry.vue'
 import TakeInventory from '../views/TakeInventory.vue'
 import CreateInventoryForm from '../views/CreateInventoryForm.vue'
 import InventoryFormManagement from '../views/InventoryFormManagement.vue'
@@ -9,13 +10,17 @@ import PageNotFound from '../views/PageNotFound.vue'
 Vue.use(VueRouter)
 
 const routes = [{
+  path: '/dashboard',
+  name: 'Dashboard',
+  component: Dashboard
+}, {
   path: '/',
   name: 'Dashboard',
   component: Dashboard
 }, {
-  path: '/dashboard',
-  name: 'Dashboard',
-  component: Dashboard
+  path: '/inquiry',
+  name: 'Inquiry',
+  component: Inquiry
 }, {
   path: '/takeInventory',
   name: 'TakeInventory',

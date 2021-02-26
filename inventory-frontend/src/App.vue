@@ -15,8 +15,11 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
             <b-nav-item-dropdown :text="$t('inventoryOfAssets')">
-              <b-dropdown-item @click="$router.push({ path: '/dashboard' })">{{
+              <b-dropdown-item @click="$router.push({ name: 'Dashboard' })">{{
                 $t("dashboard")
+              }}</b-dropdown-item>
+              <b-dropdown-item @click="$router.push({ name: 'Inquiry' })">{{
+                $t("inquiry")
               }}</b-dropdown-item>
               <b-dropdown-item
                 @click="$router.push({ name: 'CreateInventoryForm' })"
@@ -76,9 +79,7 @@ export default {
     this.initializeApp();
   },
   mounted() {
-    document.title = `${this.$t("assetMgmtSystem")} - ${this.$t(
-      "inventoryOfAssets"
-    )}`;
+    document.title = this.documentTitle;
   },
   data() {
     return {
@@ -87,6 +88,9 @@ export default {
   },
   computed: {
     ...mapState(["appInitialized", "loggedInUser", "locale"]),
+    documentTitle: function () {
+      return `${this.$t("assetMgmtSystem")} - ${this.$t("inventoryOfAssets")}`;
+    },
   },
   methods: {
     ...mapActions(["initStore", "updateLocale", "updateLoggedInUser"]),
@@ -108,6 +112,7 @@ export default {
       if (this.appInitialized) return;
       await this.initStore();
       if (!this.loggedInUser) {
+        // user not logged in
         const accessToken = this.$route.query.accessToken;
         if (!accessToken) {
           /* this.redirectToLoginUrl();
@@ -119,10 +124,11 @@ export default {
             accessToken
           );
           if (userInfo) {
+            // user info found
             await this.updateLoggedInUser(userInfo);
           } else {
-            // sign out user if user info not found
-            await this.signOut();
+            // redirect to login url if user info not found
+            this.redirectToLoginUrl();
             return;
           }
         } catch (err) {

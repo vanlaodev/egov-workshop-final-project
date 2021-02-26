@@ -7,6 +7,7 @@
   "userProfile": "用戶資料",
   "signOut": "登出",
   "dashboard": "儀表板",
+  "inquiry": "查詢",
   "msg_appStartup": "正在啟動應用，請稍候。",
   "msg_pageNotFound": "頁面不存在。"
 }
