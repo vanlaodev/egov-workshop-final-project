@@ -1,11 +1,6 @@
 <template>
   <div id="app">
-    <div v-if="!appInitialized" class="p-2">
-      {{ $t("msg_appStartup") }}
-    </div>
-    <div v-else-if="failedToInitializeAppReason" class="p-2">
-      {{ failedToInitializeAppReason }}
-    </div>
+    <splash-view v-if="!appInitialized"></splash-view>
     <div v-else>
       <b-navbar toggleable="lg" type="dark" variant="primary">
         <b-navbar-brand href="#">{{ $t("assetMgmtSystem") }}</b-navbar-brand>
@@ -73,6 +68,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
+import SplashView from "./components/SplashView";
 
 export default {
   created() {
@@ -81,10 +77,8 @@ export default {
   mounted() {
     document.title = this.documentTitle;
   },
-  data() {
-    return {
-      failedToInitializeAppReason: null,
-    };
+  components: {
+    SplashView,
   },
   computed: {
     ...mapState(["appInitialized", "loggedInUser", "locale"]),
@@ -118,7 +112,6 @@ export default {
           /* this.redirectToLoginUrl();
           return; */
         }
-        // TODO: fetch user info
         try {
           const userInfo = await this.$api.userMgmtApi.getUserInfoByAccessToken(
             accessToken
@@ -132,7 +125,8 @@ export default {
             return;
           }
         } catch (err) {
-          this.failedToInitializeAppReason = err;
+          // redirect to login url if failed to get user info
+          this.redirectToLoginUrl();
           return;
         }
       }
