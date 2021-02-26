@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>egov.workshop.ams</groupId>
 	<artifactId>inventory-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>inventory-api</name>
 	<description>Asset Management System - Inventory module</description>
 	<properties>
