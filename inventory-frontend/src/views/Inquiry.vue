@@ -18,9 +18,13 @@
                     <td>{{ r.to }}</td>
                     <td>
                         <a href="#" class="editcolor a-btn-slide-text" @click.prevent="editObject(index)">
-                            <span style="font-size: 18px"  class="glyphicon glyphicon-edit " aria-hidden="true"></span></a>
+                            <!-- <span style="font-size: 18px"  class="glyphicon glyphicon-edit" aria-hidden="true"></span> -->
+                            <b-icon-x-circle></b-icon-x-circle>
+                        </a>
                         <a href="#" class="deletecolor a-btn-slide-text" @click.prevent="deleteObject(index)">
-                        <span style="font-size: 18px" class="glyphicon glyphicon-remove " aria-hidden="true"></span></a>
+                            <!-- <span style="font-size: 18px" class="glyphicon glyphicon-remove " aria-hidden="true"></span> -->
+                            <b-icon-x-circle></b-icon-x-circle>
+                        </a>
                     </td>
                 </tr>
             </table> 
@@ -153,8 +157,15 @@
 </style>
 
 <script>
+
+
+import { BIconXCircle } from 'bootstrap-vue'
+
 export default {
     name: 'Inquiry',
+    components: {
+        BIconXCircle,
+    },
     data() {
         return { 
             rows: [
