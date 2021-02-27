@@ -5,7 +5,7 @@ import i18n from '../i18n'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     appInitialized: false,
     storeInitialized: false,
@@ -52,3 +52,5 @@ export default new Vuex.Store({
   },
   modules: {}
 })
+
+export default store;

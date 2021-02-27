@@ -10,23 +10,11 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
             <b-nav-item-dropdown :text="$t('inventoryOfAssets')">
-              <b-dropdown-item @click="$router.push({ name: 'Dashboard' })">{{
-                $t("dashboard")
-              }}</b-dropdown-item>
-              <b-dropdown-item @click="$router.push({ name: 'Inquiry' })">{{
-                $t("inquiry")
-              }}</b-dropdown-item>
               <b-dropdown-item
-                @click="$router.push({ name: 'CreateInventoryForm' })"
-                >{{ $t("createInventoryForm") }}</b-dropdown-item
-              >
-              <b-dropdown-item
-                @click="$router.push({ name: 'InventoryFormManagement' })"
-                >{{ $t("inventoryFormManagement") }}</b-dropdown-item
-              >
-              <b-dropdown-item
-                @click="$router.push({ name: 'TakeInventory' })"
-                >{{ $t("takeInventory") }}</b-dropdown-item
+                v-for="(item, index) in mainMenuItemsAllowToNav"
+                :key="index"
+                @click="navToMainMenuItem(item)"
+                >{{ $t(item.titleI18nKey) }}</b-dropdown-item
               >
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -69,6 +57,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 import SplashView from "./components/SplashView";
+import mainMenu from "./domain/main-menu";
 
 export default {
   created() {
@@ -81,14 +70,22 @@ export default {
     SplashView,
   },
   computed: {
-    ...mapState(["appInitialized", "loggedInUser", "locale"]),
+    ...mapState(["appInitialized", "loggedInUser"]),
     documentTitle: function () {
       return `${this.$t("assetMgmtSystem")} - ${this.$t("inventoryOfAssets")}`;
+    },
+    mainMenuItemsAllowToNav: function () {
+      return mainMenu.items.filter((mi) =>
+        mi.allowNavigate(this.loggedInUser.roles)
+      );
     },
   },
   methods: {
     ...mapActions(["initStore", "updateLocale", "updateLoggedInUser"]),
     ...mapMutations(["setAppInitialized"]),
+    navToMainMenuItem(item) {
+      this.$router.push({ name: item.routeName }).catch(() => {});
+    },
     async signOut() {
       try {
         await this.$api.userMgmtApi.signOut();
@@ -100,18 +97,13 @@ export default {
       }
     },
     redirectToLoginUrl() {
-      window.location = "#"; // TODO: redirect to login url
+      window.location = `${process.env.LOGIN_URL}?redirectUrl=${window.location}`;
     },
     async initializeApp() {
       if (this.appInitialized) return;
       await this.initStore();
-      if (!this.loggedInUser) {
-        // user not logged in
-        const accessToken = this.$route.query.accessToken;
-        if (!accessToken) {
-          /* this.redirectToLoginUrl();
-          return; */
-        }
+      const accessToken = this.$route.query.accessToken ?? "fake_accesstoken"; // TODO: for dev only, remove the fake token later
+      if (accessToken) {
         try {
           const userInfo = await this.$api.userMgmtApi.getUserInfoByAccessToken(
             accessToken
@@ -130,7 +122,28 @@ export default {
           return;
         }
       }
+      if (!this.loggedInUser) {
+        // redirect to login url if user not logged in
+        this.redirectToLoginUrl();
+        return;
+      }
       this.setAppInitialized(true);
+
+      const mainMenuItem = mainMenu.items.filter(
+        (i) => this.$route.name === i.routeName
+      );
+      if (
+        mainMenuItem.length > 0 &&
+        !mainMenuItem[0].allowNavigate(
+          this.loggedInUser == null ? [] : this.loggedInUser.roles
+        )
+      ) {
+        this.$router.replace({
+          name: "PermissionDenied",
+          query: { originalPath: this.$route.path },
+        });
+        return;
+      }
     },
   },
 };

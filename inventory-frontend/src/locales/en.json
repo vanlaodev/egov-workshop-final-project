@@ -9,5 +9,6 @@
     "dashboard": "Dashboard",
     "inquiry": "Inquiry",
     "msg_appStartup": "Application starting up, please wait.",
-    "msg_pageNotFound": "Page not found."
+    "msg_pageNotFound": "Page not found.",
+    "msg_permissionDenied": "Permission denied."
 }
