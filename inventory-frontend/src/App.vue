@@ -14,35 +14,35 @@
                 v-for="(item, index) in mainMenuItemsAllowToNav"
                 :key="index"
                 @click="navToMainMenuItem(item)"
-                >{{ $t(item.titleI18nKey) }}</b-dropdown-item
-              >
+              >{{ $t(item.titleI18nKey) }}</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
 
           <b-navbar-nav class="ml-auto">
             <b-nav-item-dropdown>
               <template #button-content>
-                <b-icon-globe></b-icon-globe>
+                <b-icon-globe class="mr-1" aria-hidden="true"></b-icon-globe>
+                <span>{{ $t('language') }}</span>
               </template>
-              <b-dropdown-item @click="updateLocale('zh-TW')"
-                >中文</b-dropdown-item
-              >
-              <b-dropdown-item @click="updateLocale('en')"
-                >English</b-dropdown-item
-              >
+              <b-dropdown-item @click="updateLocale('zh-TW')">中文</b-dropdown-item>
+              <b-dropdown-item @click="updateLocale('en')">English</b-dropdown-item>
             </b-nav-item-dropdown>
 
             <b-nav-item-dropdown v-if="loggedInUser">
               <template #button-content>
-                <b-icon-person-fill></b-icon-person-fill>
+                <b-icon-person-fill class="mr-1" aria-hidden="true"></b-icon-person-fill>
                 <span>{{ loggedInUser.username }}</span>
               </template>
-              <b-dropdown-item href="#">{{
+              <b-dropdown-item href="#">
+                {{
                 $t("userProfile")
-              }}</b-dropdown-item>
-              <b-dropdown-item @click="signOut">{{
+                }}
+              </b-dropdown-item>
+              <b-dropdown-item @click="signOut">
+                {{
                 $t("signOut")
-              }}</b-dropdown-item>
+                }}
+              </b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
@@ -67,18 +67,18 @@ export default {
     document.title = this.documentTitle;
   },
   components: {
-    SplashView,
+    SplashView
   },
   computed: {
     ...mapState(["appInitialized", "loggedInUser"]),
-    documentTitle: function () {
+    documentTitle: function() {
       return `${this.$t("assetMgmtSystem")} - ${this.$t("inventoryOfAssets")}`;
     },
-    mainMenuItemsAllowToNav: function () {
-      return mainMenu.items.filter((mi) =>
+    mainMenuItemsAllowToNav: function() {
+      return mainMenu.items.filter(mi =>
         mi.allowNavigate(this.loggedInUser.roles)
       );
-    },
+    }
   },
   methods: {
     ...mapActions(["initStore", "updateLocale", "updateLoggedInUser"]),
@@ -130,7 +130,7 @@ export default {
       this.setAppInitialized(true);
 
       const mainMenuItem = mainMenu.items.filter(
-        (i) => this.$route.name === i.routeName
+        i => this.$route.name === i.routeName
       );
       if (
         mainMenuItem.length > 0 &&
@@ -140,11 +140,11 @@ export default {
       ) {
         this.$router.replace({
           name: "PermissionDenied",
-          query: { originalPath: this.$route.path },
+          query: { originalPath: this.$route.path }
         });
         return;
       }
-    },
-  },
+    }
+  }
 };
 </script>

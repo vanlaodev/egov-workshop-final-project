@@ -8,6 +8,7 @@
     "signOut": "Sign out",
     "dashboard": "Dashboard",
     "inquiry": "Inquiry",
+    "language": "Language",
     "msg_appStartup": "Application starting up, please wait.",
     "msg_pageNotFound": "Page not found.",
     "msg_permissionDenied": "Permission denied."
