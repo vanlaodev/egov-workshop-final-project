@@ -5,6 +5,7 @@ import mainMenu from '../domain/main-menu'
 import Dashboard from '../views/Dashboard.vue'
 import Inquiry from '../views/Inquiry.vue'
 import TakeInventory from '../views/TakeInventory.vue'
+import TakeInventoryDetail from '../views/TakeInventoryDetail.vue'
 import CreateInventoryForm from '../views/CreateInventoryForm.vue'
 import InventoryFormManagement from '../views/InventoryFormManagement.vue'
 import PageNotFound from '../views/PageNotFound.vue'
@@ -25,6 +26,10 @@ const routes = [{
   path: '/takeInventory',
   name: 'TakeInventory',
   component: TakeInventory
+}, {
+  path: '/takeInventoryDetail',
+  name: 'TakeInventoryDetail',
+  component: TakeInventoryDetail
 }, {
   path: '/createInventoryForm',
   name: 'CreateInventoryForm',
