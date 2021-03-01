@@ -47,15 +47,6 @@
 
 <style>
  @import url("https://unpkg.com/element-ui@2.11.1/lib/theme-chalk/index.css"); 
-    body {
-      margin: 20px;
-      max-width: 800px;
-      padding: 0 20px;
-      color: rgb(8, 8, 8);
-      background: #C5DDEB;
-      font: 14px/20px "Lato", Arial, sans-serif;
-    }
-    
     
     .darker {
       
