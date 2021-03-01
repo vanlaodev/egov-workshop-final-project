@@ -12,7 +12,6 @@ import PermissionDenied from '../views/PermissionDenied.vue'
 import EditInventoryForm from '../views/EditInventoryForm.vue'
 
 Vue.use(VueRouter)
-
 const routes = [{
   path: '/dashboard',
   name: 'Dashboard',
