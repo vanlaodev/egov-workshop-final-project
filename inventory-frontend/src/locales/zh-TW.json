@@ -1,0 +1,14 @@
+{
+  "assetMgmtSystem": "動產管理系統",
+  "inventoryOfAssets": "資產盤點",
+  "takeInventory": "進行盤點",
+  "createInventoryForm": "建立盤點單",
+  "inventoryFormManagement": "盤點單管理",
+  "userProfile": "用戶資料",
+  "signOut": "登出",
+  "dashboard": "儀表板",
+  "inquiry": "查詢",
+  "msg_appStartup": "正在啟動應用，請稍候。",
+  "msg_pageNotFound": "頁面不存在。",
+  "msg_permissionDenied": "權限不足。"
+}
