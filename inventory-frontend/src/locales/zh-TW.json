@@ -11,6 +11,7 @@
   "language": "語言",
   "save": "儲存",
   "cancel": "取消",
+  "confirm": "確定",
   "all": "全部",
   "item": "項目",
   "department": "部門",
@@ -19,5 +20,9 @@
   "editInventoryForm": "編輯盤點單",
   "msg_appStartup": "正在啟動應用，請稍候。",
   "msg_pageNotFound": "頁面不存在。",
-  "msg_permissionDenied": "權限不足。"
+  "msg_permissionDenied": "權限不足。",
+  "msg_InventoryFormManagement_deleteModal": "刪除盤點單編號",
+  "inventoryid": "盤點單編號",
+  "editordelete": "編輯/刪除",
+  "InventoryFormManagement_placeholder": "按項目篩選"
 }

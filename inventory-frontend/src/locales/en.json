@@ -11,6 +11,7 @@
     "language": "Language",
     "save": "Save",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "all": "All",
     "item": "Item",
     "department": "Department",
@@ -19,5 +20,9 @@
     "editInventoryForm": "Edit inventory form",
     "msg_appStartup": "Application starting up, please wait.",
     "msg_pageNotFound": "Page not found.",
-    "msg_permissionDenied": "Permission denied."
+    "msg_permissionDenied": "Permission denied.",
+    "msg_InventoryFormManagement_deleteModal": "Delete inventory No.",
+    "inventoryid": "Inventory ID",
+    "editordelete": "Edit/Delete",
+    "InventoryFormManagement_placeholder": "Filter items by item name"
 }
