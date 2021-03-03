@@ -1,109 +1,108 @@
 <template>
   <div>
     <div>
-      <br />
-      <input
-        type="text"
-        v-model="filter_name"
-        placeholder="Filter titles by title name"
-        class="form-control"
-      />
-
-      <table class="table table-condensed">
-        <tr>
-          <td></td>
-        </tr>
-        <tr class="titlestyle">
-          <td>#</td>
-          <td>
-            <a href="#" @click.prevent="sort('name')" :class="{'active': sortBy == 'name'}">TITLE</a>
-          </td>
-          <td>
-            <a href="#" @click.prevent="sort('from')" :class="{'active': sortBy == 'from'}">FROM</a>
-          </td>
-          <td>
-            <a href="#" @click.prevent="sort('to')" :class="{'active': sortBy == 'to'}">TO</a>
-          </td>
-          <td></td>
-        </tr>
-        <tr
-          v-bind:key="r.id"
-          v-for="(r, index) in filteredRows.slice(pageStart, pageStart + countOfPage)"
-          :class="[{'darker':index%2!=1},{'light':index%2!=0}]"
-        >
-          <td>{{ (currPage-1) * countOfPage + index + 1 }}</td>
-          <td>{{ r.name }}</td>
-          <td>{{ r.from }}</td>
-          <td>{{ r.to }}</td>
-          <td>
-            <a href="#" class="editcolor a-btn-slide-text" @click.prevent="editObject(r.id)">
-              <!-- <span style="font-size: 18px"  class="glyphicon glyphicon-edit" aria-hidden="true"></span> -->
-              <b-icon icon="pencil-square" style="font-size: 18px"></b-icon>
-              <!-- <b-icon-pencil-square></b-icon-pencil-square>  -->
-            </a>&nbsp;
-            <a
-              href="#"
-              class="deletecolor a-btn-slide-text"
-              @click.prevent="deleteObject(index)"
+      <!-- <p></p> -->
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-9">
+            <b-input-group>
+              <b-form-input
+                type="search"
+                v-model="filter"
+                :placeholder="placeholder_description"
+              >
+              </b-form-input>
+              <b-input-group-append>
+                <b-button :disabled="!filter" @click="filter = ''">{{
+                  $t("clear")
+                }}</b-button>
+              </b-input-group-append>
+            </b-input-group>
+          </div>
+          <div class="col-sm-3" style="text-align: right">
+            <b-button
+              type="button"
+              variant="primary"
+              class="mr-2"
+              @click.prevent="goToCreateInventoryForm"
+              >{{ $t("createInventoryForm") }}</b-button
             >
-              <!-- <span style="font-size: 18px" class="glyphicon glyphicon-remove " aria-hidden="true"></span> -->
-              <b-icon icon="trash-fill" style="font-size: 18px"></b-icon>
-              <!-- <b-icon-x-circle></b-icon-x-circle> -->
-            </a>
-          </td>
-        </tr>
-      </table>
-
-      <div class="pagination">
-        <ul>
-          <li v-bind:class="{'disabled': (currPage === 1)}" @click.prevent="setPage(currPage-1)">
-            <a href="#">Prev</a>
-          </li>
-          <li
-            v-bind:key="n"
-            v-for="n in totalPage"
-            v-bind:class="{'active': (currPage === (n))}"
-            @click.prevent="setPage(n)"
-          >
-            <a href="#">{{n}}</a>
-          </li>
-          <li
-            v-bind:class="{'disabled': (currPage === totalPage)}"
-            @click.prevent="setPage(currPage+1)"
-          >
-            <a href="#">Next</a>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
+      <!-- <p></p> -->
+
+      <b-table
+        striped
+        hover
+        :items="items"
+        :fields="fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="filter"
+        @filtered="onFiltered"
+      >
+        <template #cell(Action)="data">
+          <a
+            href="#"
+            class="editcolor a-btn-slide-text"
+            @click.prevent="editObject(data.item.id)"
+          >
+            <b-icon icon="pencil-square" class="h3 mb-2"></b-icon> </a
+          >&nbsp;
+          <a
+            href="#"
+            class="deletecolor a-btn-slide-text"
+            @click.prevent="clickDelete(data.index, data.item.id)"
+          >
+            <b-icon icon="trash-fill" class="h3 mb-2"></b-icon>
+          </a>
+        </template>
+      </b-table>
+
+      <b-pagination
+        v-model="currentPage"
+        :total-rows="totalRows"
+        :per-page="perPage"
+        size="md"
+      ></b-pagination>
+
+      <b-modal ref="delete-modal" id="delete-modal" hide-footer hide-header>
+        <div class="d-block text-center">
+          <h3>
+            <b-icon
+              icon="x-circle-fill"
+              style="width: 80px; height: 80px; color: rgb(184, 11, 11)"
+            ></b-icon>
+          </h3>
+        </div>
+        <div class="d-block text-center delete-title">
+          <h3>
+            {{ $t("msg_InventoryFormManagement_deleteModal") }}&nbsp;{{
+              selectedId
+            }}&nbsp;?
+          </h3>
+        </div>
+        <b-button
+          class="mt-2"
+          variant="outline-success"
+          block
+          @click="deleteObject"
+          >{{ $t("confirm") }}</b-button
+        >
+        <b-button
+          class="mt-3 close-button"
+          variant="outline-danger"
+          block
+          @click="hideModal"
+          >{{ $t("cancel") }}</b-button
+        >
+      </b-modal>
     </div>
   </div>
 </template>
 
-
 <style>
-/* body {
-      margin: 20px;
-      max-width: 800px;
-      padding: 0 20px;
-      color: rgb(8, 8, 8);
-      background: #C5DDEB;
-      font: 14px/20px "Lato", Arial, sans-serif;
-    } */
-
-.darker {
-  background-color: rgb(163, 162, 162);
-}
-.light {
-  background-color: #dfdfdf;
-}
-.titlestyle {
-  background-color: #222222;
-  color: rgb(163, 162, 162);
-}
-
-.border {
-  border: 2px solid #7e7c7c;
-}
 .deletecolor {
   color: rgb(184, 11, 11);
 }
@@ -120,122 +119,18 @@
 .editcolor:focus {
   color: rgba(3, 94, 11, 0.76);
 }
-a {
-  font-weight: normal;
-  color: rgb(163, 162, 162);
+#delete-modal.delete-title {
+  margin-bottom: 25px;
 }
-a.active {
-  font-weight: bold;
-  color: rgb(233, 89, 6);
-}
-.pagination {
-  margin: 20px 0;
-}
-.pagination ul {
-  display: inline-block;
-  *display: inline;
-  *zoom: 1;
-  margin-left: 0;
-  margin-bottom: 0;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-.pagination ul > li {
-  display: inline;
-}
-.pagination ul > li > a,
-.pagination ul > li > span {
-  float: left;
-  padding: 4px 12px;
-  line-height: 20px;
-  text-decoration: none;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  border-left-width: 0;
-}
-.pagination ul > li > a:hover,
-.pagination ul > li > a:focus,
-.pagination ul > .active > a,
-.pagination ul > .active > span {
-  background-color: #f5f5f5;
-}
-.pagination ul > .active > a,
-.pagination ul > .active > span {
-  color: #999999;
-  cursor: default;
-}
-.pagination ul > .disabled > span,
-.pagination ul > .disabled > a,
-.pagination ul > .disabled > a:hover,
-.pagination ul > .disabled > a:focus {
-  color: #999999;
-  background-color: transparent;
-  cursor: default;
-}
-.pagination ul > li:first-child > a,
-.pagination ul > li:first-child > span {
-  border-left-width: 1px;
-  -webkit-border-top-left-radius: 4px;
-  -moz-border-radius-topleft: 4px;
-  border-top-left-radius: 4px;
-  -webkit-border-bottom-left-radius: 4px;
-  -moz-border-radius-bottomleft: 4px;
-  border-bottom-left-radius: 4px;
-}
-.pagination ul > li:last-child > a,
-.pagination ul > li:last-child > span {
-  -webkit-border-top-right-radius: 4px;
-  -moz-border-radius-topright: 4px;
-  border-top-right-radius: 4px;
-  -webkit-border-bottom-right-radius: 4px;
-  -moz-border-radius-bottomright: 4px;
-  border-bottom-right-radius: 4px;
-}
-ul,
-ol {
-  padding: 0;
-  margin: 0 0 10px 25px;
-}
-ul ul,
-ul ol,
-ol ol,
-ol ul {
-  margin-bottom: 0;
-}
-li {
-  line-height: 20px;
-}
-ul.unstyled,
-ol.unstyled {
-  margin-left: 0;
-  list-style: none;
-}
-ul.inline,
-ol.inline {
-  margin-left: 0;
-  list-style: none;
-}
-ul.inline > li,
-ol.inline > li {
-  display: inline-block;
-  *display: inline;
-  *zoom: 1;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-.table-condensed th,
-.table-condensed td {
-  padding: 8px 9px;
+#delete-modal.close-button {
+  margin-top: 5px !important;
 }
 </style>
 
+
 <script>
 // import { BIconXCircle } from 'bootstrap-vue'
-import JSAlert from "js-alert";
+//import JSAlert from "js-alert";
 export default {
   name: "InventoryFormManagement",
   components: {
@@ -243,139 +138,148 @@ export default {
   },
   data() {
     return {
-      rows: [
+      fields: [
+        {
+          key: "id",
+          label: `${this.$t("inventoryid")}`,
+          sortable: true,
+        },
+        {
+          key: "name",
+          label: `${this.$t("item")}`,
+          sortable: true,
+        },
+        {
+          key: "from",
+          label: `${this.$t("from")}`,
+          sortable: true,
+        },
+        {
+          key: "to",
+          label: `${this.$t("to")}`,
+          sortable: true,
+        },
+        {
+          key: "Action",
+          label: `${this.$t("editordelete")}`,
+        },
+      ],
+      items: [
         {
           id: 1,
           name: "關於2021年DOI的盤點項目",
           from: "01/02/2021",
-          to: "28/02/2021"
+          to: "28/02/2021",
         },
         {
           id: 2,
           name: "關於2021年DAF的盤點項目",
           from: "05/02/2021",
-          to: "28/02/2021"
+          to: "28/02/2021",
         },
         {
           id: 3,
           name: "關於2021年ABC的盤點項目",
           from: "05/02/2021",
-          to: "28/02/2021"
+          to: "28/02/2021",
         },
         {
           id: 4,
           name: "關於2021年CDE的盤點項目",
           from: "05/02/2021",
-          to: "28/02/2021"
+          to: "28/02/2021",
         },
         {
           id: 5,
           name: "關於2021年FGH的盤點項目",
           from: "01/02/2021",
-          to: "27/02/2021"
+          to: "27/02/2021",
         },
         {
           id: 6,
           name: "關於2021年IJK的盤點項目",
           from: "06/02/2021",
-          to: "27/02/2021"
+          to: "27/02/2021",
         },
         {
           id: 7,
           name: "關於2021年LMN的盤點項目",
           from: "03/02/2021",
-          to: "26/02/2021"
+          to: "26/02/2021",
         },
         {
           id: 8,
           name: "關於2021年OPQ的盤點項目",
           from: "01/02/2021",
-          to: "28/02/2021"
+          to: "28/02/2021",
         },
         {
           id: 9,
           name: "關於2021年RST的盤點項目",
           from: "01/02/2021",
-          to: "28/02/2021"
-        }
+          to: "28/02/2021",
+        },
       ],
-      countOfPage: 5,
-      currPage: 1,
-      sortBy: "name",
-      sortDirection: "asc",
-      filter_name: ""
+      totalRows: 1,
+      currentPage: 1,
+      perPage: 5,
+      filter_name: [],
+      selectedIndex: 0,
+      selectedId: 0,
+      filter: null,
+      placeholder_description: `${this.$t(
+        "InventoryFormManagement_placeholder"
+      )}`,
     };
   },
 
   computed: {
-    filteredRows: function() {
-      //return this.rows;
-      var filter_name = this.filter_name.toLowerCase();
-
-      this.changes();
-      return this.filter_name.trim() !== ""
-        ? this.rows.filter(function(d) {
-            return d.name.toLowerCase().indexOf(filter_name) > -1;
-          })
-        : this.rows;
-    },
-    pageStart: function() {
-      return (this.currPage - 1) * this.countOfPage;
-    },
-    totalPage: function() {
-      return Math.ceil(this.filteredRows.length / this.countOfPage);
-    }
+  },
+  mounted() {
+    this.totalRows = this.items.length;
+    this.filter_name = this.items;
   },
 
   methods: {
-    changes: function() {
-      this.rows.sort((p1, p2) => {
-        let modifier = 1;
-        if (this.sortDirection === "desc") modifier = -1;
-        if (p1[this.sortBy] < p2[this.sortBy]) return -1 * modifier;
-        if (p1[this.sortBy] > p2[this.sortBy]) return 1 * modifier;
-        return 0;
-      });
-      if (this.filter_name.trim() !== "") {
-        this.currPage = 1;
-      }
+    clickDelete: function (data_index, data_id) {
+      this.selectedIndex = data_index;
+      this.selectedId = data_id;
+      //console.log(this.selectedId);
+      this.$refs["delete-modal"].show();
     },
-    setPage: function(idx) {
-      if (idx <= 0 || idx > this.totalPage) {
-        return;
-      }
-      this.currPage = idx;
+    hideModal() {
+      this.$refs["delete-modal"].hide();
     },
-    sort: function(s) {
-      if (s === this.sortBy) {
-        this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
-      }
-      this.sortBy = s;
-    },
-
-    deleteObject: function(index) {
-      JSAlert.confirm("Do you really want to delete?").then(result => {
-        if (result) {
-          for (let z = 0; z < this.rows.length; z++)
-            if (
-              this.rows[z].name ==
-              this.filteredRows[(this.currPage - 1) * this.countOfPage + index]
-                .name
-            ) {
-              this.$delete(this.rows, z);
-              break;
-            }
+    deleteObject() {
+      let index = this.selectedIndex;
+      for (let z = 0; z < this.items.length; z++)
+        if (
+          this.items[z].id ==
+          this.filter_name[(this.currentPage - 1) * this.perPage + index].id
+        ) {
+          this.$delete(this.items, z);
+          this.totalRows = this.items.length;
+          break;
         }
-      });
+      this.$refs["delete-modal"].hide();
     },
-    editObject: function(inventoryfromid) {
+    editObject: function (inventoryfromid) {
       //this.$router.replace('EditInventoryForm');
       this.$router.push({
         name: "EditInventoryForm",
-        params: { id: inventoryfromid }
+        params: { id: inventoryfromid },
       });
-    }
+    },
+    goToCreateInventoryForm() {
+      this.$router.replace({ name: "CreateInventoryForm" });
+    },
+    onFiltered(filteredItems) {
+      // Trigger pagination to update the number of buttons/pages due to filtering
+      this.totalRows = filteredItems.length;
+      this.filter_name = filteredItems;
+      this.currentPage = 1;
+    },
   },
-  props: {}
+  props: {},
 };
 </script>

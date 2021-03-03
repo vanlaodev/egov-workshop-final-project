@@ -47,7 +47,7 @@
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
-      <main role="main" class="container">
+      <main role="main" class="container py-4">
         <router-view />
       </main>
     </div>
