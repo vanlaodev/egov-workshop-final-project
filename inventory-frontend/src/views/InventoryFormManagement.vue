@@ -6,7 +6,7 @@
         <div class="row">
           <div class="col-sm-9">
             <b-input-group>
-              <b-form-input type="search" v-model="filter" :placeholder="placeholder_description"></b-form-input>
+              <b-form-input type="search" v-model="filter" :placeholder='$t("InventoryFormManagement_placeholder")'></b-form-input>
               <b-input-group-append>
                 <b-button :disabled="!filter" @click="filter = ''">
                   {{
@@ -182,10 +182,7 @@ export default {
       filter_name: [],
       selectedIndex: 0,
       selectedId: 0,
-      filter: null,
-      placeholder_description: `${this.$t(
-        "InventoryFormManagement_placeholder"
-      )}`
+      filter: null
     };
   },
 
