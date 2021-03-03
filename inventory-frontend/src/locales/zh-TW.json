@@ -24,5 +24,6 @@
   "msg_InventoryFormManagement_deleteModal": "刪除盤點單編號",
   "inventoryid": "盤點單編號",
   "editordelete": "編輯/刪除",
-  "InventoryFormManagement_placeholder": "按項目篩選"
+  "InventoryFormManagement_placeholder": "按種類搜尋",
+  "clear": "清空"
 }

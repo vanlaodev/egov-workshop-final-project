@@ -1,21 +1,46 @@
 <template>
   <div>
     <div>
-      <p></p>
-      <input
-        type="text"
-        v-model="filter_name"
-        :placeholder="placeholder_description"
-        class="form-control"
-      />
-      <p></p>
+      <!-- <p></p> -->
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-9">
+            <b-input-group>
+              <b-form-input
+                type="search"
+                v-model="filter"
+                :placeholder="placeholder_description"
+              >
+              </b-form-input>
+              <b-input-group-append>
+                <b-button :disabled="!filter" @click="filter = ''">{{
+                  $t("clear")
+                }}</b-button>
+              </b-input-group-append>
+            </b-input-group>
+          </div>
+          <div class="col-sm-3" style="text-align: right">
+            <b-button
+              type="button"
+              variant="primary"
+              class="mr-2"
+              @click.prevent="goToCreateInventoryForm"
+              >{{ $t("createInventoryForm") }}</b-button
+            >
+          </div>
+        </div>
+      </div>
+      <!-- <p></p> -->
+
       <b-table
         striped
         hover
-        :items="filteredRows"
+        :items="items"
         :fields="fields"
         :current-page="currentPage"
         :per-page="perPage"
+        :filter="filter"
+        @filtered="onFiltered"
       >
         <template #cell(Action)="data">
           <a
@@ -28,7 +53,7 @@
           <a
             href="#"
             class="deletecolor a-btn-slide-text"
-            @click.prevent="clickConfirm(data.index, data.item.id)"
+            @click.prevent="clickDelete(data.index, data.item.id)"
           >
             <b-icon icon="trash-fill" class="h3 mb-2"></b-icon>
           </a>
@@ -43,6 +68,14 @@
       ></b-pagination>
 
       <b-modal ref="delete-modal" id="delete-modal" hide-footer hide-header>
+        <div class="d-block text-center">
+          <h3>
+            <b-icon
+              icon="x-circle-fill"
+              style="width: 80px; height: 80px; color: rgb(184, 11, 11)"
+            ></b-icon>
+          </h3>
+        </div>
         <div class="d-block text-center delete-title">
           <h3>
             {{ $t("msg_InventoryFormManagement_deleteModal") }}&nbsp;{{
@@ -190,9 +223,10 @@ export default {
       totalRows: 1,
       currentPage: 1,
       perPage: 5,
-      filter_name: "",
+      filter_name: [],
       selectedIndex: 0,
       selectedId: 0,
+      filter: null,
       placeholder_description: `${this.$t(
         "InventoryFormManagement_placeholder"
       )}`,
@@ -200,22 +234,14 @@ export default {
   },
 
   computed: {
-    filteredRows: function () {
-      var filter_name = this.filter_name.toLowerCase();
-
-      return this.filter_name.trim() !== ""
-        ? this.items.filter(function (d) {
-            return d.name.toLowerCase().indexOf(filter_name) > -1;
-          })
-        : this.items;
-    },
   },
   mounted() {
     this.totalRows = this.items.length;
+    this.filter_name = this.items;
   },
 
   methods: {
-    clickConfirm: function (data_index, data_id) {
+    clickDelete: function (data_index, data_id) {
       this.selectedIndex = data_index;
       this.selectedId = data_id;
       //console.log(this.selectedId);
@@ -228,10 +254,11 @@ export default {
       let index = this.selectedIndex;
       for (let z = 0; z < this.items.length; z++)
         if (
-          this.items[z].name ==
-          this.filteredRows[(this.currentPage - 1) * this.perPage + index].name
+          this.items[z].id ==
+          this.filter_name[(this.currentPage - 1) * this.perPage + index].id
         ) {
           this.$delete(this.items, z);
+          this.totalRows = this.items.length;
           break;
         }
       this.$refs["delete-modal"].hide();
@@ -242,6 +269,15 @@ export default {
         name: "EditInventoryForm",
         params: { id: inventoryfromid },
       });
+    },
+    goToCreateInventoryForm() {
+      this.$router.replace({ name: "CreateInventoryForm" });
+    },
+    onFiltered(filteredItems) {
+      // Trigger pagination to update the number of buttons/pages due to filtering
+      this.totalRows = filteredItems.length;
+      this.filter_name = filteredItems;
+      this.currentPage = 1;
     },
   },
   props: {},

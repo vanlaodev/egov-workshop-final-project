@@ -24,5 +24,6 @@
     "msg_InventoryFormManagement_deleteModal": "Delete inventory No.",
     "inventoryid": "Inventory ID",
     "editordelete": "Edit/Delete",
-    "InventoryFormManagement_placeholder": "Filter items by item name"
+    "InventoryFormManagement_placeholder": "Type to Search",
+    "clear": "Clear"
 }
