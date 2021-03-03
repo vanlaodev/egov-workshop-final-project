@@ -147,6 +147,7 @@ export default {
         this.userInventory = lodash.remove(this.userInventory, function(invertory) {
             return invertory.itemNo != selectNo;
         });
+        this.$refs['delete-modal'].hide()
     },
     pageCallback() {
         console.log(this.currentPage);
