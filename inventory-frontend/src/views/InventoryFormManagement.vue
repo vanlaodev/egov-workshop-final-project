@@ -4,7 +4,7 @@
       <!-- <p></p> -->
       <div class="form-group">
         <div class="row">
-          <div class="col-sm-9">
+          <div class="col-sm-11">
             <b-input-group>
               <b-form-input type="search" v-model="filter" :placeholder='$t("InventoryFormManagement_placeholder")'></b-form-input>
               <b-input-group-append>
@@ -16,13 +16,16 @@
               </b-input-group-append>
             </b-input-group>
           </div>
-          <div class="col-sm-3" style="text-align: right">
-            <b-button
+          <div class="col-sm-1" style="text-align: center">
+            <!-- <b-button
               type="button"
               variant="primary"
               class="mr-2"
               @click.prevent="goToCreateInventoryForm"
-            >{{ $t("createInventoryForm") }}</b-button>
+            >{{ $t("createInventoryForm") }}</b-button> -->
+            <a href="#" class="editcolor a-btn-slide-text" @click.prevent="goToCreateInventoryForm">
+            <b-icon icon="plus-circle" class="h1 mb-2"></b-icon>
+            </a>
           </div>
         </div>
       </div>
@@ -105,8 +108,9 @@
   margin-bottom: 25px;
 }
 #delete-modal.close-button {
-  margin-top: 5px !important;
+  margin-top: 5px ;
 }
+
 </style>
 
 
