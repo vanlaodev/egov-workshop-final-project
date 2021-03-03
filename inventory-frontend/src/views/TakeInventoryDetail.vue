@@ -1,7 +1,9 @@
 <template>
   <div class="view-container">
+    <!-- <search-inventory></search-inventory> -->
     <header>
       <h1>{{invertoryFormTitle}}</h1>
+      <button class="add-button"><b-icon icon="plus" variant="success"></b-icon></button>
     </header>
     <div class="content-container">
       <div class="inventory-form-time">
@@ -9,6 +11,24 @@
       </div>
       <div class="inventory-form-des">
         {{invertoryFormDes}}
+      </div>
+      <div v-if="isAdmin" class="inventory-filter-container">
+        <b-row class="filter-row">
+            <b-col class="filter-col" cols="auto">
+                <div class="filter-title">搜尋：</div>
+            </b-col>
+        </b-row>
+        <b-row class="filter-row">
+            <b-col class="filter-col" cols="3">
+                <input v-model="filterNo" placeholder="物品編號">
+            </b-col>
+            <b-col class="filter-col" cols="3">
+                <input v-model="filterUserNo" placeholder="員工編號">
+            </b-col>
+            <b-col class="filter-col" cols="auto">
+                <b-form-select v-model="departmentSelected" :options="departmentOptions" class="department-select"></b-form-select>
+            </b-col>
+        </b-row>
       </div>
       <div class="inventory-list-container">
         <ul>
@@ -35,10 +55,25 @@
                   <span v-if="inventory.checked">已確認</span>
                   <span v-else>確認</span>
                 </button>
+                <button v-if="isAdmin" class="delete-button" v-on:click="clickDelete(inventory.itemNo)">
+                  <span>刪除</span>
+                </button>
               </b-col>
             </b-row>
           </li>
         </ul>
+        <div class="inventory-pagination-container">
+            <b-pagination
+                v-model="currentPage"
+                :total-rows="rows"
+                :per-page="perPage"
+                class="inventory-pagination"
+                @change="pageCallback"
+                first-number
+                last-number
+                >
+            </b-pagination>
+        </div>
       </div>
     </div>
     <b-modal ref="confirm-modal" id="confirm-modal" hide-footer hide-header>
@@ -48,108 +83,45 @@
       <b-button class="mt-2" variant="outline-success" block @click="confirm">確定</b-button>
       <b-button class="mt-3 close-button" variant="outline-danger" block @click="hideModal">取消</b-button>
     </b-modal>
+    <b-modal ref="delete-modal" id="delete-modal" hide-footer hide-header>
+      <div class="d-block text-center delete-title">
+        <h3>是否確定刪除此物品？</h3>
+      </div>
+      <b-button class="mt-2" variant="outline-success" block @click="deleteItem">確定</b-button>
+      <b-button class="mt-3 close-button" variant="outline-danger" block @click="hideModal">取消</b-button>
+    </b-modal>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.view-container{
-  padding: 30px 10px;
-  h1{
-    font-size: 2rem;
-  }
-  .content-container{
-    padding: 10px 5px;
-    .inventory-form-des{
-      font-size: 1.2rem;
-    }
-    .inventory-form-time{
-      color: #E83981;
-      font-weight: 600;
-    }
-    .inventory-list-container{
-      padding: 20px 20px;
-      border: 1px solid #D4D4D4;
-      margin-top: 30px;
-      ul{
-        list-style-type: none;
-        margin: 0;
-        li{
-          display: block;
-          .row{
-            margin: 0;
-          }
-          &:last-child{
-            .inventory-row{
-              border-bottom: 0;
-            }
-          }
-        }
-      }
-      .inventory-row{
-        padding: 10px 10px;
-        align-items: center;
-        justify-content: center;
-        border-bottom: 1px solid #D4D4D4;
-        .inventory-col-no{
-          font-weight: 600;
-        }
-        &.title{
-          background-color: #EDEDED;
-        }
-      }
-      .check-button{
-        background: #EEEEEE;
-        border: 1px solid #C5C5C5;
-        padding: 5px 10px;
-        box-shadow: 2px 2px 3px 1px rgba(0,0,0,0.1);
-        &:disabled{
-          background-color: #087E15;
-          color: white;
-        }
-      }
-    }
-  }
-}
-#confirm-modal{
-  .confirm-title{
-    margin-bottom: 25px;
-  }
-  .close-button{
-    margin-top: 5px !important;
-  }
-}
+    @import '../assets/scss/take-inventory-detail.scss';
 </style>
 
 <script>
-import lodash from 'lodash'
+import lodash from 'lodash';
+// import SearchInventory from "../components/SearchInventory";
 
 export default {
   data(){
     return {
-      invertoryFormTitle: '2021年第一季盤點',
-      invertoryFormTime: '2021-03-01 至 2021-03-15',
-      invertoryFormDes: '周一是南韓1919年三一獨立運動102周年，總統文在寅在首爾的紀念活動發表講話，談及韓日及兩韓關係。他表示，今年夏季的日本東京奧運會可為南韓、北韓、美國、日本提供對話契機，又指韓方準備好隨時近年因二戰慰安婦問題而交惡的日本對話。',
-      selectedItemNo: null,
-      userInventory: [
-        {
-          id: 1,
-          itemNo: '734123',
-          itemName: '物品1',
-          checked: false,
-        },
-        {
-          id: 2,
-          itemNo: '264642',
-          itemName: '物品2',
-          checked: false,
-        },
-        {
-          id: 3,
-          itemNo: '643634',
-          itemName: '物品3',
-          checked: false,
-        }
-      ]
+        isAdmin: true,
+        filterNo: '',
+        filterUserNo: '',
+        rows: 100,
+        perPage: 10,
+        currentPage: 1,
+        invertoryFormTitle: '2021年第一季盤點',
+        invertoryFormTime: '2021-03-01 至 2021-03-15',
+        invertoryFormDes: '周一是南韓1919年三一獨立運動102周年，總統文在寅在首爾的紀念活動發表講話，談及韓日及兩韓關係。他表示，今年夏季的日本東京奧運會可為南韓、北韓、美國、日本提供對話契機，又指韓方準備好隨時近年因二戰慰安婦問題而交惡的日本對話。',
+        selectedItemNo: null,
+        departmentSelected: 0,
+        departmentOptions:[
+          { value: 0, text: '全部' },
+          { value: 1, text: '部門1' },
+          { value: 2, text: '部門2' },
+          { value: 3, text: '部門3' },
+        ],
+        userInventory: []
     }
   },
   methods: {
@@ -157,21 +129,47 @@ export default {
       this.selectedItemNo = itemNo;
       this.$refs['confirm-modal'].show(itemNo)
     },
+    clickDelete: function (itemNo) {
+      this.selectedItemNo = itemNo;
+      this.$refs['delete-modal'].show(itemNo)
+    },
     hideModal() {
-      this.$refs['confirm-modal'].hide()
+      this.$refs['confirm-modal'].hide();
+      this.$refs['delete-modal'].hide();
     },
     confirm() {
       let selectedItem = lodash.find(this.userInventory, {itemNo: this.selectedItemNo});
       selectedItem.checked = true;
       this.$refs['confirm-modal'].hide()
+    },
+    deleteItem() {
+        let selectNo = this.selectedItemNo;
+        this.userInventory = lodash.remove(this.userInventory, function(invertory) {
+            return invertory.itemNo != selectNo;
+        });
+    },
+    pageCallback() {
+        console.log(this.currentPage);
     }
   },
   mounted(){
+    this.userInventory = [];
+    for(let i=1; i<=10; i++){
+        this.userInventory.push({
+            id: i,
+            itemNo: '734123' + i,
+            itemName: '物品' + i,
+            checked: false,
+        })
+    }
     this.$root.$on('bv::modal::hide', (bvEvent, modalId) => {
       if(modalId === 'confirm-modal'){
         this.selectedItemNo = null;
       }
     })
-  }
+  },
+  components: {
+    // SearchInventory
+  },
 };
 </script>
