@@ -2,6 +2,9 @@
   <div class="container-fluid">
     <b-card :title="$t('editInventoryForm')">
       <b-form @submit.prevent="savedata">
+        <b-form-group :label="`${$t('inventoryid')}:`" label-for="input-inventoryid" >
+          <b-form-input id="input-inventoryid" v-model="inventoryid" disabled></b-form-input>
+        </b-form-group>
         <b-form-group :label="`${$t('item')}:`" label-for="input-item">
           <b-form-input id="input-item" v-model="item" required></b-form-input>
         </b-form-group>
