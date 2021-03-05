@@ -39,8 +39,15 @@
             font-size: 16px;
             padding: 0 0 5px 2px;
         }
+        .filter-col{
+            padding-right: 5px;
+            &:nth-child(n+2){
+                padding-left: 5px;
+            }
+        }
         input{
             padding: 5px 10px;
+            width: 100%;
         }
         .department-select{
             height: 100%;
@@ -71,6 +78,15 @@
           align-items: center;
           justify-content: center;
           border-bottom: 1px solid #D4D4D4;
+          text-align: left;
+          .col-2:first-child{
+              min-width: 100px;
+          }
+          .action-button-col.col-sm-12{
+              margin-top: 10px;
+              padding: 0;
+              text-align: right;
+          }
           .inventory-col-no{
             font-weight: 600;
           }
@@ -102,11 +118,21 @@
       }
     }
   }
-  #confirm-modal, #delete-modal{
+  #confirm-modal, #delete-modal, #search-modal{
     .confirm-title, .delete-title{
       margin-bottom: 25px;
     }
     .close-button{
       margin-top: 5px !important;
+      &.search{
+          margin-top: 15px !important;
+      }
     }
+  }
+  #search-modal{
+      .modal-dialog{
+        @media (min-width: 576px) {
+            max-width: 1000px;
+        }
+      }
   }

@@ -1,9 +1,8 @@
 <template>
   <div class="view-container">
-    <!-- <search-inventory></search-inventory> -->
     <header>
       <h1>{{invertoryFormTitle}}</h1>
-      <button class="add-button"><b-icon icon="plus" variant="success"></b-icon></button>
+      <button v-if="isAdmin" class="add-button" v-on:click="clickAddItem()"><b-icon icon="plus" variant="success"></b-icon></button>
     </header>
     <div class="content-container">
       <div class="inventory-form-time">
@@ -50,7 +49,7 @@
               <b-col>
               {{ inventory.itemName }}
               </b-col>
-              <b-col cols="auto">
+              <b-col class="action-button-col" md="auto" sm="12">
                 <button class="check-button" v-on:click="clickConfirm(inventory.itemNo)" :disabled="inventory.checked">
                   <span v-if="inventory.checked">已確認</span>
                   <span v-else>確認</span>
@@ -90,6 +89,13 @@
       <b-button class="mt-2" variant="outline-success" block @click="deleteItem">確定</b-button>
       <b-button class="mt-3 close-button" variant="outline-danger" block @click="hideModal">取消</b-button>
     </b-modal>
+    <b-modal ref="search-modal" id="search-modal" size="lg" hide-footer hide-header>
+      <div class="d-block text-center search-title">
+        <h3>新增物品</h3>
+      </div>
+      <search-inventory v-on:clickAdd="addItem"></search-inventory>   
+      <b-button class="mt-3 search close-button" variant="outline-danger" block @click="hideModal">取消</b-button>
+    </b-modal>
   </div>
 </template>
 
@@ -99,7 +105,7 @@
 
 <script>
 import lodash from 'lodash';
-// import SearchInventory from "../components/SearchInventory";
+import SearchInventory from "../components/SearchInventory";
 
 export default {
   data(){
@@ -125,6 +131,9 @@ export default {
     }
   },
   methods: {
+    clickAddItem: function () {
+      this.$refs['search-modal'].show()
+    },
     clickConfirm: function (itemNo) {
       this.selectedItemNo = itemNo;
       this.$refs['confirm-modal'].show(itemNo)
@@ -136,6 +145,7 @@ export default {
     hideModal() {
       this.$refs['confirm-modal'].hide();
       this.$refs['delete-modal'].hide();
+      this.$refs['search-modal'].hide();
     },
     confirm() {
       let selectedItem = lodash.find(this.userInventory, {itemNo: this.selectedItemNo});
@@ -151,6 +161,10 @@ export default {
     },
     pageCallback() {
         console.log(this.currentPage);
+    },
+    addItem(itemNo) {
+        console.log('addItem', itemNo);
+        this.$refs['search-modal'].hide();
     }
   },
   mounted(){
@@ -170,7 +184,7 @@ export default {
     })
   },
   components: {
-    // SearchInventory
+    SearchInventory
   },
 };
 </script>
