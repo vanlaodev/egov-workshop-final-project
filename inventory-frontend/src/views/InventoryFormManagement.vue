@@ -1,7 +1,6 @@
 <template>
   <div>
     <div>
-      <!-- <p></p> -->
       <div class="form-group">
         <div class="row">
           <div class="col-sm-11">
@@ -29,7 +28,6 @@
           </div>
         </div>
       </div>
-      <!-- <p></p> -->
 
       <b-table
         striped
@@ -48,7 +46,7 @@
           <a
             href="#"
             class="deletecolor a-btn-slide-text"
-            @click.prevent="clickDelete(data.index, data.item.id)"
+            @click.prevent="clickDelete(data.item.id)"
           >
             <b-icon icon="trash-fill" class="h3 mb-2"></b-icon>
           </a>
@@ -115,12 +113,10 @@
 
 
 <script>
-// import { BIconXCircle } from 'bootstrap-vue'
-//import JSAlert from "js-alert";
+
 export default {
   name: "InventoryFormManagement",
   components: {
-    // BIconXCircle,
   },
   data() {
     return {
@@ -183,8 +179,6 @@ export default {
       totalRows: 1,
       currentPage: 1,
       perPage: 5,
-      filter_name: [],
-      selectedIndex: 0,
       selectedId: 0,
       filter: null
     };
@@ -222,25 +216,20 @@ export default {
   },
   mounted() {
     this.totalRows = this.items.length;
-    this.filter_name = this.items;
   },
 
   methods: {
-    clickDelete: function(data_index, data_id) {
-      this.selectedIndex = data_index;
+    clickDelete: function(data_id) {
       this.selectedId = data_id;
-      //console.log(this.selectedId);
       this.$refs["delete-modal"].show();
     },
     hideModal() {
       this.$refs["delete-modal"].hide();
     },
     deleteObject() {
-      let index = this.selectedIndex;
       for (let z = 0; z < this.items.length; z++)
         if (
-          this.items[z].id ==
-          this.filter_name[(this.currentPage - 1) * this.perPage + index].id
+          this.items[z].id == this.selectedId
         ) {
           this.$delete(this.items, z);
           this.totalRows = this.items.length;
@@ -261,7 +250,6 @@ export default {
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
-      this.filter_name = filteredItems;
       this.currentPage = 1;
     }
   },
