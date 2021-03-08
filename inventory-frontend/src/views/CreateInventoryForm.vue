@@ -38,12 +38,19 @@
       <b-form-group :label="$t('remark')" label-for="input-remark">
         <b-form-textarea id="input-remark" v-model="remark"></b-form-textarea>
       </b-form-group>
-      <b-button type="submit" variant="primary" class="mr-2">{{
-        $t("save")
-      }}</b-button>
-      <b-button @click.prevent="backToinquiry" variant="secondary">{{
-        $t("cancel")
-      }}</b-button>
+      <b-button
+        :disabled="saving"
+        type="submit"
+        variant="primary"
+        class="mr-2"
+        >{{ $t("save") }}</b-button
+      >
+      <b-button
+        :disabled="saving"
+        @click.prevent="backToinquiry"
+        variant="secondary"
+        >{{ $t("cancel") }}</b-button
+      >
     </b-form>
   </b-card>
 </template>
@@ -69,6 +76,7 @@ export default {
         { value: "3", text: "DRC" },
       ],
       remark: "",
+      saving: false,
     };
   },
   methods: {
@@ -78,7 +86,9 @@ export default {
       }
     },
     async savedata() {
+      if (this.saving) return;
       try {
+        this.saving = true;
         await this.$api.inventoryApi.createMaster({
           deptId: this.depselected,
           fromTime: dayjs(this.dtpFrom).format("YYYY/MM/DD"),
@@ -91,6 +101,8 @@ export default {
       } catch (err) {
         // TODO: show err dialog
         showErrorAlert(err);
+      } finally {
+        this.saving = false;
       }
     },
     changeEnd() {

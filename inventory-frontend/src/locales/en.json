@@ -40,6 +40,8 @@
     "inactive": "Inactive",
     "title": "Title",
     "id": "ID",
+    "edit": "Edit",
+    "loading": "Loading",
     "fmt_msg_error": "Error occurred: {msg}",
     "fmt_msg_confirmDeleteInventoryMaster": "Are you sure to delete the inventory master no. {id}?"
 }

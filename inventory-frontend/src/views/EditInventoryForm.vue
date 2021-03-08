@@ -1,6 +1,10 @@
 <template>
-  <b-card :title="$t('editInventoryForm')" v-if="originalMaster">
-    <b-form class="mt-4" @submit.prevent="savedata">
+  <b-card :title="$t('editInventoryForm')">
+    <b-form
+      class="mt-4"
+      @submit.prevent="savedata"
+      v-if="originalMaster && !loading"
+    >
       <b-form-group :label="$t('id')" label-for="input-id">
         <b-form-input
           id="input-id"
@@ -60,13 +64,23 @@
       <b-form-group :label="$t('remark')" label-for="input-remark">
         <b-form-textarea id="input-remark" v-model="remark"></b-form-textarea>
       </b-form-group>
-      <b-button type="submit" variant="primary" class="mr-2">{{
-        $t("save")
-      }}</b-button>
-      <b-button @click.prevent="backToinquiry" variant="secondary">{{
-        $t("cancel")
-      }}</b-button>
+      <b-button
+        :disabled="saving"
+        type="submit"
+        variant="primary"
+        class="mr-2"
+        >{{ $t("save") }}</b-button
+      >
+      <b-button
+        :disabled="saving"
+        @click.prevent="backToinquiry"
+        variant="secondary"
+        >{{ $t("cancel") }}</b-button
+      >
     </b-form>
+    <div v-else-if="loading" class="mt-4">
+      <strong>{{ $t("loading") }}...</strong>
+    </div>
   </b-card>
 </template>
 
@@ -92,6 +106,8 @@ export default {
       selectedStatus: "",
       statusList: [{ value: "ACTIVE", text: this.$t("active") }],
       remark: "",
+      saving: false,
+      loading: false,
     };
   },
   computed: {
@@ -110,7 +126,9 @@ export default {
     async getInventoryMaster() {
       const masterId = this.$route.params.id;
       if (masterId) {
+        if (this.loading) return;
         try {
+          this.loading = true;
           const master = (
             await this.$api.inventoryApi.searchMaster({
               deptId: this.loggedInUser.dept.id,
@@ -139,6 +157,8 @@ export default {
         } catch (err) {
           showErrorAlert(err);
           this.backToinquiry();
+        } finally {
+          this.loading = false;
         }
       } else {
         this.backToinquiry();
@@ -150,7 +170,9 @@ export default {
       }
     },
     async savedata() {
+      if (this.saving) return;
       try {
+        this.saving = true;
         await this.$api.inventoryApi.updateMaster({
           id: this.originalMaster.id,
           deptId: this.depselected,
@@ -165,6 +187,8 @@ export default {
       } catch (err) {
         // TODO: show err dialog
         showErrorAlert(err);
+      } finally {
+        this.saving = false;
       }
     },
     changeEnd() {

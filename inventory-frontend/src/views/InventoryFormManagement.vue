@@ -17,18 +17,26 @@
           </b-button>
         </b-input-group-append>
       </b-input-group>
-      <a
-        href="#"
-        class="editcolor a-btn-slide-text"
-        @click.prevent="goToCreateInventoryForm"
-      >
-        <b-icon icon="plus-circle" class="h1 m-0 ml-3"></b-icon>
+      <a href="#" @click.prevent="goToCreateInventoryForm">
+        <b-icon
+          variant="success"
+          icon="plus-circle"
+          class="h2 m-0 ml-3"
+        ></b-icon>
       </a>
+      <!--       <a href="#" @click.prevent="loadInventoryMasters">
+        <b-icon
+          variant="primary"
+          icon="arrow-clockwise"
+          :animation="loadingTable ? 'spin' : ''"
+          class="h2 m-0 ml-2"
+        ></b-icon>
+      </a> -->
     </b-form>
 
     <b-table
+      v-if="!loadingTable"
       responsive
-      striped
       hover
       :items="items"
       :fields="fields"
@@ -38,22 +46,31 @@
       @filtered="onFiltered"
     >
       <template #cell(Action)="data">
-        <a
-          href="#"
-          class="editcolor a-btn-slide-text"
-          @click.prevent="editObject(data.item.id)"
+        <b-button
+          variant="secondary"
+          size="sm"
+          @click="editMaster(data.item.id)"
+          class="mr-2"
         >
-          <b-icon icon="pencil-square" class="h3 mr-2"></b-icon> </a
-        >&nbsp;
-        <a
-          href="#"
-          class="deletecolor a-btn-slide-text"
-          @click.prevent="clickDelete(data.item.id)"
+          <b-icon icon="pencil-fill" aria-hidden="true"></b-icon>
+          {{ $t("edit") }}
+        </b-button>
+        <b-button
+          variant="danger"
+          size="sm"
+          @click="showConfirmDeleteMasterModal(data.item.id)"
         >
-          <b-icon icon="trash-fill" class="h3"></b-icon>
-        </a>
+          <b-icon icon="trash-fill" aria-hidden="true"></b-icon>
+          {{ $t("delete") }}
+        </b-button>
       </template>
     </b-table>
+    <b-skeleton-table
+      v-else
+      :rows="4"
+      :columns="6"
+      :table-props="{ bordered: true }"
+    ></b-skeleton-table>
 
     <b-pagination
       v-model="currentPage"
@@ -67,8 +84,9 @@
       <div class="d-block text-center">
         <h3>
           <b-icon
+            variant="danger"
             icon="x-circle-fill"
-            style="width: 80px; height: 80px; color: rgb(184, 11, 11)"
+            style="width: 80px; height: 80px"
           ></b-icon>
         </h3>
       </div>
@@ -81,7 +99,7 @@
         class="mt-3"
         variant="outline-success"
         block
-        @click="deleteObject"
+        @click="deleteMaster"
         >{{ $t("confirm") }}</b-button
       >
       <b-button
@@ -94,31 +112,6 @@
     </b-modal>
   </b-card>
 </template>
-
-<style>
-.deletecolor {
-  color: rgb(184, 11, 11);
-}
-.deletecolor:hover,
-.deletecolor:active,
-.deletecolor:focus {
-  color: rgb(184, 11, 11);
-}
-.editcolor {
-  color: rgba(3, 94, 11, 0.76);
-}
-.editcolor:hover,
-.editcolor:active,
-.editcolor:focus {
-  color: rgba(3, 94, 11, 0.76);
-}
-#delete-modal.delete-title {
-  margin-bottom: 25px;
-}
-#delete-modal.close-button {
-  margin-top: 5px;
-}
-</style>
 
 <script>
 import { showErrorAlert } from "../utils/helpers";
@@ -134,6 +127,7 @@ export default {
       perPage: 10,
       selectedId: 0,
       filter: null,
+      loadingTable: false,
     };
   },
   computed: {
@@ -176,12 +170,13 @@ export default {
     },
   },
   mounted() {
-    this.loadInventoryMaster();
+    this.loadInventoryMasters();
   },
-
   methods: {
-    async loadInventoryMaster() {
+    async loadInventoryMasters() {
+      if (this.loadingTable) return;
       try {
+        this.loadingTable = true;
         const masters = await this.$api.inventoryApi.searchMaster({
           deptId: this.loggedInUser.dept.id,
         });
@@ -208,29 +203,24 @@ export default {
             };
           })
           .sort((m1, m2) => m2.id - m1.id);
+        this.currentPage = 1;
       } catch (err) {
         // TODO: show err dialog
         showErrorAlert(err);
+      } finally {
+        this.loadingTable = false;
       }
     },
-    async deleteInventoryMaster(id) {
-      try {
-        await this.$api.inventoryApi.deleteMaster(id);
-      } catch (err) {
-        // TODO: show err dialog
-        showErrorAlert(err);
-      }
-    },
-    clickDelete: function (data_id) {
+    showConfirmDeleteMasterModal: function (data_id) {
       this.selectedId = data_id;
       this.$refs["delete-modal"].show();
     },
     hideModal() {
       this.$refs["delete-modal"].hide();
     },
-    async deleteObject() {
+    async deleteMaster() {
       try {
-        await this.deleteInventoryMaster(this.selectedId);
+        await this.$api.inventoryApi.deleteMaster(this.selectedId);
         for (let z = 0; z < this.items.length; z++)
           if (this.items[z].id == this.selectedId) {
             this.$delete(this.items, z);
@@ -243,18 +233,16 @@ export default {
         this.$refs["delete-modal"].hide();
       }
     },
-    editObject: function (inventoryfromid) {
-      //this.$router.replace('EditInventoryForm');
+    editMaster(inventoryfromid) {
       this.$router.push({
         name: "EditInventoryForm",
         params: { id: inventoryfromid },
       });
     },
     goToCreateInventoryForm() {
-      this.$router.replace({ name: "CreateInventoryForm" });
+      this.$router.push({ name: "CreateInventoryForm" });
     },
     onFiltered() {
-      // Trigger pagination to update the number of buttons/pages due to filtering
       this.currentPage = 1;
     },
   },

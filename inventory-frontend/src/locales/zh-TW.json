@@ -40,6 +40,8 @@
   "inactive": "無效",
   "title": "標題",
   "id": "編號",
+  "edit": "編輯",
+  "loading": "載入中",
   "fmt_msg_error": "發生錯誤：{msg}",
   "fmt_msg_confirmDeleteInventoryMaster": "您是否確定要刪除盤點單{id}？"
 }
