@@ -9,6 +9,7 @@
           type="search"
           v-model="filter"
           :placeholder="$t('search')"
+          autofocus
         ></b-form-input>
         <b-input-group-append v-if="filter">
           <b-button @click="filter = ''">

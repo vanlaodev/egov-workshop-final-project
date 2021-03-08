@@ -1,15 +1,20 @@
 <template>
   <b-card :title="$t('inventoryFormManagement')" v-if="originalMaster">
     <b-form class="mt-4" @submit.prevent="savedata">
-      <b-form-group :label="$t('id')" label-for="input-inventoryid">
+      <b-form-group :label="$t('id')" label-for="input-id">
         <b-form-input
-          id="input-inventoryid"
+          id="input-id"
           :value="originalMaster.id"
           readonly
         ></b-form-input>
       </b-form-group>
-      <b-form-group :label="$t('title')" label-for="input-item">
-        <b-form-input id="input-item" v-model="title" required></b-form-input>
+      <b-form-group :label="$t('title')" label-for="input-title">
+        <b-form-input
+          id="input-title"
+          v-model="title"
+          required
+          autofocus
+        ></b-form-input>
       </b-form-group>
       <b-form-group :label="$t('department')" label-for="select-dept">
         <select id="select-dept" class="form-control" v-model="depselected">

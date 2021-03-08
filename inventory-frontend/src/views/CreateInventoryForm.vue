@@ -1,8 +1,13 @@
 <template>
   <b-card :title="$t('createInventoryForm')">
     <b-form class="mt-4" @submit.prevent="savedata">
-      <b-form-group :label="$t('title')" label-for="input-item">
-        <b-form-input id="input-item" v-model="title" required></b-form-input>
+      <b-form-group :label="$t('title')" label-for="input-title">
+        <b-form-input
+          id="input-title"
+          v-model="title"
+          required
+          autofocus
+        ></b-form-input>
       </b-form-group>
       <b-form-group :label="$t('department')" label-for="select-dept">
         <select id="select-dept" class="form-control" v-model="depselected">
