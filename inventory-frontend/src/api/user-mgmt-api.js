@@ -1,12 +1,14 @@
+import axios from 'axios';
 import {
     promiseDelay
 } from '../utils/helpers'
 
-// TODO
-
 class UserMgmtApi {
     constructor(baseUrl) {
         this.baseUrl = baseUrl;
+        this.httpClient = axios.create({
+            baseURL: baseUrl,
+          });
     }
 
     async getUserInfoByAccessToken(accessToken) {

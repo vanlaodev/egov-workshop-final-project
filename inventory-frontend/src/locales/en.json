@@ -25,5 +25,12 @@
     "inventoryid": "Inventory ID",
     "editordelete": "Edit/Delete",
     "InventoryFormManagement_placeholder": "Type to Search",
-    "clear": "Clear"
+    "clear": "Clear",
+    "search": "Search",
+    "staffId": "Staff ID",
+    "assetId": "Asset ID",
+    "assetName": "Asset name",
+    "add": "Add",
+    "confirmed": "Confirmed",
+    "delete": "Delete"
 }

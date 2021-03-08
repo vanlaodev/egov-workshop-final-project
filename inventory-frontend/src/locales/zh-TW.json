@@ -25,5 +25,12 @@
   "inventoryid": "盤點單編號",
   "editordelete": "編輯/刪除",
   "InventoryFormManagement_placeholder": "按種類搜尋",
-  "clear": "清空"
+  "clear": "清空",
+  "search": "搜尋",
+  "staffId": "員工編號",
+  "assetId": "資產編號",
+  "assetName": "資產名稱",
+  "add": "新增",
+  "confirmed": "已確認",
+  "delete": "刪除"
 }
