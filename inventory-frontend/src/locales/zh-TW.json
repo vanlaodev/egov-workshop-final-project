@@ -45,6 +45,7 @@
   "message": "訊息",
   "ok": "好的",
   "error": "錯誤",
+  "confirmation": "確認",
   "msg_operationSuccess": "操作成功。",
   "fmt_msg_error": "發生錯誤：{msg}",
   "fmt_msg_confirmDeleteInventoryMaster": "您是否確定要刪除盤點單{id}？"

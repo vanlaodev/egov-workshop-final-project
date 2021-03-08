@@ -68,7 +68,7 @@
       class="mb-0"
     ></b-pagination>
 
-    <b-modal ref="delete-modal" id="delete-modal" hide-footer hide-header>
+    <!-- <b-modal ref="delete-modal" id="delete-modal" hide-footer hide-header>
       <div class="d-block text-center">
         <h3>
           <b-icon
@@ -97,30 +97,39 @@
         @click="hideConfirmDeleteMasterModal"
         >{{ $t("cancel") }}</b-button
       >
-    </b-modal>
+    </b-modal> -->
 
     <message-dialog :ctx="msgDialogCtx"></message-dialog>
+    <confirm-dialog :ctx="confirmDialogCtx"></confirm-dialog>
   </b-card>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import MessageDialog from "../components/MessageDialog";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 export default {
   name: "InventoryFormManagement",
   components: {
     MessageDialog,
+    ConfirmDialog,
   },
   data() {
     return {
       items: [],
       currentPage: 1,
       perPage: 10,
-      selectedId: 0,
+      // selectedId: 0,
       filter: null,
       loadingTable: false,
       msgDialogCtx: {
+        visible: false,
+        title: "",
+        message: "",
+        resolve: null,
+      },
+      confirmDialogCtx: {
         visible: false,
         title: "",
         message: "",
@@ -155,6 +164,21 @@ export default {
         {
           key: "status",
           label: this.$t("status"),
+          formatter: (value) => {
+            let status;
+            switch (value) {
+              case "ACTIVE":
+                status = this.$t("active");
+                break;
+              case "INACTIVE":
+                status = this.$t("inactive");
+                break;
+              default:
+                status = value;
+                break;
+            }
+            return status;
+          },
           sortable: true,
         },
         {
@@ -179,6 +203,14 @@ export default {
         this.msgDialogCtx.visible = true;
       });
     },
+    showConfirmDialog(message, title) {
+      return new Promise((resolve) => {
+        this.confirmDialogCtx.title = title;
+        this.confirmDialogCtx.message = message;
+        this.confirmDialogCtx.resolve = resolve;
+        this.confirmDialogCtx.visible = true;
+      });
+    },
     async loadInventoryMasters() {
       if (this.loadingTable) return;
       try {
@@ -188,24 +220,12 @@ export default {
         });
         this.items = masters
           .map((m) => {
-            let status;
-            switch (m.status) {
-              case "ACTIVE":
-                status = this.$t("active");
-                break;
-              case "INACTIVE":
-                status = this.$t("inactive");
-                break;
-              default:
-                status = m.status;
-                break;
-            }
             return {
               id: m.id,
               name: m.title,
               from: m.fromTime,
               to: m.endTime,
-              status: status,
+              status: m.status,
             };
           })
           .sort((m1, m2) => m2.id - m1.id);
@@ -216,24 +236,33 @@ export default {
         this.loadingTable = false;
       }
     },
-    showConfirmDeleteMasterModal: function (data_id) {
+    async showConfirmDeleteMasterModal(selectedId) {
+      const confirmed = await this.showConfirmDialog(
+        this.$t("fmt_msg_confirmDeleteInventoryMaster", { id: selectedId })
+      );
+      if (confirmed) {
+        await this.deleteMaster(selectedId);
+      }
+    },
+    /* showConfirmDeleteMasterModal(data_id) {
       this.selectedId = data_id;
       this.$refs["delete-modal"].show();
     },
     hideConfirmDeleteMasterModal() {
       this.$refs["delete-modal"].hide();
-    },
-    async deleteMaster() {
+    }, */
+    async deleteMaster(selectedId) {
       try {
-        await this.$api.inventoryApi.deleteMaster(this.selectedId);
-        for (let z = 0; z < this.items.length; z++)
-          if (this.items[z].id == this.selectedId) {
+        await this.$api.inventoryApi.deleteMaster(selectedId);
+        for (let z = 0; z < this.items.length; z++) {
+          if (this.items[z].id == selectedId) {
             this.$delete(this.items, z);
             break;
           }
-        this.hideConfirmDeleteMasterModal();
+        }
+        // this.hideConfirmDeleteMasterModal();
       } catch (err) {
-        this.hideConfirmDeleteMasterModal();
+        // this.hideConfirmDeleteMasterModal();
         await this.showMsgDialog(err, this.$t("error"));
       }
     },
