@@ -32,5 +32,6 @@
     "assetName": "Asset name",
     "add": "Add",
     "confirmed": "Confirmed",
-    "delete": "Delete"
+    "delete": "Delete",
+    "remark": "Remark"
 }

@@ -31,7 +31,7 @@
             <b-nav-item-dropdown v-if="loggedInUser">
               <template #button-content>
                 <b-icon-person-fill class="mr-1" aria-hidden="true"></b-icon-person-fill>
-                <span>{{ loggedInUser.username }}</span>
+                <span v-if="loggedInUser">{{ loggedInUser.username }}</span>
               </template>
               <b-dropdown-item href="#">
                 {{
@@ -76,7 +76,7 @@ export default {
     },
     mainMenuItemsAllowToNav: function() {
       return mainMenu.items.filter(mi =>
-        mi.allowNavigate(this.loggedInUser.roles)
+        mi.allowNavigate(this.loggedInUser?.roles)
       );
     }
   },

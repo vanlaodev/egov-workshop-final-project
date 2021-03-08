@@ -3,7 +3,7 @@
     <b-card :title="$t('createInventoryForm')">
       <b-form @submit.prevent="savedata">
         <b-form-group :label="`${$t('item')}:`" label-for="input-item">
-          <b-form-input id="input-item" v-model="item" required></b-form-input>
+          <b-form-input id="input-item" v-model="title" required></b-form-input>
         </b-form-group>
         <b-form-group :label="`${$t('department')}:`" label-for="select-dept">
           <select id="select-dept" class="form-control" v-model="depselected">
@@ -19,7 +19,10 @@
           ></b-form-datepicker>
         </b-form-group>
         <b-form-group :label="`${$t('to')}:`" label-for="dtp-to">
-          <b-form-datepicker v-model="dtpTo" :min="minDtpTo"></b-form-datepicker>
+          <b-form-datepicker id="dtp-to" v-model="dtpTo" :min="minDtpTo"></b-form-datepicker>
+        </b-form-group>
+        <b-form-group :label="`${$t('remark')}:`" label-for="input-remark">
+          <b-form-textarea id="input-remark" v-model="remark"></b-form-textarea>
         </b-form-group>
         <b-button type="submit" variant="primary" class="mr-2">{{ $t('save') }}</b-button>
         <b-button @click.prevent="backToinquiry" variant="secondary">{{ $t('cancel') }}</b-button>
@@ -34,16 +37,16 @@ import * as dayjs from "dayjs";
 export default {
   data() {
     return {
-      item: "",
-      depselected: "ALL",
+      title: "",
+      depselected: "1",
       dtpFrom: dayjs().format("YYYY-MM-DD"),
       dtpTo: dayjs().format("YYYY-MM-DD"),
       deplist: [
-        { value: "ALL", text: "ALL" },
-        { value: "DOI", text: "DOI" },
-        { value: "DAF", text: "DAF" },
-        { value: "DRC", text: "DRC" }
-      ]
+        { value: "1", text: "DOI" },
+        { value: "2", text: "DAF" },
+        { value: "3", text: "DRC" }
+      ],
+      remark: ""
     };
   },
   methods: {
@@ -52,8 +55,21 @@ export default {
         this.dtpTo = this.dtpFrom;
       }
     },
-    savedata() {
-      this.$router.replace({ name: "InventoryFormManagement" });
+    async savedata() {
+      try {
+        await this.$api.inventoryApi.createMaster({
+          deptId: 1, // TODO
+          fromTime: dayjs(this.dtpFrom).format("YYYY/MM/DD"),
+          endTime: dayjs(this.dtpTo).format("YYYY/MM/DD"),
+          title: this.title,
+          remark: this.remark,
+          userName: "test"
+        });
+        this.$router.replace({ name: "InventoryFormManagement" });
+      } catch (err) {
+        // TODO: show err dialog
+        alert(`Error: ${err}`);
+      }
     },
     changeEnd() {
       this.dtpicker2 = this.dtpicker1;

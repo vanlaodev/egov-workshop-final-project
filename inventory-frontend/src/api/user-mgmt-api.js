@@ -1,7 +1,4 @@
 import axios from 'axios';
-import {
-    promiseDelay
-} from '../utils/helpers'
 
 class UserMgmtApi {
     constructor(baseUrl) {
@@ -13,7 +10,6 @@ class UserMgmtApi {
 
     async getUserInfoByAccessToken(accessToken) {
         // TODO
-        await promiseDelay(1000);
         return await new Promise((resolve) => {
             resolve({
                 id: 'adminid',
@@ -21,7 +17,7 @@ class UserMgmtApi {
                 accessToken: accessToken,
                 refreshToken: null,
                 department: {
-                    id: 'dummydept',
+                    id: 1,
                 },
                 roles: []
             });
@@ -30,7 +26,6 @@ class UserMgmtApi {
 
     async signOut() {
         // TODO: revoke access token if need
-        await promiseDelay(1000);
     }
 }
 

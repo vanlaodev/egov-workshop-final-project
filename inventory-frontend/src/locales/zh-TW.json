@@ -32,5 +32,6 @@
   "assetName": "資產名稱",
   "add": "新增",
   "confirmed": "已確認",
-  "delete": "刪除"
+  "delete": "刪除",
+  "remark": "備註"
 }

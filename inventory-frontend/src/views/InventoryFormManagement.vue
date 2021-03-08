@@ -5,7 +5,11 @@
         <div class="row">
           <div class="col-sm-11">
             <b-input-group>
-              <b-form-input type="search" v-model="filter" :placeholder='$t("InventoryFormManagement_placeholder")'></b-form-input>
+              <b-form-input
+                type="search"
+                v-model="filter"
+                :placeholder="$t('InventoryFormManagement_placeholder')"
+              ></b-form-input>
               <b-input-group-append>
                 <b-button :disabled="!filter" @click="filter = ''">
                   {{
@@ -21,9 +25,9 @@
               variant="primary"
               class="mr-2"
               @click.prevent="goToCreateInventoryForm"
-            >{{ $t("createInventoryForm") }}</b-button> -->
+            >{{ $t("createInventoryForm") }}</b-button>-->
             <a href="#" class="editcolor a-btn-slide-text" @click.prevent="goToCreateInventoryForm">
-            <b-icon icon="plus-circle" class="h1 mb-2"></b-icon>
+              <b-icon icon="plus-circle" class="h1 mb-2"></b-icon>
             </a>
           </div>
         </div>
@@ -41,14 +45,14 @@
       >
         <template #cell(Action)="data">
           <a href="#" class="editcolor a-btn-slide-text" @click.prevent="editObject(data.item.id)">
-            <b-icon icon="pencil-square" class="h3 mb-2"></b-icon>
+            <b-icon icon="pencil-square" class="h3 mr-2"></b-icon>
           </a>&nbsp;
           <a
             href="#"
             class="deletecolor a-btn-slide-text"
             @click.prevent="clickDelete(data.item.id)"
           >
-            <b-icon icon="trash-fill" class="h3 mb-2"></b-icon>
+            <b-icon icon="trash-fill" class="h3"></b-icon>
           </a>
         </template>
       </b-table>
@@ -106,79 +110,20 @@
   margin-bottom: 25px;
 }
 #delete-modal.close-button {
-  margin-top: 5px ;
+  margin-top: 5px;
 }
-
 </style>
 
 
 <script>
-
 export default {
   name: "InventoryFormManagement",
-  components: {
-  },
+  components: {},
   data() {
     return {
-      items: [
-        {
-          id: 1,
-          name: "關於2021年DOI的盤點項目",
-          from: "01/02/2021",
-          to: "28/02/2021"
-        },
-        {
-          id: 2,
-          name: "關於2021年DAF的盤點項目",
-          from: "05/02/2021",
-          to: "28/02/2021"
-        },
-        {
-          id: 3,
-          name: "關於2021年ABC的盤點項目",
-          from: "05/02/2021",
-          to: "28/02/2021"
-        },
-        {
-          id: 4,
-          name: "關於2021年CDE的盤點項目",
-          from: "05/02/2021",
-          to: "28/02/2021"
-        },
-        {
-          id: 5,
-          name: "關於2021年FGH的盤點項目",
-          from: "01/02/2021",
-          to: "27/02/2021"
-        },
-        {
-          id: 6,
-          name: "關於2021年IJK的盤點項目",
-          from: "06/02/2021",
-          to: "27/02/2021"
-        },
-        {
-          id: 7,
-          name: "關於2021年LMN的盤點項目",
-          from: "03/02/2021",
-          to: "26/02/2021"
-        },
-        {
-          id: 8,
-          name: "關於2021年OPQ的盤點項目",
-          from: "01/02/2021",
-          to: "28/02/2021"
-        },
-        {
-          id: 9,
-          name: "關於2021年RST的盤點項目",
-          from: "01/02/2021",
-          to: "28/02/2021"
-        }
-      ],
-      totalRows: 1,
+      items: [],
       currentPage: 1,
-      perPage: 5,
+      perPage: 10,
       selectedId: 0,
       filter: null
     };
@@ -212,13 +157,44 @@ export default {
           label: this.$t("editordelete")
         }
       ];
+    },
+    totalRows() {
+      return this.items.length;
     }
   },
   mounted() {
-    this.totalRows = this.items.length;
+    this.loadInventoryMaster();
   },
 
   methods: {
+    async loadInventoryMaster() {
+      try {
+        const masters = await this.$api.inventoryApi.searchMaster({
+          deptId: 1
+        });
+        this.items = masters
+          .map(m => {
+            return {
+              id: m.id,
+              name: m.title,
+              from: m.fromTime,
+              to: m.endTime
+            };
+          })
+          .sort((m1, m2) => m2.id - m1.id);
+      } catch (err) {
+        // TODO: show err dialog
+        alert(`Error: ${err}`);
+      }
+    },
+    async deleteInventoryMaster(id) {
+      try {
+        await this.$api.inventoryApi.deleteMaster(id);
+      } catch (err) {
+        // TODO: show err dialog
+        alert(`Error: ${err}`);
+      }
+    },
     clickDelete: function(data_id) {
       this.selectedId = data_id;
       this.$refs["delete-modal"].show();
@@ -226,16 +202,20 @@ export default {
     hideModal() {
       this.$refs["delete-modal"].hide();
     },
-    deleteObject() {
-      for (let z = 0; z < this.items.length; z++)
-        if (
-          this.items[z].id == this.selectedId
-        ) {
-          this.$delete(this.items, z);
-          this.totalRows = this.items.length;
-          break;
-        }
-      this.$refs["delete-modal"].hide();
+    async deleteObject() {
+      try {
+        await this.deleteInventoryMaster(this.selectedId);
+        for (let z = 0; z < this.items.length; z++)
+          if (this.items[z].id == this.selectedId) {
+            this.$delete(this.items, z);
+            break;
+          }
+      } catch (err) {
+        // TODO: show err dialog
+        alert(`Error: ${err}`);
+      } finally {
+        this.$refs["delete-modal"].hide();
+      }
     },
     editObject: function(inventoryfromid) {
       //this.$router.replace('EditInventoryForm');
@@ -247,9 +227,8 @@ export default {
     goToCreateInventoryForm() {
       this.$router.replace({ name: "CreateInventoryForm" });
     },
-    onFiltered(filteredItems) {
+    onFiltered() {
       // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length;
       this.currentPage = 1;
     }
   },

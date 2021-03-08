@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <b-card :title="$t('editInventoryForm')">
       <b-form @submit.prevent="savedata">
-        <b-form-group :label="`${$t('inventoryid')}:`" label-for="input-inventoryid" >
+        <b-form-group :label="`${$t('inventoryid')}:`" label-for="input-inventoryid">
           <b-form-input id="input-inventoryid" v-model="inventoryid" disabled></b-form-input>
         </b-form-group>
         <b-form-group :label="`${$t('item')}:`" label-for="input-item">
@@ -22,7 +22,10 @@
           ></b-form-datepicker>
         </b-form-group>
         <b-form-group :label="`${$t('to')}:`" label-for="dtp-to">
-          <b-form-datepicker v-model="dtpTo" :min="minDtpTo"></b-form-datepicker>
+          <b-form-datepicker id="dtp-to" v-model="dtpTo" :min="minDtpTo"></b-form-datepicker>
+        </b-form-group>
+        <b-form-group :label="`${$t('remark')}:`" label-for="input-remark">
+          <b-form-textarea id="input-remark" v-model="remark"></b-form-textarea>
         </b-form-group>
         <b-button type="submit" variant="primary" class="mr-2">{{ $t('save') }}</b-button>
         <b-button @click.prevent="backToinquiry" variant="secondary">{{ $t('cancel') }}</b-button>
@@ -38,6 +41,7 @@ export default {
   data() {
     return {
       item: "",
+      inventoryid: "",
       depselected: "ALL",
       dtpFrom: dayjs().format("YYYY-MM-DD"),
       dtpTo: dayjs().format("YYYY-MM-DD"),
@@ -46,7 +50,8 @@ export default {
         { value: "DOI", text: "DOI" },
         { value: "DAF", text: "DAF" },
         { value: "DRC", text: "DRC" }
-      ]
+      ],
+      remark: ""
     };
   },
   methods: {

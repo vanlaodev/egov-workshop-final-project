@@ -15,26 +15,39 @@ class InventoryApi {
         });
     }
 
-    createMaster(master) {
+    async createMaster(master) {
         this._assetLoggedIn();
-        return this.httpClient.post('v1/createMaster', master);
+        const resp = await this.httpClient.post('v1/createMaster', master);
+        return this._handleResp(resp.data);
     }
 
-    searchMaster(searchCriteria) {
+    async searchMaster(searchCriteria) {
         this._assetLoggedIn();
-        return this.httpClient.post('v1/searchMaster', searchCriteria);
+        const resp = await this.httpClient.post('v1/searchMaster', searchCriteria);
+        return this._handleResp(resp.data);
     }
 
-    editMaster(master) {
+    async editMaster(master) {
         this._assetLoggedIn();
-        return this.httpClient.post('v1/editMaster', master);
+        const resp = await this.httpClient.post('v1/editMaster', master);
+        return this._handleResp(resp.data);
     }
 
-    deleteMaster(id) {
+    async deleteMaster(id) {
         this._assetLoggedIn();
-        return this.httpClient.post('v1/deleteMaster', {
+        const resp = await this.httpClient.post('v1/deleteMaster', {
             id: id
         });
+        return this._handleResp(resp.data);
+    }
+
+    _handleResp(resp) {
+        if (resp.code == 0) {
+            return resp.data;
+        } else if (resp.code == -2) {
+            // TODO: access token invalid - redirect to login page
+        }
+        throw resp.msg;
     }
 
     _assetLoggedIn() {
