@@ -27,7 +27,7 @@ class InventoryApi {
         return this._handleResp(resp.data);
     }
 
-    async editMaster(master) {
+    async updateMaster(master) {
         this._assetLoggedIn();
         const resp = await this.httpClient.post('v1/editMaster', master);
         return this._handleResp(resp.data);

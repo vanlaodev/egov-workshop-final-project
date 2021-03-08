@@ -22,6 +22,7 @@
     "msg_pageNotFound": "Page not found.",
     "msg_permissionDenied": "Permission denied.",
     "msg_InventoryFormManagement_deleteModal": "Delete inventory No.",
+    "msg_recordNotFound": "Record not found.",
     "inventoryid": "Inventory ID",
     "editordelete": "Edit/Delete",
     "InventoryFormManagement_placeholder": "Type to Search",
@@ -33,5 +34,10 @@
     "add": "Add",
     "confirmed": "Confirmed",
     "delete": "Delete",
-    "remark": "Remark"
+    "remark": "Remark",
+    "actions": "Actions",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "inactive",
+    "fmt_msg_error": "Error occurred: {msg}"
 }

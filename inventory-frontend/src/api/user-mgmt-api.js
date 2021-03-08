@@ -16,7 +16,7 @@ class UserMgmtApi {
                 username: 'admin',
                 accessToken: accessToken,
                 refreshToken: null,
-                department: {
+                dept: {
                     id: 1,
                 },
                 roles: []
