@@ -25,12 +25,18 @@
                 <input v-model="filterUserNo" placeholder="員工編號">
             </b-col>
             <b-col class="filter-col" cols="auto">
+                <b-form-select v-model="departmentSelected" :options="statusOptions" class="status-select"></b-form-select>
+            </b-col>
+            <b-col class="filter-col" cols="auto">
                 <b-form-select v-model="departmentSelected" :options="departmentOptions" class="department-select"></b-form-select>
             </b-col>
         </b-row>
       </div>
       <div class="inventory-list-container">
-        <ul>
+        <div class="no-find-item" v-if="userInventory.length == 0">
+            沒有找到物品
+        </div>
+        <ul v-if="userInventory.length > 0">
           <li>
             <b-row class="inventory-row title">
               <b-col cols="2">
@@ -61,7 +67,7 @@
             </b-row>
           </li>
         </ul>
-        <div class="inventory-pagination-container">
+        <div v-if="userInventory.length > 0" class="inventory-pagination-container">
             <b-pagination
                 v-model="currentPage"
                 :total-rows="rows"
@@ -121,6 +127,11 @@ export default {
         invertoryFormDes: '周一是南韓1919年三一獨立運動102周年，總統文在寅在首爾的紀念活動發表講話，談及韓日及兩韓關係。他表示，今年夏季的日本東京奧運會可為南韓、北韓、美國、日本提供對話契機，又指韓方準備好隨時近年因二戰慰安婦問題而交惡的日本對話。',
         selectedItemNo: null,
         departmentSelected: 0,
+        statusOptions:[
+          { value: 0, text: '全部' },
+          { value: 1, text: '已確認' },
+          { value: 2, text: '未確認' },
+        ],
         departmentOptions:[
           { value: 0, text: '全部' },
           { value: 1, text: '部門1' },
@@ -168,6 +179,7 @@ export default {
     }
   },
   mounted(){
+    let self = this;
     this.userInventory = [];
     for(let i=1; i<=10; i++){
         this.userInventory.push({
@@ -177,11 +189,14 @@ export default {
             checked: false,
         })
     }
-    this.$root.$on('bv::modal::hide', (bvEvent, modalId) => {
-      if(modalId === 'confirm-modal'){
-        this.selectedItemNo = null;
-      }
-    })
+    lodash.forEach([this.$refs['confirm-modal'], this.$refs['delete-modal'], this.$refs['search-modal']], function(modal){
+        modal.$root.$off('bv::modal::hide');
+        modal.$root.$on('bv::modal::hide', (bvEvent, modalId) => {
+        if(modalId === 'confirm-modal'){
+            self.selectedItemNo = null;
+        }
+        })
+    });
   },
   components: {
     SearchInventory

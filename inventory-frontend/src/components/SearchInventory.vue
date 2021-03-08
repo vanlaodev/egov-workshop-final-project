@@ -19,7 +19,10 @@
         </b-row>
       </div>
       <div class="inventory-search-list">
-        <ul>
+        <div class="no-find-item" v-if="inventoryList.length == 0">
+            沒有找到物品
+        </div>
+        <ul v-if="inventoryList.length > 0">
           <li>
             <b-row class="inventory-row title">
               <b-col cols="2">
@@ -46,7 +49,7 @@
             </b-row>
           </li>
         </ul>
-        <div class="inventory-pagination-container">
+        <div v-if="inventoryList.length > 0" class="inventory-pagination-container">
             <b-pagination
                 v-model="currentPage"
                 :total-rows="rows"
@@ -59,6 +62,13 @@
             </b-pagination>
         </div>
       </div>
+      <b-modal ref="search-confirm-modal" id="search-confirm-modal" hide-footer hide-header>
+        <div class="d-block text-center search-confirm-title">
+            <h3>是否確定新增?</h3>
+        </div>
+        <b-button class="mt-2" variant="outline-success" block @click="confirm">確定</b-button>
+        <b-button class="mt-3 close-button" variant="outline-danger" block @click="hideModal">取消</b-button>
+      </b-modal>
   </div>
 </template>
 
@@ -83,6 +93,11 @@
         }
         .department-select{
             height: 100%;
+        }
+        .no-find-item{
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
         }
         .inventory-search-list{
             border: 1px solid #D4D4D4;
@@ -138,6 +153,14 @@
             }
         }
     }
+    #search-confirm-modal{
+        .search-confirm-title{
+            margin-bottom: 25px;
+        }
+        .close-button{
+            margin-top: 5px !important;
+        }
+    }
 </style>
 
 <script>
@@ -148,6 +171,7 @@ export default {
         isAdmin: true,
         filterNo: '',
         filterUserNo: '',
+        currentItem: null,
         rows: 100,
         perPage: 5,
         currentPage: 1,
@@ -166,7 +190,14 @@ export default {
         console.log(this.currentPage);
     },
     clickAdd: function (itemNo) {
-        this.$emit('clickAdd', itemNo);
+        this.$refs['search-confirm-modal'].show()
+        this.currentItem = itemNo;
+    },
+    confirm() {
+        this.$emit('clickAdd', this.currentItem);
+    },
+    hideModal() {
+      this.$refs['search-confirm-modal'].hide();
     },
   },
   mounted(){
@@ -178,6 +209,12 @@ export default {
             itemName: '物品' + i
         })
     }
+    this.$refs['search-confirm-modal'].$root.$off('bv::modal::hide');
+    this.$refs['search-confirm-modal'].$root.$on('bv::modal::hide', (bvEvent, modalId) => {
+      if(modalId === 'search-confirm-modal'){
+        this.currentItem  = null;
+      }
+    })
   }
 };
 </script>
