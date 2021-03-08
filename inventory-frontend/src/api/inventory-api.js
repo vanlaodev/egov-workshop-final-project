@@ -16,25 +16,25 @@ class InventoryApi {
     }
 
     async createMaster(master) {
-        this._assetLoggedIn();
+        this._assertUserLoggedIn();
         const resp = await this.httpClient.post('v1/createMaster', master);
         return this._handleResp(resp.data);
     }
 
     async searchMaster(searchCriteria) {
-        this._assetLoggedIn();
+        this._assertUserLoggedIn();
         const resp = await this.httpClient.post('v1/searchMaster', searchCriteria);
         return this._handleResp(resp.data);
     }
 
     async updateMaster(master) {
-        this._assetLoggedIn();
+        this._assertUserLoggedIn();
         const resp = await this.httpClient.post('v1/editMaster', master);
         return this._handleResp(resp.data);
     }
 
     async deleteMaster(id) {
-        this._assetLoggedIn();
+        this._assertUserLoggedIn();
         const resp = await this.httpClient.post('v1/deleteMaster', {
             id: id
         });
@@ -50,7 +50,7 @@ class InventoryApi {
         throw resp.msg;
     }
 
-    _assetLoggedIn() {
+    _assertUserLoggedIn() {
         if (!store.state.loggedInUser) throw 'User not logged in.';
     }
 }
