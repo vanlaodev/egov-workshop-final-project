@@ -1,5 +1,5 @@
 <template>
-  <b-card :title="$t('inventoryFormManagement')" v-if="originalMaster">
+  <b-card :title="$t('editInventoryForm')" v-if="originalMaster">
     <b-form class="mt-4" @submit.prevent="savedata">
       <b-form-group :label="$t('id')" label-for="input-id">
         <b-form-input
