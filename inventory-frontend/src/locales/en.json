@@ -25,7 +25,6 @@
     "msg_recordNotFound": "Record not found.",
     "inventoryid": "Inventory ID",
     "editordelete": "Edit/Delete",
-    "InventoryFormManagement_placeholder": "Type to Search",
     "clear": "Clear",
     "search": "Search",
     "staffId": "Staff ID",
@@ -38,6 +37,9 @@
     "actions": "Actions",
     "status": "Status",
     "active": "Active",
-    "inactive": "inactive",
-    "fmt_msg_error": "Error occurred: {msg}"
+    "inactive": "Inactive",
+    "title": "Title",
+    "id": "ID",
+    "fmt_msg_error": "Error occurred: {msg}",
+    "fmt_msg_confirmDeleteInventoryMaster": "Are you sure to delete the inventory master no. {id}?"
 }

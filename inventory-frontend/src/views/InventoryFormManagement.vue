@@ -4,13 +4,16 @@
       <div class="row">
         <div class="col-sm-11">
           <b-input-group>
+            <template #prepend>
+              <b-input-group-text><b-icon icon="search" /></b-input-group-text>
+            </template>
             <b-form-input
               type="search"
               v-model="filter"
-              :placeholder="$t('InventoryFormManagement_placeholder')"
+              :placeholder="$t('search')"
             ></b-form-input>
-            <b-input-group-append>
-              <b-button :disabled="!filter" @click="filter = ''">
+            <b-input-group-append v-if="filter">
+              <b-button @click="filter = ''">
                 {{ $t("clear") }}
               </b-button>
             </b-input-group-append>
@@ -22,7 +25,7 @@
             class="editcolor a-btn-slide-text"
             @click.prevent="goToCreateInventoryForm"
           >
-            <b-icon icon="plus-circle" class="h1 mb-2"></b-icon>
+            <b-icon icon="plus-circle" class="h1"></b-icon>
           </a>
         </div>
       </div>
@@ -74,20 +77,18 @@
       </div>
       <div class="d-block text-center delete-title">
         <h3>
-          {{ $t("msg_InventoryFormManagement_deleteModal") }}&nbsp;{{
-            selectedId
-          }}&nbsp;?
+          {{ $t("fmt_msg_confirmDeleteInventoryMaster", { id: selectedId }) }}
         </h3>
       </div>
       <b-button
-        class="mt-2"
+        class="mt-3"
         variant="outline-success"
         block
         @click="deleteObject"
         >{{ $t("confirm") }}</b-button
       >
       <b-button
-        class="mt-3 close-button"
+        class="mt-2 close-button"
         variant="outline-danger"
         block
         @click="hideModal"
@@ -144,12 +145,12 @@ export default {
       return [
         {
           key: "id",
-          label: this.$t("inventoryid"),
+          label: this.$t("id"),
           sortable: true,
         },
         {
           key: "name",
-          label: this.$t("item"),
+          label: this.$t("title"),
           sortable: true,
         },
         {
