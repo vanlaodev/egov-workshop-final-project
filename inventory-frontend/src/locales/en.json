@@ -42,6 +42,10 @@
     "id": "ID",
     "edit": "Edit",
     "loading": "Loading",
+    "message": "Message",
+    "ok": "OK",
+    "error": "Error",
+    "msg_operationSuccess": "Operation success.",
     "fmt_msg_error": "Error occurred: {msg}",
     "fmt_msg_confirmDeleteInventoryMaster": "Are you sure to delete the inventory master no. {id}?"
 }

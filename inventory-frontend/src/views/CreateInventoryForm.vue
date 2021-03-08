@@ -52,15 +52,19 @@
         >{{ $t("cancel") }}</b-button
       >
     </b-form>
+    <message-dialog :ctx="msgDialogCtx"></message-dialog>
   </b-card>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import { showErrorAlert } from "../utils/helpers";
 import * as dayjs from "dayjs";
+import MessageDialog from "../components/MessageDialog";
 
 export default {
+  components: {
+    MessageDialog,
+  },
   mounted() {
     this.depselected = this.loggedInUser.dept.id;
   },
@@ -77,9 +81,23 @@ export default {
       ],
       remark: "",
       saving: false,
+      msgDialogCtx: {
+        visible: false,
+        title: "",
+        message: "",
+        resolve: null,
+      },
     };
   },
   methods: {
+    showMsgDialog(message, title) {
+      return new Promise((resolve) => {
+        this.msgDialogCtx.title = title;
+        this.msgDialogCtx.message = message;
+        this.msgDialogCtx.resolve = resolve;
+        this.msgDialogCtx.visible = true;
+      });
+    },
     onDtpFromUpdated() {
       if (this.dtpFrom > this.dtpTo) {
         this.dtpTo = this.dtpFrom;
@@ -97,10 +115,10 @@ export default {
           remark: this.remark,
           userName: "test", // TODO: remove this later
         });
+        await this.showMsgDialog(this.$t("msg_operationSuccess"));
         this.backToinquiry();
       } catch (err) {
-        // TODO: show err dialog
-        showErrorAlert(err);
+        await this.showMsgDialog(err, this.$t("error"));
       } finally {
         this.saving = false;
       }

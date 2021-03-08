@@ -17,21 +17,9 @@
           </b-button>
         </b-input-group-append>
       </b-input-group>
-      <a href="#" @click.prevent="goToCreateInventoryForm">
-        <b-icon
-          variant="success"
-          icon="plus-circle"
-          class="h2 m-0 ml-3"
-        ></b-icon>
+      <a href="#" @click.prevent="goToCreateInventoryForm" class="ml-3">
+        <b-icon variant="success" icon="plus-circle" class="h2 m-0"></b-icon>
       </a>
-      <!--       <a href="#" @click.prevent="loadInventoryMasters">
-        <b-icon
-          variant="primary"
-          icon="arrow-clockwise"
-          :animation="loadingTable ? 'spin' : ''"
-          class="h2 m-0 ml-2"
-        ></b-icon>
-      </a> -->
     </b-form>
 
     <b-table
@@ -47,7 +35,7 @@
     >
       <template #cell(Action)="data">
         <b-button
-          variant="secondary"
+          variant="link"
           size="sm"
           @click="editMaster(data.item.id)"
           class="mr-2"
@@ -56,7 +44,7 @@
           {{ $t("edit") }}
         </b-button>
         <b-button
-          variant="danger"
+          variant="link"
           size="sm"
           @click="showConfirmDeleteMasterModal(data.item.id)"
         >
@@ -106,20 +94,24 @@
         class="mt-2 close-button"
         variant="outline-danger"
         block
-        @click="hideModal"
+        @click="hideConfirmDeleteMasterModal"
         >{{ $t("cancel") }}</b-button
       >
     </b-modal>
+
+    <message-dialog :ctx="msgDialogCtx"></message-dialog>
   </b-card>
 </template>
 
 <script>
-import { showErrorAlert } from "../utils/helpers";
 import { mapState } from "vuex";
+import MessageDialog from "../components/MessageDialog";
 
 export default {
   name: "InventoryFormManagement",
-  components: {},
+  components: {
+    MessageDialog,
+  },
   data() {
     return {
       items: [],
@@ -128,6 +120,12 @@ export default {
       selectedId: 0,
       filter: null,
       loadingTable: false,
+      msgDialogCtx: {
+        visible: false,
+        title: "",
+        message: "",
+        resolve: null,
+      },
     };
   },
   computed: {
@@ -173,6 +171,14 @@ export default {
     this.loadInventoryMasters();
   },
   methods: {
+    showMsgDialog(message, title) {
+      return new Promise((resolve) => {
+        this.msgDialogCtx.title = title;
+        this.msgDialogCtx.message = message;
+        this.msgDialogCtx.resolve = resolve;
+        this.msgDialogCtx.visible = true;
+      });
+    },
     async loadInventoryMasters() {
       if (this.loadingTable) return;
       try {
@@ -205,8 +211,7 @@ export default {
           .sort((m1, m2) => m2.id - m1.id);
         this.currentPage = 1;
       } catch (err) {
-        // TODO: show err dialog
-        showErrorAlert(err);
+        await this.showMsgDialog(err, this.$t("error"));
       } finally {
         this.loadingTable = false;
       }
@@ -215,7 +220,7 @@ export default {
       this.selectedId = data_id;
       this.$refs["delete-modal"].show();
     },
-    hideModal() {
+    hideConfirmDeleteMasterModal() {
       this.$refs["delete-modal"].hide();
     },
     async deleteMaster() {
@@ -226,11 +231,10 @@ export default {
             this.$delete(this.items, z);
             break;
           }
+        this.hideConfirmDeleteMasterModal();
       } catch (err) {
-        // TODO: show err dialog
-        showErrorAlert(err);
-      } finally {
-        this.$refs["delete-modal"].hide();
+        this.hideConfirmDeleteMasterModal();
+        await this.showMsgDialog(err, this.$t("error"));
       }
     },
     editMaster(inventoryfromid) {

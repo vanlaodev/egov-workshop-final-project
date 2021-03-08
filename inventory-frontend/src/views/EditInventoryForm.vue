@@ -81,15 +81,19 @@
     <div v-else-if="loading" class="mt-4">
       <strong>{{ $t("loading") }}...</strong>
     </div>
+    <message-dialog :ctx="msgDialogCtx"></message-dialog>
   </b-card>
 </template>
 
 <script>
-import { showErrorAlert } from "../utils/helpers";
 import * as dayjs from "dayjs";
 import { mapState } from "vuex";
+import MessageDialog from "../components/MessageDialog";
 
 export default {
+  components: {
+    MessageDialog,
+  },
   data() {
     return {
       originalMaster: null,
@@ -108,6 +112,12 @@ export default {
       remark: "",
       saving: false,
       loading: false,
+      msgDialogCtx: {
+        visible: false,
+        title: "",
+        message: "",
+        resolve: null,
+      },
     };
   },
   computed: {
@@ -123,6 +133,14 @@ export default {
     this.getInventoryMaster();
   },
   methods: {
+    showMsgDialog(message, title) {
+      return new Promise((resolve) => {
+        this.msgDialogCtx.title = title;
+        this.msgDialogCtx.message = message;
+        this.msgDialogCtx.resolve = resolve;
+        this.msgDialogCtx.visible = true;
+      });
+    },
     async getInventoryMaster() {
       const masterId = this.$route.params.id;
       if (masterId) {
@@ -151,11 +169,11 @@ export default {
             );
             this.originalMaster = master;
           } else {
-            showErrorAlert(this.$t("msg_recordNotFound"));
+            await this.showMsgDialog(this.$t("msg_recordNotFound"));
             this.backToinquiry();
           }
         } catch (err) {
-          showErrorAlert(err);
+          await this.showMsgDialog(err, this.$t("error"));
           this.backToinquiry();
         } finally {
           this.loading = false;
@@ -183,10 +201,10 @@ export default {
           remark: this.remark,
           userName: "test", // TODO: remove this later
         });
+        await this.showMsgDialog(this.$t("msg_operationSuccess"));
         this.backToinquiry();
       } catch (err) {
-        // TODO: show err dialog
-        showErrorAlert(err);
+        await this.showMsgDialog(err, this.$t("error"));
       } finally {
         this.saving = false;
       }
