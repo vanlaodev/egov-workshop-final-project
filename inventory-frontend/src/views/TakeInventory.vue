@@ -26,7 +26,6 @@
 
 <style lang="scss" scoped>
 .view-container{
-  padding: 30px 10px;
   h1{
     font-size: 2rem;
   }

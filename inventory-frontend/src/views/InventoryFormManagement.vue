@@ -1,37 +1,32 @@
 <template>
-  <div>
-    <div class="form-group">
-      <div class="row">
-        <div class="col-sm-11">
-          <b-input-group>
-            <template #prepend>
-              <b-input-group-text><b-icon icon="search" /></b-input-group-text>
-            </template>
-            <b-form-input
-              type="search"
-              v-model="filter"
-              :placeholder="$t('search')"
-            ></b-form-input>
-            <b-input-group-append v-if="filter">
-              <b-button @click="filter = ''">
-                {{ $t("clear") }}
-              </b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </div>
-        <div class="col-sm-1" style="text-align: center">
-          <a
-            href="#"
-            class="editcolor a-btn-slide-text"
-            @click.prevent="goToCreateInventoryForm"
-          >
-            <b-icon icon="plus-circle" class="h1"></b-icon>
-          </a>
-        </div>
-      </div>
-    </div>
+  <b-card :title="$t('inventoryFormManagement')">
+    <b-form inline class="d-flex flex-row flex-nowrap align-items-center">
+      <b-input-group class="flex-grow-1 my-3">
+        <template #prepend>
+          <b-input-group-text><b-icon icon="search" /></b-input-group-text>
+        </template>
+        <b-form-input
+          type="search"
+          v-model="filter"
+          :placeholder="$t('search')"
+        ></b-form-input>
+        <b-input-group-append v-if="filter">
+          <b-button @click="filter = ''">
+            {{ $t("clear") }}
+          </b-button>
+        </b-input-group-append>
+      </b-input-group>
+      <a
+        href="#"
+        class="editcolor a-btn-slide-text"
+        @click.prevent="goToCreateInventoryForm"
+      >
+        <b-icon icon="plus-circle" class="h1 m-0 ml-3"></b-icon>
+      </a>
+    </b-form>
 
     <b-table
+      responsive
       striped
       hover
       :items="items"
@@ -64,6 +59,7 @@
       :total-rows="totalRows"
       :per-page="perPage"
       size="md"
+      class="mb-0"
     ></b-pagination>
 
     <b-modal ref="delete-modal" id="delete-modal" hide-footer hide-header>
@@ -95,7 +91,7 @@
         >{{ $t("cancel") }}</b-button
       >
     </b-modal>
-  </div>
+  </b-card>
 </template>
 
 <style>
