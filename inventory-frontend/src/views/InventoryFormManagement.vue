@@ -38,7 +38,6 @@
           variant="link"
           size="sm"
           @click="editMaster(data.item.id)"
-          class="mr-2"
         >
           <b-icon icon="pencil-fill" aria-hidden="true"></b-icon>
           {{ $t("edit") }}
