@@ -47,6 +47,9 @@
     "error": "Error",
     "confirmation": "Confirmation",
     "invalid": "Invalid",
+    "transferOfAssets": "Transfer of assets",
+    "assetsManagement": "Assets management",
+    "reports": "Reports",
     "msg_operationSuccess": "Operation success.",
     "fmt_msg_error": "Error occurred: {msg}",
     "fmt_msg_confirmDeleteInventoryMaster": "Are you sure to delete the inventory master no. {id}?"

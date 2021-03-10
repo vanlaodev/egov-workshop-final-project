@@ -17,6 +17,9 @@
                 >{{ $t(item.titleI18nKey) }}</b-dropdown-item
               >
             </b-nav-item-dropdown>
+            <b-nav-item href="#">{{ $t("assetsManagement") }}</b-nav-item>
+            <b-nav-item>{{ $t("transferOfAssets") }}</b-nav-item>
+            <b-nav-item href="#">{{ $t("reports") }}</b-nav-item>
           </b-navbar-nav>
 
           <b-navbar-nav class="ml-auto">
