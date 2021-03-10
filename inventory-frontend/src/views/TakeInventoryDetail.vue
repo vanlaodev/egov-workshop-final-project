@@ -19,16 +19,16 @@
         </b-row>
         <b-row class="filter-row">
             <b-col class="filter-col" cols="3">
-                <input v-model="filterNo" placeholder="物品編號">
+                <input v-on:keypress="searchChange" v-model="filterNo" placeholder="物品編號">
             </b-col>
             <b-col class="filter-col" cols="3">
-                <input v-model="filterUserNo" placeholder="員工編號">
+                <input v-on:keypress="searchChange" v-model="filterUserNo" placeholder="員工編號">
             </b-col>
             <b-col class="filter-col" cols="auto">
-                <b-form-select v-model="departmentSelected" :options="statusOptions" class="status-select"></b-form-select>
+                <b-form-select v-on:change="searchChangeNotDebounce" v-model="statusSelected" :options="statusOptions" class="status-select"></b-form-select>
             </b-col>
             <b-col class="filter-col" cols="auto">
-                <b-form-select v-model="departmentSelected" :options="departmentOptions" class="department-select"></b-form-select>
+                <b-form-select v-on:change="searchChangeNotDebounce" v-model="departmentSelected" :options="departmentOptions" class="department-select"></b-form-select>
             </b-col>
         </b-row>
       </div>
@@ -39,23 +39,31 @@
         <ul v-if="userInventory.length > 0">
           <li>
             <b-row class="inventory-row title">
-              <b-col cols="2">
+              <b-col md="2">
               物品編號
               </b-col>
-              <b-col>
+              <b-col md="6">
               物品名稱
+              </b-col>
+              <b-col md="2">
+              員工
+              </b-col>
+              <b-col md="2">
               </b-col>
             </b-row>
           </li>
           <li v-for="inventory in userInventory" :key="inventory.id">
             <b-row class="inventory-row">
-              <b-col class="inventory-col-no" cols="2">
+              <b-col class="inventory-col-no" md="2">
               {{ inventory.itemNo }}
               </b-col>
-              <b-col>
+              <b-col  md="6">
               {{ inventory.itemName }}
               </b-col>
-              <b-col class="action-button-col" md="auto" sm="12">
+              <b-col md="2">
+              {{ inventory.staff }}
+              </b-col>
+              <b-col class="action-button-col" md="2" sm="12">
                 <button class="check-button" v-on:click="clickConfirm(inventory.itemNo)" :disabled="inventory.checked">
                   <span v-if="inventory.checked">已確認</span>
                   <span v-else>確認</span>
@@ -126,6 +134,7 @@ export default {
         invertoryFormTime: '2021-03-01 至 2021-03-15',
         invertoryFormDes: '周一是南韓1919年三一獨立運動102周年，總統文在寅在首爾的紀念活動發表講話，談及韓日及兩韓關係。他表示，今年夏季的日本東京奧運會可為南韓、北韓、美國、日本提供對話契機，又指韓方準備好隨時近年因二戰慰安婦問題而交惡的日本對話。',
         selectedItemNo: null,
+        statusSelected: 0,
         departmentSelected: 0,
         statusOptions:[
           { value: 0, text: '全部' },
@@ -176,7 +185,13 @@ export default {
     addItem(itemNo) {
         console.log('addItem', itemNo);
         this.$refs['search-modal'].hide();
-    }
+    },
+    searchChangeNotDebounce() {
+        console.log(this.filterNo);
+    },
+    searchChange: lodash.debounce(function(){
+        this.searchChangeNotDebounce();
+    }, 1000)
   },
   mounted(){
     let self = this;
@@ -186,6 +201,7 @@ export default {
             id: i,
             itemNo: '734123' + i,
             itemName: '物品' + i,
+            staff: '員工' + i,
             checked: false,
         })
     }

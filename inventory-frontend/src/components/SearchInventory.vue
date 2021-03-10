@@ -8,13 +8,13 @@
         </b-row>
         <b-row class="filter-row">
             <b-col class="filter-col" cols="4">
-                <input v-model="filterNo" placeholder="物品編號">
+                <input v-on:keypress="searchChange" v-model="filterNo" placeholder="物品編號">
             </b-col>
             <b-col class="filter-col" cols="4">
-                <input v-model="filterUserNo" placeholder="員工編號">
+                <input v-on:keypress="searchChange" v-model="filterUserNo" placeholder="員工編號">
             </b-col>
             <b-col class="filter-col" cols="auto">
-                <b-form-select v-model="departmentSelected" :options="departmentOptions" class="department-select"></b-form-select>
+                <b-form-select v-on:change="searchChangeNotDebounce" v-model="departmentSelected" :options="departmentOptions" class="department-select"></b-form-select>
             </b-col>
         </b-row>
       </div>
@@ -25,23 +25,31 @@
         <ul v-if="inventoryList.length > 0">
           <li>
             <b-row class="inventory-row title">
-              <b-col cols="2">
+              <b-col md="2">
               物品編號
               </b-col>
-              <b-col>
+              <b-col md="6">
               物品名稱
+              </b-col>
+              <b-col md="2">
+              員工
+              </b-col>
+              <b-col md="2">
               </b-col>
             </b-row>
           </li>
           <li v-for="inventory in inventoryList" :key="inventory.id">
             <b-row class="inventory-row">
-              <b-col class="inventory-col-no" cols="2">
+              <b-col class="inventory-col-no" md="2">
               {{ inventory.itemNo }}
               </b-col>
-              <b-col>
+              <b-col md="6">
               {{ inventory.itemName }}
               </b-col>
-              <b-col cols="auto">
+              <b-col md="2">
+              {{ inventory.staff }}
+              </b-col>
+              <b-col class="action-button-col" md="2" sm="12">
                 <button class="choose-button" v-on:click="clickAdd(inventory.itemNo)" :disabled="inventory.checked">
                   <span>新增</span>
                 </button>
@@ -130,6 +138,11 @@
                 .inventory-col-no{
                     font-weight: 600;
                 }
+                .action-button-col.col-sm-12{
+                    margin-top: 10px;
+                    padding: 0;
+                    text-align: right;
+                }
                 &.title{
                     background-color: #EDEDED;
                 }
@@ -164,6 +177,8 @@
 </style>
 
 <script>
+import lodash from 'lodash';
+
 export default {
   name: "SearchInventory",
   data(){
@@ -199,6 +214,12 @@ export default {
     hideModal() {
       this.$refs['search-confirm-modal'].hide();
     },
+    searchChangeNotDebounce() {
+        console.log(this.filterNo);
+    },
+    searchChange: lodash.debounce(function(){
+        this.searchChangeNotDebounce();
+    }, 1000)
   },
   mounted(){
     this.inventoryList = [];
@@ -206,7 +227,8 @@ export default {
         this.inventoryList.push({
             id: i,
             itemNo: '734123' + i,
-            itemName: '物品' + i
+            itemName: '物品' + i,
+            staff: '員工' + i
         })
     }
     this.$refs['search-confirm-modal'].$root.$off('bv::modal::hide');
