@@ -1,6 +1,6 @@
 <template>
   <b-card :title="$t('createInventoryForm')">
-    <b-form class="mt-4" @submit.prevent="savedata">
+    <b-form @submit.prevent="savedata" class="mt-3">
       <b-form-group
         :label="$t('department')"
         label-for="input-dept"

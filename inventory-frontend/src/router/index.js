@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import store from '../store'
 import mainMenu from '../domain/main-menu'
 import Dashboard from '../views/Dashboard.vue'
-import Inquiry from '../views/Inquiry.vue'
 import TakeInventory from '../views/TakeInventory.vue'
 import TakeInventoryDetail from '../views/TakeInventoryDetail.vue'
 import CreateInventoryForm from '../views/CreateInventoryForm.vue'
@@ -19,10 +18,6 @@ const routes = [{
   alias: ['/'],
   component: Dashboard
 }, {
-  path: '/inquiry',
-  name: 'Inquiry',
-  component: Inquiry,
-}, {
   path: '/takeInventory',
   name: 'TakeInventory',
   component: TakeInventory
@@ -34,11 +29,11 @@ const routes = [{
   path: '/createInventoryForm',
   name: 'CreateInventoryForm',
   component: CreateInventoryForm
-},{
+}, {
   path: '/editInventoryForm/:id',
   name: 'EditInventoryForm',
   component: EditInventoryForm
-},{
+}, {
   path: '/inventoryFormManagement',
   name: 'InventoryFormManagement',
   component: InventoryFormManagement

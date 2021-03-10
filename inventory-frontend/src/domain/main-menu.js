@@ -13,7 +13,6 @@ class MainMenuItem {
 const mainMenu = {
     items: [
         new MainMenuItem('dashboard', 'Dashboard'),
-        new MainMenuItem('inquiry', 'Inquiry'),
         new MainMenuItem('createInventoryForm', 'CreateInventoryForm'),
         new MainMenuItem('inventoryFormManagement', 'InventoryFormManagement'),
         new MainMenuItem('takeInventory', 'TakeInventory'),

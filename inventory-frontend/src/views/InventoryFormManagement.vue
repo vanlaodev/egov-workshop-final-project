@@ -1,7 +1,7 @@
 <template>
   <b-card :title="$t('inventoryFormManagement')">
-    <b-form inline class="d-flex flex-row flex-nowrap align-items-center">
-      <b-input-group class="flex-grow-1 my-3">
+    <b-form inline class="d-flex flex-row flex-nowrap align-items-center my-3">
+      <b-input-group class="flex-grow-1">
         <template #prepend>
           <b-input-group-text><b-icon icon="search" /></b-input-group-text>
         </template>
@@ -34,11 +34,7 @@
       @filtered="onFiltered"
     >
       <template #cell(Action)="data">
-        <b-button
-          variant="link"
-          size="sm"
-          @click="editMaster(data.item.id)"
-        >
+        <b-button variant="link" size="sm" @click="editMaster(data.item.id)">
           <b-icon icon="pencil-fill" aria-hidden="true"></b-icon>
           {{ $t("edit") }}
         </b-button>

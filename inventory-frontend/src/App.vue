@@ -58,6 +58,12 @@
   </div>
 </template>
 
+<style>
+body {
+  background-color: #eff4f7;
+}
+</style>
+
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 import SplashView from "./components/SplashView";
