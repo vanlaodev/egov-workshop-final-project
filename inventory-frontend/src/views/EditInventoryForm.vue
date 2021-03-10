@@ -75,10 +75,6 @@ export default {
         { value: "3", text: "DRC" }
       ],
       selectedStatus: "",
-      statusList: [
-        { value: "ACTIVE", text: this.$t("active") },
-        { value: "INVALID", text: this.$t("invalid") }
-      ],
       remark: "",
       saving: false,
       loading: false,
@@ -101,7 +97,12 @@ export default {
     selectedDept() {
       if (!this.originalMaster) return null;
       return this.deplist.find(d => d.value == this.originalMaster.deptId);
-    }
+    },      
+    statusList() {
+       return [
+        { value: "ACTIVE", text: this.$t("active") },
+        { value: "INVALID", text: this.$t("invalid") }
+      ]}
   },
   mounted() {
     this.getInventoryMaster();
