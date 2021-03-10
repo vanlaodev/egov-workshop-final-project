@@ -86,9 +86,6 @@ export default {
     this.$bus.$off("LOGIN_REQUIRED");
     this.$bus.$off("LOCALE_UPDATED");
   },
-  mounted() {
-    document.title = this.documentTitle;
-  },
   components: {
     SplashView,
   },
@@ -125,6 +122,7 @@ export default {
     async initializeApp() {
       if (this.appInitialized) return;
       await this.initStore();
+      document.title = this.documentTitle;
       const accessToken = this.$route.query.accessToken ?? "EgovWorkshop2020"; // TODO: for dev only, remove the fake token later
       if (accessToken) {
         try {
