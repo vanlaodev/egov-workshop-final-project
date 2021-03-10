@@ -1,20 +1,36 @@
 <template>
   <b-card :title="$t('editInventoryForm')">
-    <b-form class="mt-4" @submit.prevent="savedata" v-if="originalMaster && !loading">
+    <b-form
+      class="mt-4"
+      @submit.prevent="savedata"
+      v-if="originalMaster && !loading"
+    >
       <b-form-group :label="$t('id')" label-for="input-id">
-        <b-form-input id="input-id" :value="originalMaster.id" readonly></b-form-input>
+        <b-form-input
+          id="input-id"
+          :value="originalMaster.id"
+          readonly
+        ></b-form-input>
       </b-form-group>
-      <b-form-group :label="$t('department')" label-for="input-dept" v-if="selectedDept">
-        <b-form-input id="input-dept" :value="selectedDept.text" readonly></b-form-input>
+      <b-form-group
+        :label="$t('department')"
+        label-for="input-dept"
+        v-if="selectedDept"
+      >
+        <b-form-input
+          id="input-dept"
+          :value="selectedDept.text"
+          readonly
+        ></b-form-input>
       </b-form-group>
       <b-form-group :label="$t('title')" label-for="input-title">
-        <b-form-input id="input-title" v-model="title" required autofocus></b-form-input>
+        <b-form-input
+          id="input-title"
+          v-model="title"
+          required
+          autofocus
+        ></b-form-input>
       </b-form-group>
-      <!--      <b-form-group :label="$t('department')" label-for="select-dept">
-        <select id="select-dept" class="form-control" v-model="depselected" readonly>
-          <option v-bind:key="dep.value" v-for="dep in deplist" :value="dep.value">{{ dep.text }}</option>
-        </select>
-      </b-form-group>-->
       <b-form-group :label="$t('from')" label-for="dtp-from">
         <b-form-datepicker
           id="dtp-from"
@@ -24,26 +40,43 @@
         ></b-form-datepicker>
       </b-form-group>
       <b-form-group :label="$t('to')" label-for="dtp-to">
-        <b-form-datepicker id="dtp-to" v-model="dtpTo" :min="minDtpTo"></b-form-datepicker>
+        <b-form-datepicker
+          id="dtp-to"
+          v-model="dtpTo"
+          :min="minDtpTo"
+        ></b-form-datepicker>
       </b-form-group>
       <b-form-group :label="$t('status')" label-for="select-status">
-        <select id="select-status" class="form-control" v-model="selectedStatus">
+        <select
+          id="select-status"
+          class="form-control"
+          v-model="selectedStatus"
+        >
           <option
             v-bind:key="status.value"
             v-for="status in statusList"
             :value="status.value"
-          >{{ status.text }}</option>
+          >
+            {{ status.text }}
+          </option>
         </select>
       </b-form-group>
       <b-form-group :label="$t('remark')" label-for="input-remark">
         <b-form-textarea id="input-remark" v-model="remark"></b-form-textarea>
       </b-form-group>
-      <b-button :disabled="saving" type="submit" variant="primary" class="mr-2">{{ $t("save") }}</b-button>
+      <b-button
+        :disabled="saving"
+        type="submit"
+        variant="primary"
+        class="mr-2"
+        >{{ $t("save") }}</b-button
+      >
       <b-button
         :disabled="saving"
         @click.prevent="backToinquiry"
         variant="secondary"
-      >{{ $t("cancel") }}</b-button>
+        >{{ $t("cancel") }}</b-button
+      >
     </b-form>
     <div v-else-if="loading" class="mt-4">
       <strong>{{ $t("loading") }}...</strong>
@@ -59,21 +92,15 @@ import MessageDialog from "../components/MessageDialog";
 
 export default {
   components: {
-    MessageDialog
+    MessageDialog,
   },
   data() {
     return {
       originalMaster: null,
       title: "",
       inventoryid: "",
-      // depselected: "",
       dtpFrom: dayjs().format("YYYY-MM-DD"),
       dtpTo: dayjs().format("YYYY-MM-DD"),
-      deplist: [
-        { value: "1", text: "DOI" },
-        { value: "2", text: "DAF" },
-        { value: "3", text: "DRC" }
-      ],
       selectedStatus: "",
       remark: "",
       saving: false,
@@ -82,12 +109,12 @@ export default {
         visible: false,
         title: "",
         message: "",
-        resolve: null
-      }
+        resolve: null,
+      },
     };
   },
   computed: {
-    ...mapState(["loggedInUser"]),
+    ...mapState(["loggedInUser", "deptList"]),
     minDtpFrom() {
       return dayjs().format("YYYY-MM-DD");
     },
@@ -96,20 +123,21 @@ export default {
     },
     selectedDept() {
       if (!this.originalMaster) return null;
-      return this.deplist.find(d => d.value == this.originalMaster.deptId);
-    },      
+      return this.deptList.find((d) => d.value == this.originalMaster.deptId);
+    },
     statusList() {
-       return [
+      return [
         { value: "ACTIVE", text: this.$t("active") },
-        { value: "INVALID", text: this.$t("invalid") }
-      ]}
+        { value: "INVALID", text: this.$t("invalid") },
+      ];
+    },
   },
   mounted() {
     this.getInventoryMaster();
   },
   methods: {
     showMsgDialog(message, title) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         this.msgDialogCtx.title = title;
         this.msgDialogCtx.message = message;
         this.msgDialogCtx.resolve = resolve;
@@ -124,17 +152,14 @@ export default {
           this.loading = true;
           const master = (
             await this.$api.inventoryApi.searchMaster({
-              deptId: this.loggedInUser.dept.id
+              deptId: this.loggedInUser.dept.id,
             })
-          ).find(m => m.id == masterId);
+          ).find((m) => m.id == masterId);
           if (master) {
             this.title = master.title;
             this.remark = master.remark;
-            this.depselected = this.deplist.find(
-              d => d.value == master.deptId
-            ).value;
             this.selectedStatus = this.statusList.find(
-              d => d.value == master.status
+              (d) => d.value == master.status
             ).value;
             this.dtpFrom = dayjs(master.fromTime, "YYYY/MM/DD").format(
               "YYYY-MM-DD"
@@ -168,14 +193,19 @@ export default {
         this.saving = true;
         await this.$api.inventoryApi.updateMaster({
           id: this.originalMaster.id,
-          deptId: this.depselected,
+          deptId: this.originalMaster.deptId,
           status: this.selectedStatus,
           fromTime: dayjs(this.dtpFrom).format("YYYY/MM/DD"),
           endTime: dayjs(this.dtpTo).format("YYYY/MM/DD"),
           title: this.title,
-          remark: this.remark
+          remark: this.remark,
         });
-        await this.showMsgDialog(this.$t("msg_operationSuccess"));
+        this.$root.$bvToast.toast(this.$t("msg_operationSuccess"), {
+          title: this.$t("message"),
+          variant: "success",
+          autoHideDelay: 2000,
+          solid: true,
+        });
         this.backToinquiry();
       } catch (err) {
         await this.showMsgDialog(err, this.$t("error"));
@@ -183,12 +213,9 @@ export default {
         this.saving = false;
       }
     },
-    changeEnd() {
-      this.dtpicker2 = this.dtpicker1;
-    },
     backToinquiry() {
       this.$router.replace({ name: "InventoryFormManagement" });
-    }
-  }
+    },
+  },
 };
 </script>
