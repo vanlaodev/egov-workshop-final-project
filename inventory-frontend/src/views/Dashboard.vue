@@ -3,11 +3,11 @@
     <h1>{{ $t("dashboard") }}</h1>
     <div class="row">
       <div
-        v-for="(chartType, index) in chartTypes"
+        v-for="chartType in chartTypes"
         :key="chartType"
         class="col-md-6 my-2"
       >
-        <b-card :header="`Dummy Chart ${index + 1}`" class="shadow-sm">
+        <b-card :header="`Dummy Chart (${chartType})`" class="shadow-sm">
           <apexchart
             :type="chartType"
             :options="chartOptions"

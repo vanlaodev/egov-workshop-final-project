@@ -76,10 +76,15 @@ export default {
   created() {
     this.initializeApp().then(() => {
       this.$bus.$on("LOGIN_REQUIRED", this.signOut);
+      this.$bus.$on(
+        "LOCALE_UPDATED",
+        () => (document.title = this.documentTitle)
+      );
     });
   },
   beforeDestroy() {
     this.$bus.$off("LOGIN_REQUIRED");
+    this.$bus.$off("LOCALE_UPDATED");
   },
   mounted() {
     document.title = this.documentTitle;

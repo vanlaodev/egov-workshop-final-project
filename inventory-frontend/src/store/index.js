@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import localforage from "localforage";
 import i18n from "../i18n";
+import bus from "../eventbus";
 
 Vue.use(Vuex);
 
@@ -11,10 +12,18 @@ const store = new Vuex.Store({
     storeInitialized: false,
     loggedInUser: null,
     locale: null,
-    deptList: [
-      { value: "1", text: "DOI" },
-      { value: "2", text: "DAF" },
-      { value: "3", text: "DRC" },
+    deptList: [{
+        value: "1",
+        text: "DOI"
+      },
+      {
+        value: "2",
+        text: "DAF"
+      },
+      {
+        value: "3",
+        text: "DRC"
+      },
     ],
   },
   mutations: {
@@ -33,26 +42,33 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    async initStore({ commit, state }) {
+    async initStore({
+      commit,
+      state
+    }) {
       if (state.storeInitialized) return;
       commit(
         "setLocale",
         (await localforage.getItem("locale")) ??
-          process.env.VUE_APP_I18N_LOCALE ?? "zh-TW"
+        process.env.VUE_APP_I18N_LOCALE ?? "zh-TW"
       );
       commit("setLoggedInUser", await localforage.getItem("loggedInUser"));
       commit("setStoreInitialized");
     },
-    async updateLoggedInUser({ commit }, loggedInUser) {
+    async updateLoggedInUser({
+      commit
+    }, loggedInUser) {
       commit("setLoggedInUser", loggedInUser);
       await localforage.setItem("loggedInUser", loggedInUser);
     },
-    async updateLocale({ commit }, locale) {
+    async updateLocale({
+      commit
+    }, locale) {
       commit("setLocale", locale);
       await localforage.setItem("locale", locale);
+      bus.$emit('LOCALE_UPDATED', locale);
     },
   },
-  modules: {},
 });
 
 export default store;
