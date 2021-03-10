@@ -6,11 +6,12 @@ import "./plugins/bootstrap-vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import bus from "./eventbus";
 import "./api/api-gateway";
 
 Vue.config.productionTip = false;
 
-Vue.prototype.$bus = new Vue();
+Vue.prototype.$bus = bus;
 
 new Vue({
   router,

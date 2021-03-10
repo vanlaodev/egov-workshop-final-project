@@ -14,7 +14,8 @@
                 v-for="(item, index) in mainMenuItemsAllowToNav"
                 :key="index"
                 @click="navToMainMenuItem(item)"
-              >{{ $t(item.titleI18nKey) }}</b-dropdown-item>
+                >{{ $t(item.titleI18nKey) }}</b-dropdown-item
+              >
             </b-nav-item-dropdown>
           </b-navbar-nav>
 
@@ -22,26 +23,29 @@
             <b-nav-item-dropdown>
               <template #button-content>
                 <b-icon-globe class="mr-1" aria-hidden="true"></b-icon-globe>
-                <span>{{ $t('language') }}</span>
+                <span>{{ $t("language") }}</span>
               </template>
-              <b-dropdown-item @click="updateLocale('zh-TW')">中文</b-dropdown-item>
-              <b-dropdown-item @click="updateLocale('en')">English</b-dropdown-item>
+              <b-dropdown-item @click="updateLocale('zh-TW')"
+                >中文</b-dropdown-item
+              >
+              <b-dropdown-item @click="updateLocale('en')"
+                >English</b-dropdown-item
+              >
             </b-nav-item-dropdown>
 
             <b-nav-item-dropdown v-if="loggedInUser">
               <template #button-content>
-                <b-icon-person-fill class="mr-1" aria-hidden="true"></b-icon-person-fill>
+                <b-icon-person-fill
+                  class="mr-1"
+                  aria-hidden="true"
+                ></b-icon-person-fill>
                 <span v-if="loggedInUser">{{ loggedInUser.username }}</span>
               </template>
               <b-dropdown-item href="#">
-                {{
-                $t("userProfile")
-                }}
+                {{ $t("userProfile") }}
               </b-dropdown-item>
               <b-dropdown-item @click="signOut">
-                {{
-                $t("signOut")
-                }}
+                {{ $t("signOut") }}
               </b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -61,24 +65,29 @@ import mainMenu from "./domain/main-menu";
 
 export default {
   created() {
-    this.initializeApp();
+    this.initializeApp().then(() => {
+      this.$bus.$on("LOGIN_REQUIRED", this.signOut);
+    });
+  },
+  beforeDestroy() {
+    this.$bus.$off("LOGIN_REQUIRED");
   },
   mounted() {
     document.title = this.documentTitle;
   },
   components: {
-    SplashView
+    SplashView,
   },
   computed: {
-    ...mapState(["appInitialized", "loggedInUser"]),
-    documentTitle: function() {
+    ...mapState(["appInitialized", "loggedInUser", "locale"]),
+    documentTitle: function () {
       return `${this.$t("assetMgmtSystem")} - ${this.$t("inventoryOfAssets")}`;
     },
-    mainMenuItemsAllowToNav: function() {
-      return mainMenu.items.filter(mi =>
+    mainMenuItemsAllowToNav: function () {
+      return mainMenu.items.filter((mi) =>
         mi.allowNavigate(this.loggedInUser?.roles)
       );
-    }
+    },
   },
   methods: {
     ...mapActions(["initStore", "updateLocale", "updateLoggedInUser"]),
@@ -97,7 +106,7 @@ export default {
       }
     },
     redirectToLoginUrl() {
-      window.location = `${process.env.VUE_APP_LOGIN_URL}?redirectUrl=${window.location}`;
+      window.location = `${process.env.VUE_APP_LOGIN_URL}?redirectUrl=${window.location}&locale=${this.locale}`;
     },
     async initializeApp() {
       if (this.appInitialized) return;
@@ -130,7 +139,7 @@ export default {
       this.setAppInitialized(true);
 
       const mainMenuItem = mainMenu.items.filter(
-        i => this.$route.name === i.routeName
+        (i) => this.$route.name === i.routeName
       );
       if (
         mainMenuItem.length > 0 &&
@@ -140,11 +149,11 @@ export default {
       ) {
         this.$router.replace({
           name: "PermissionDenied",
-          query: { originalPath: this.$route.path }
+          query: { originalPath: this.$route.path },
         });
         return;
       }
-    }
-  }
+    },
+  },
 };
 </script>
