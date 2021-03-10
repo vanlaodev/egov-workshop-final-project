@@ -220,6 +220,12 @@ export default {
             break;
           }
         }
+        this.$root.$bvToast.toast(this.$t("msg_operationSuccess"), {
+          title: this.$t("message"),
+          variant: "success",
+          autoHideDelay: 2000,
+          solid: true,
+        });
       } catch (err) {
         await this.showMsgDialog(err, this.$t("error"));
       }
