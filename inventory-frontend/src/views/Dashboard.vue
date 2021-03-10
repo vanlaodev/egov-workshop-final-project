@@ -7,7 +7,7 @@
         :key="chartType"
         class="col-md-6 my-2"
       >
-        <b-card :header="`Dummy Chart ${index + 1}`">
+        <b-card :header="`Dummy Chart ${index + 1}`" class="shadow-sm">
           <apexchart
             :type="chartType"
             :options="chartOptions"

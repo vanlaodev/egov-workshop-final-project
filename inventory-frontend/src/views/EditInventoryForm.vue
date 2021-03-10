@@ -1,5 +1,5 @@
 <template>
-  <b-card :title="$t('editInventoryForm')">
+  <b-card :title="$t('editInventoryForm')" class="shadow-sm">
     <b-form
       @submit.prevent="savedata"
       v-if="originalMaster && !loading"

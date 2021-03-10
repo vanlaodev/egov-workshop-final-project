@@ -1,5 +1,5 @@
 <template>
-  <b-card :title="$t('createInventoryForm')">
+  <b-card :title="$t('createInventoryForm')" class="shadow-sm">
     <b-form @submit.prevent="savedata" class="mt-3">
       <b-form-group
         :label="$t('department')"

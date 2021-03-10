@@ -1,5 +1,5 @@
 <template>
-  <b-card :title="$t('inventoryFormManagement')">
+  <b-card :title="$t('inventoryFormManagement')" class="shadow-sm">
     <b-form inline class="d-flex flex-row flex-nowrap align-items-center my-3">
       <b-input-group class="flex-grow-1">
         <template #prepend>
