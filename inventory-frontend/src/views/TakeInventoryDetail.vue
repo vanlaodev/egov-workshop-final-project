@@ -5,17 +5,13 @@
       <button v-if="isAdmin" class="add-button" v-on:click="clickAddItem()"><b-icon icon="plus" variant="success"></b-icon></button>
     </header>
     <div class="content-container">
-      <div class="inventory-form-time">
-        {{invertoryFormTime}}
-      </div>
-      <div class="inventory-form-des">
-        {{invertoryFormDes}}
-      </div>
+      <div class="inventory-form-time">{{invertoryFormTime}}</div>
+      <div class="inventory-form-des">{{invertoryFormDes}}</div>
       <div v-if="isAdmin" class="inventory-filter-container">
         <b-row class="filter-row">
-            <b-col class="filter-col" cols="auto">
-                <div class="filter-title">搜尋：</div>
-            </b-col>
+          <b-col class="filter-col" cols="auto">
+            <div class="filter-title">{{ $t('search') }}:</div>
+          </b-col>
         </b-row>
         <b-row class="filter-row">
             <b-col class="filter-col" cols="3">
@@ -68,8 +64,12 @@
                   <span v-if="inventory.checked">已確認</span>
                   <span v-else>確認</span>
                 </button>
-                <button v-if="isAdmin" class="delete-button" v-on:click="clickDelete(inventory.itemNo)">
-                  <span>刪除</span>
+                <button
+                  v-if="isAdmin"
+                  class="delete-button"
+                  v-on:click="clickDelete(inventory.itemNo)"
+                >
+                  <span>{{$t('delete')}}</span>
                 </button>
               </b-col>
             </b-row>
@@ -114,7 +114,7 @@
 </template>
 
 <style lang="scss" scoped>
-    @import '../assets/scss/take-inventory-detail.scss';
+@import "../assets/scss/take-inventory-detail.scss";
 </style>
 
 <script>
@@ -122,7 +122,7 @@ import lodash from 'lodash';
 import SearchInventory from "../components/SearchInventory";
 
 export default {
-  data(){
+  data() {
     return {
         isAdmin: true,
         filterNo: '',
@@ -156,11 +156,11 @@ export default {
     },
     clickConfirm: function (itemNo) {
       this.selectedItemNo = itemNo;
-      this.$refs['confirm-modal'].show(itemNo)
+      this.$refs["confirm-modal"].show(itemNo);
     },
-    clickDelete: function (itemNo) {
+    clickDelete: function(itemNo) {
       this.selectedItemNo = itemNo;
-      this.$refs['delete-modal'].show(itemNo)
+      this.$refs["delete-modal"].show(itemNo);
     },
     hideModal() {
       this.$refs['confirm-modal'].hide();
@@ -168,9 +168,11 @@ export default {
       this.$refs['search-modal'].hide();
     },
     confirm() {
-      let selectedItem = lodash.find(this.userInventory, {itemNo: this.selectedItemNo});
+      let selectedItem = lodash.find(this.userInventory, {
+        itemNo: this.selectedItemNo
+      });
       selectedItem.checked = true;
-      this.$refs['confirm-modal'].hide()
+      this.$refs["confirm-modal"].hide();
     },
     deleteItem() {
         let selectNo = this.selectedItemNo;

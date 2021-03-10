@@ -1,9 +1,47 @@
 <template>
   <div class="inventory-search-container">
-      <div class="inventory-search-filter">
-          <b-row class="filter-row">
-            <b-col class="filter-col" cols="auto">
-                <div class="filter-title">搜尋：</div>
+    <div class="inventory-search-filter">
+      <b-row class="filter-row">
+        <b-col class="filter-col" cols="auto">
+          <div class="filter-title">{{ $t('search') }}:</div>
+        </b-col>
+      </b-row>
+      <b-row class="filter-row">
+        <b-col class="filter-col" cols="3">
+          <input v-model="filterNo" :placeholder="$t('assetId')" />
+        </b-col>
+        <b-col class="filter-col" cols="3">
+          <input v-model="filterUserNo" :placeholder="$t('staffId')" />
+        </b-col>
+        <b-col class="filter-col" cols="auto">
+          <b-form-select
+            v-model="departmentSelected"
+            :options="departmentOptions"
+            class="department-select"
+          ></b-form-select>
+        </b-col>
+      </b-row>
+    </div>
+    <div class="inventory-search-list">
+      <ul>
+        <li>
+          <b-row class="inventory-row title">
+            <b-col cols="2">{{$t('assetId')}}</b-col>
+            <b-col>{{$t('assetName')}}</b-col>
+          </b-row>
+        </li>
+        <li v-for="inventory in inventoryList" :key="inventory.id">
+          <b-row class="inventory-row">
+            <b-col class="inventory-col-no" cols="2">{{ inventory.itemNo }}</b-col>
+            <b-col>{{ inventory.itemName }}</b-col>
+            <b-col cols="auto">
+              <button
+                class="check-button"
+                v-on:click="clickAdd(inventory.itemNo)"
+                :disabled="inventory.checked"
+              >
+                <span>{{ $t('add') }}</span>
+              </button>
             </b-col>
         </b-row>
         <b-row class="filter-row">
@@ -181,7 +219,7 @@ import lodash from 'lodash';
 
 export default {
   name: "SearchInventory",
-  data(){
+  data() {
     return {
         isAdmin: true,
         filterNo: '',
@@ -221,7 +259,7 @@ export default {
         this.searchChangeNotDebounce();
     }, 1000)
   },
-  mounted(){
+  mounted() {
     this.inventoryList = [];
     for(let i=1; i<=this.perPage; i++){
         this.inventoryList.push({

@@ -6,9 +6,9 @@ import UserMgmtApi from './user-mgmt-api';
 class ApiGateway {
 
     constructor() {
-        this._inventoryApi = new InventoryApi(process.env.INVENTORY_API_BASE_URL);
-        this._assetMgmtApi = new AssetMgmtApi(process.env.ASSET_MGMT_API_BASE_URL);
-        this._userMgmtApi = new UserMgmtApi(process.env.USER_MGMT_API_BASE_URL);
+        this._inventoryApi = new InventoryApi(process.env.VUE_APP_INVENTORY_API_BASE_URL);
+        this._assetMgmtApi = new AssetMgmtApi(process.env.VUE_APP_ASSET_MGMT_API_BASE_URL);
+        this._userMgmtApi = new UserMgmtApi(process.env.VUE_APP_USER_MGMT_API_BASE_URL);
     }
 
     get userMgmtApi() {

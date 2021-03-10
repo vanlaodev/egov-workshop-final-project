@@ -31,7 +31,7 @@
             <b-nav-item-dropdown v-if="loggedInUser">
               <template #button-content>
                 <b-icon-person-fill class="mr-1" aria-hidden="true"></b-icon-person-fill>
-                <span>{{ loggedInUser.username }}</span>
+                <span v-if="loggedInUser">{{ loggedInUser.username }}</span>
               </template>
               <b-dropdown-item href="#">
                 {{
@@ -76,7 +76,7 @@ export default {
     },
     mainMenuItemsAllowToNav: function() {
       return mainMenu.items.filter(mi =>
-        mi.allowNavigate(this.loggedInUser.roles)
+        mi.allowNavigate(this.loggedInUser?.roles)
       );
     }
   },
@@ -97,12 +97,12 @@ export default {
       }
     },
     redirectToLoginUrl() {
-      window.location = `${process.env.LOGIN_URL}?redirectUrl=${window.location}`;
+      window.location = `${process.env.VUE_APP_LOGIN_URL}?redirectUrl=${window.location}`;
     },
     async initializeApp() {
       if (this.appInitialized) return;
       await this.initStore();
-      const accessToken = this.$route.query.accessToken ?? "fake_accesstoken"; // TODO: for dev only, remove the fake token later
+      const accessToken = this.$route.query.accessToken ?? "EgovWorkshop2020"; // TODO: for dev only, remove the fake token later
       if (accessToken) {
         try {
           const userInfo = await this.$api.userMgmtApi.getUserInfoByAccessToken(

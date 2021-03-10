@@ -1,25 +1,23 @@
-import {
-    promiseDelay
-} from '../utils/helpers'
-
-// TODO
+import axios from 'axios';
 
 class UserMgmtApi {
     constructor(baseUrl) {
         this.baseUrl = baseUrl;
+        this.httpClient = axios.create({
+            baseURL: baseUrl,
+          });
     }
 
     async getUserInfoByAccessToken(accessToken) {
         // TODO
-        await promiseDelay(1000);
         return await new Promise((resolve) => {
             resolve({
                 id: 'adminid',
                 username: 'admin',
                 accessToken: accessToken,
                 refreshToken: null,
-                department: {
-                    id: 'dummydept',
+                dept: {
+                    id: 1,
                 },
                 roles: []
             });
@@ -28,7 +26,6 @@ class UserMgmtApi {
 
     async signOut() {
         // TODO: revoke access token if need
-        await promiseDelay(1000);
     }
 }
 

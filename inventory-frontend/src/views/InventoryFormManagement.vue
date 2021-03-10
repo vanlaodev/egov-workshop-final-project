@@ -1,258 +1,284 @@
 <template>
-  <div>
-    <div>
-      <div class="form-group">
-        <div class="row">
-          <div class="col-sm-11">
-            <b-input-group>
-              <b-form-input type="search" v-model="filter" :placeholder='$t("InventoryFormManagement_placeholder")'></b-form-input>
-              <b-input-group-append>
-                <b-button :disabled="!filter" @click="filter = ''">
-                  {{
-                  $t("clear")
-                  }}
-                </b-button>
-              </b-input-group-append>
-            </b-input-group>
-          </div>
-          <div class="col-sm-1" style="text-align: center">
-            <!-- <b-button
-              type="button"
-              variant="primary"
-              class="mr-2"
-              @click.prevent="goToCreateInventoryForm"
-            >{{ $t("createInventoryForm") }}</b-button> -->
-            <a href="#" class="editcolor a-btn-slide-text" @click.prevent="goToCreateInventoryForm">
-            <b-icon icon="plus-circle" class="h1 mb-2"></b-icon>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <b-table
-        striped
-        hover
-        :items="items"
-        :fields="fields"
-        :current-page="currentPage"
-        :per-page="perPage"
-        :filter="filter"
-        @filtered="onFiltered"
-      >
-        <template #cell(Action)="data">
-          <a href="#" class="editcolor a-btn-slide-text" @click.prevent="editObject(data.item.id)">
-            <b-icon icon="pencil-square" class="h3 mb-2"></b-icon>
-          </a>&nbsp;
-          <a
-            href="#"
-            class="deletecolor a-btn-slide-text"
-            @click.prevent="clickDelete(data.item.id)"
-          >
-            <b-icon icon="trash-fill" class="h3 mb-2"></b-icon>
-          </a>
+  <b-card :title="$t('inventoryFormManagement')">
+    <b-form inline class="d-flex flex-row flex-nowrap align-items-center">
+      <b-input-group class="flex-grow-1 my-3">
+        <template #prepend>
+          <b-input-group-text><b-icon icon="search" /></b-input-group-text>
         </template>
-      </b-table>
+        <b-form-input
+          type="search"
+          v-model="filter"
+          :placeholder="$t('search')"
+          autofocus
+        ></b-form-input>
+        <b-input-group-append v-if="filter">
+          <b-button @click="filter = ''">
+            {{ $t("clear") }}
+          </b-button>
+        </b-input-group-append>
+      </b-input-group>
+      <a href="#" @click.prevent="goToCreateInventoryForm" class="ml-3">
+        <b-icon variant="success" icon="plus-circle" class="h2 m-0"></b-icon>
+      </a>
+    </b-form>
 
-      <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" size="md"></b-pagination>
+    <b-table
+      v-if="!loadingTable"
+      responsive
+      hover
+      :items="items"
+      :fields="fields"
+      :current-page="currentPage"
+      :per-page="perPage"
+      :filter="filter"
+      @filtered="onFiltered"
+    >
+      <template #cell(Action)="data">
+        <b-button
+          variant="link"
+          size="sm"
+          @click="editMaster(data.item.id)"
+          class="mr-2"
+        >
+          <b-icon icon="pencil-fill" aria-hidden="true"></b-icon>
+          {{ $t("edit") }}
+        </b-button>
+        <b-button
+          variant="link"
+          size="sm"
+          @click="showConfirmDeleteMasterModal(data.item.id)"
+        >
+          <b-icon icon="trash-fill" aria-hidden="true"></b-icon>
+          {{ $t("delete") }}
+        </b-button>
+      </template>
+    </b-table>
+    <b-skeleton-table
+      v-else
+      :rows="4"
+      :columns="6"
+      :table-props="{ bordered: true }"
+    ></b-skeleton-table>
 
-      <b-modal ref="delete-modal" id="delete-modal" hide-footer hide-header>
-        <div class="d-block text-center">
-          <h3>
-            <b-icon icon="x-circle-fill" style="width: 80px; height: 80px; color: rgb(184, 11, 11)"></b-icon>
-          </h3>
-        </div>
-        <div class="d-block text-center delete-title">
-          <h3>
-            {{ $t("msg_InventoryFormManagement_deleteModal") }}&nbsp;{{
-            selectedId
-            }}&nbsp;?
-          </h3>
-        </div>
-        <b-button
-          class="mt-2"
-          variant="outline-success"
-          block
-          @click="deleteObject"
-        >{{ $t("confirm") }}</b-button>
-        <b-button
-          class="mt-3 close-button"
-          variant="outline-danger"
-          block
-          @click="hideModal"
-        >{{ $t("cancel") }}</b-button>
-      </b-modal>
-    </div>
-  </div>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="totalRows"
+      :per-page="perPage"
+      size="md"
+      class="mb-0"
+    ></b-pagination>
+
+    <!-- <b-modal ref="delete-modal" id="delete-modal" hide-footer hide-header>
+      <div class="d-block text-center">
+        <h3>
+          <b-icon
+            variant="danger"
+            icon="x-circle-fill"
+            style="width: 80px; height: 80px"
+          ></b-icon>
+        </h3>
+      </div>
+      <div class="d-block text-center delete-title">
+        <h3>
+          {{ $t("fmt_msg_confirmDeleteInventoryMaster", { id: selectedId }) }}
+        </h3>
+      </div>
+      <b-button
+        class="mt-3"
+        variant="outline-success"
+        block
+        @click="deleteMaster"
+        >{{ $t("confirm") }}</b-button
+      >
+      <b-button
+        class="mt-2 close-button"
+        variant="outline-danger"
+        block
+        @click="hideConfirmDeleteMasterModal"
+        >{{ $t("cancel") }}</b-button
+      >
+    </b-modal> -->
+
+    <message-dialog :ctx="msgDialogCtx"></message-dialog>
+    <confirm-dialog :ctx="confirmDialogCtx"></confirm-dialog>
+  </b-card>
 </template>
 
-<style>
-.deletecolor {
-  color: rgb(184, 11, 11);
-}
-.deletecolor:hover,
-.deletecolor:active,
-.deletecolor:focus {
-  color: rgb(184, 11, 11);
-}
-.editcolor {
-  color: rgba(3, 94, 11, 0.76);
-}
-.editcolor:hover,
-.editcolor:active,
-.editcolor:focus {
-  color: rgba(3, 94, 11, 0.76);
-}
-#delete-modal.delete-title {
-  margin-bottom: 25px;
-}
-#delete-modal.close-button {
-  margin-top: 5px ;
-}
-
-</style>
-
-
 <script>
+import { mapState } from "vuex";
+import MessageDialog from "../components/MessageDialog";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 export default {
   name: "InventoryFormManagement",
   components: {
+    MessageDialog,
+    ConfirmDialog,
   },
   data() {
     return {
-      items: [
-        {
-          id: 1,
-          name: "關於2021年DOI的盤點項目",
-          from: "01/02/2021",
-          to: "28/02/2021"
-        },
-        {
-          id: 2,
-          name: "關於2021年DAF的盤點項目",
-          from: "05/02/2021",
-          to: "28/02/2021"
-        },
-        {
-          id: 3,
-          name: "關於2021年ABC的盤點項目",
-          from: "05/02/2021",
-          to: "28/02/2021"
-        },
-        {
-          id: 4,
-          name: "關於2021年CDE的盤點項目",
-          from: "05/02/2021",
-          to: "28/02/2021"
-        },
-        {
-          id: 5,
-          name: "關於2021年FGH的盤點項目",
-          from: "01/02/2021",
-          to: "27/02/2021"
-        },
-        {
-          id: 6,
-          name: "關於2021年IJK的盤點項目",
-          from: "06/02/2021",
-          to: "27/02/2021"
-        },
-        {
-          id: 7,
-          name: "關於2021年LMN的盤點項目",
-          from: "03/02/2021",
-          to: "26/02/2021"
-        },
-        {
-          id: 8,
-          name: "關於2021年OPQ的盤點項目",
-          from: "01/02/2021",
-          to: "28/02/2021"
-        },
-        {
-          id: 9,
-          name: "關於2021年RST的盤點項目",
-          from: "01/02/2021",
-          to: "28/02/2021"
-        }
-      ],
-      totalRows: 1,
+      items: [],
       currentPage: 1,
-      perPage: 5,
-      selectedId: 0,
-      filter: null
+      perPage: 10,
+      // selectedId: 0,
+      filter: null,
+      loadingTable: false,
+      msgDialogCtx: {
+        visible: false,
+        title: "",
+        message: "",
+        resolve: null,
+      },
+      confirmDialogCtx: {
+        visible: false,
+        title: "",
+        message: "",
+        resolve: null,
+      },
     };
   },
-
   computed: {
+    ...mapState(["loggedInUser"]),
     fields() {
       return [
         {
           key: "id",
-          label: this.$t("inventoryid"),
-          sortable: true
+          label: this.$t("id"),
+          sortable: true,
         },
         {
           key: "name",
-          label: this.$t("item"),
-          sortable: true
+          label: this.$t("title"),
+          sortable: true,
         },
         {
           key: "from",
           label: this.$t("from"),
-          sortable: true
+          sortable: true,
         },
         {
           key: "to",
           label: this.$t("to"),
-          sortable: true
+          sortable: true,
+        },
+        {
+          key: "status",
+          label: this.$t("status"),
+          formatter: (value) => {
+            let status;
+            switch (value) {
+              case "ACTIVE":
+                status = this.$t("active");
+                break;
+              case "INACTIVE":
+                status = this.$t("inactive");
+                break;
+              default:
+                status = value;
+                break;
+            }
+            return status;
+          },
+          sortable: true,
         },
         {
           key: "Action",
-          label: this.$t("editordelete")
-        }
+          label: this.$t("actions"),
+        },
       ];
-    }
+    },
+    totalRows() {
+      return this.items.length;
+    },
   },
   mounted() {
-    this.totalRows = this.items.length;
+    this.loadInventoryMasters();
   },
-
   methods: {
-    clickDelete: function(data_id) {
+    showMsgDialog(message, title) {
+      return new Promise((resolve) => {
+        this.msgDialogCtx.title = title;
+        this.msgDialogCtx.message = message;
+        this.msgDialogCtx.resolve = resolve;
+        this.msgDialogCtx.visible = true;
+      });
+    },
+    showConfirmDialog(message, title) {
+      return new Promise((resolve) => {
+        this.confirmDialogCtx.title = title;
+        this.confirmDialogCtx.message = message;
+        this.confirmDialogCtx.resolve = resolve;
+        this.confirmDialogCtx.visible = true;
+      });
+    },
+    async loadInventoryMasters() {
+      if (this.loadingTable) return;
+      try {
+        this.loadingTable = true;
+        const masters = await this.$api.inventoryApi.searchMaster({
+          deptId: this.loggedInUser.dept.id,
+        });
+        this.items = masters
+          .map((m) => {
+            return {
+              id: m.id,
+              name: m.title,
+              from: m.fromTime,
+              to: m.endTime,
+              status: m.status,
+            };
+          })
+          .sort((m1, m2) => m2.id - m1.id);
+        this.currentPage = 1;
+      } catch (err) {
+        await this.showMsgDialog(err, this.$t("error"));
+      } finally {
+        this.loadingTable = false;
+      }
+    },
+    async showConfirmDeleteMasterModal(selectedId) {
+      const confirmed = await this.showConfirmDialog(
+        this.$t("fmt_msg_confirmDeleteInventoryMaster", { id: selectedId })
+      );
+      if (confirmed) {
+        await this.deleteMaster(selectedId);
+      }
+    },
+    /* showConfirmDeleteMasterModal(data_id) {
       this.selectedId = data_id;
       this.$refs["delete-modal"].show();
     },
-    hideModal() {
+    hideConfirmDeleteMasterModal() {
       this.$refs["delete-modal"].hide();
-    },
-    deleteObject() {
-      for (let z = 0; z < this.items.length; z++)
-        if (
-          this.items[z].id == this.selectedId
-        ) {
-          this.$delete(this.items, z);
-          this.totalRows = this.items.length;
-          break;
+    }, */
+    async deleteMaster(selectedId) {
+      try {
+        await this.$api.inventoryApi.deleteMaster(selectedId);
+        for (let z = 0; z < this.items.length; z++) {
+          if (this.items[z].id == selectedId) {
+            this.$delete(this.items, z);
+            break;
+          }
         }
-      this.$refs["delete-modal"].hide();
+        // this.hideConfirmDeleteMasterModal();
+      } catch (err) {
+        // this.hideConfirmDeleteMasterModal();
+        await this.showMsgDialog(err, this.$t("error"));
+      }
     },
-    editObject: function(inventoryfromid) {
-      //this.$router.replace('EditInventoryForm');
+    editMaster(inventoryfromid) {
       this.$router.push({
         name: "EditInventoryForm",
-        params: { id: inventoryfromid }
+        params: { id: inventoryfromid },
       });
     },
     goToCreateInventoryForm() {
-      this.$router.replace({ name: "CreateInventoryForm" });
+      this.$router.push({ name: "CreateInventoryForm" });
     },
-    onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length;
+    onFiltered() {
       this.currentPage = 1;
-    }
+    },
   },
-  props: {}
+  props: {},
 };
 </script>
