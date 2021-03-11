@@ -19,15 +19,6 @@
   </div>
 </template>
 
-<style scoped>
-.box {
-  box-shadow: 0px 1px 22px -12px #607d8b;
-  background-color: #fff;
-  padding: 25px 35px 25px 30px;
-  margin: 10px 0px;
-}
-</style>
-
 <script>
 import VueApexCharts from "vue-apexcharts";
 
