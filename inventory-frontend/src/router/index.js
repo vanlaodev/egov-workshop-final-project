@@ -1,70 +1,78 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import store from '../store'
-import mainMenu from '../domain/main-menu'
-import Dashboard from '../views/Dashboard.vue'
-import TakeInventory from '../views/TakeInventory.vue'
-import TakeInventoryDetail from '../views/TakeInventoryDetail.vue'
-import CreateInventoryForm from '../views/CreateInventoryForm.vue'
-import InventoryFormManagement from '../views/InventoryFormManagement.vue'
-import PageNotFound from '../views/PageNotFound.vue'
-import PermissionDenied from '../views/PermissionDenied.vue'
-import EditInventoryForm from '../views/EditInventoryForm.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import store from "../store";
+import mainMenu from "../domain/main-menu";
+const Dashboard = () => import("../views/Dashboard.vue");
+const TakeInventory = () => import("../views/TakeInventory.vue");
+const TakeInventoryDetail = () => import("../views/TakeInventoryDetail.vue");
+const CreateInventoryForm = () => import("../views/CreateInventoryForm.vue");
+const InventoryFormManagement = () =>
+  import("../views/InventoryFormManagement.vue");
+const PageNotFound = () => import("../views/PageNotFound.vue");
+const PermissionDenied = () => import("../views/PermissionDenied.vue");
+const EditInventoryForm = () => import("../views/EditInventoryForm.vue");
 
-Vue.use(VueRouter)
-const routes = [{
-  path: '/dashboard',
-  name: 'Dashboard',
-  alias: ['/'],
-  component: Dashboard
-}, {
-  path: '/takeInventory',
-  name: 'TakeInventory',
-  component: TakeInventory
-}, {
-  path: '/takeInventoryDetail',
-  name: 'TakeInventoryDetail',
-  component: TakeInventoryDetail
-}, {
-  path: '/createInventoryForm',
-  name: 'CreateInventoryForm',
-  component: CreateInventoryForm
-}, {
-  path: '/editInventoryForm/:id',
-  name: 'EditInventoryForm',
-  component: EditInventoryForm
-}, {
-  path: '/inventoryFormManagement',
-  name: 'InventoryFormManagement',
-  component: InventoryFormManagement
-}, {
-  path: '/permissionDenied',
-  name: 'PermissionDenied',
-  component: PermissionDenied
-}, {
-  path: '*',
-  name: 'PageNotFound',
-  component: PageNotFound
-}]
+Vue.use(VueRouter);
+const routes = [
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    alias: ["/"],
+    component: Dashboard,
+  },
+  {
+    path: "/takeInventory",
+    name: "TakeInventory",
+    component: TakeInventory,
+  },
+  {
+    path: "/takeInventoryDetail",
+    name: "TakeInventoryDetail",
+    component: TakeInventoryDetail,
+  },
+  {
+    path: "/createInventoryForm",
+    name: "CreateInventoryForm",
+    component: CreateInventoryForm,
+  },
+  {
+    path: "/editInventoryForm/:id",
+    name: "EditInventoryForm",
+    component: EditInventoryForm,
+  },
+  {
+    path: "/inventoryFormManagement",
+    name: "InventoryFormManagement",
+    component: InventoryFormManagement,
+  },
+  {
+    path: "/permissionDenied",
+    name: "PermissionDenied",
+    component: PermissionDenied,
+  },
+  {
+    path: "*",
+    name: "PageNotFound",
+    component: PageNotFound,
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => {
-    if (err.name !== 'NavigationDuplicated') throw err
+  return originalPush.call(this, location).catch((err) => {
+    if (err.name !== "NavigationDuplicated") throw err;
   });
-}
+};
 
 router.beforeEach((to, from, next) => {
   if (store.state.appInitialized) {
-    const mainMenuItem = mainMenu.items.filter(
-      (i) => to.name === i.routeName
-    );
+    const mainMenuItem = mainMenu.items.filter((i) => to.name === i.routeName);
     if (
       mainMenuItem.length > 0 &&
       !mainMenuItem[0].allowNavigate(
@@ -75,8 +83,8 @@ router.beforeEach((to, from, next) => {
         name: "PermissionDenied",
         replace: true,
         query: {
-          originalPath: from == null ? null : from.path
-        }
+          originalPath: from == null ? null : from.path,
+        },
       });
       return;
     }
@@ -84,4 +92,4 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-export default router
+export default router;
