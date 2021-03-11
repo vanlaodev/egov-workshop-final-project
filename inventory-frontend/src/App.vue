@@ -71,7 +71,7 @@ body {
 import { mapState, mapMutations, mapActions } from "vuex";
 import SplashView from "./components/SplashView";
 import mainMenu from "./domain/main-menu";
-import { promiseDelay } from "./utils/helpers";
+// import { promiseDelay } from "./utils/helpers";
 
 export default {
   created() {
@@ -153,7 +153,7 @@ export default {
       }
       this.$bus.$emit("APP_STARTUP_PROGRESS_UPDATED", 100);
 
-      await promiseDelay(20);
+      // await promiseDelay(20);
 
       this.setAppInitialized(true);
 
