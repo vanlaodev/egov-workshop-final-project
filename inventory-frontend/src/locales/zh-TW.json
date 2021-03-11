@@ -53,5 +53,7 @@
   "backToHomePage": "返回首頁",
   "msg_operationSuccess": "操作成功。",
   "fmt_msg_error": "發生錯誤：{msg}",
-  "fmt_msg_confirmDeleteInventoryMaster": "您是否確定要刪除盤點單{id}？"
+  "fmt_msg_confirmDeleteInventoryMaster": "您是否確定要刪除盤點單{id}？",
+  "dashboard_counted": "已盤點",
+  "dashboard_notcounted": "未盤點"  
 }
