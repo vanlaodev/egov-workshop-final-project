@@ -50,6 +50,7 @@
   "transferOfAssets": "資產轉移",
   "assetsManagement": "資產管理",
   "reports": "報表",
+  "backToHomePage": "返回首頁",
   "msg_operationSuccess": "操作成功。",
   "fmt_msg_error": "發生錯誤：{msg}",
   "fmt_msg_confirmDeleteInventoryMaster": "您是否確定要刪除盤點單{id}？"

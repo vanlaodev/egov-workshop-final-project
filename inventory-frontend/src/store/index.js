@@ -52,7 +52,9 @@ const store = new Vuex.Store({
         (await localforage.getItem("locale")) ??
         process.env.VUE_APP_I18N_LOCALE ?? "zh-TW"
       );
+      bus.$emit('APP_STARTUP_PROGRESS_UPDATED', 25);
       commit("setLoggedInUser", await localforage.getItem("loggedInUser"));
+      bus.$emit('APP_STARTUP_PROGRESS_UPDATED', 50);
       commit("setStoreInitialized");
     },
     async updateLoggedInUser({

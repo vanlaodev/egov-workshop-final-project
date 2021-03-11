@@ -152,7 +152,7 @@ export default {
           this.loading = true;
           const master = (
             await this.$api.inventoryApi.searchMaster({
-              deptId: this.loggedInUser.dept.id,
+              deptId: this.loggedInUser.deptId,
             })
           ).find((m) => m.id == masterId);
           if (master) {

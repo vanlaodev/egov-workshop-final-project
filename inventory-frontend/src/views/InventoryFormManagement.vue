@@ -178,7 +178,7 @@ export default {
       try {
         this.loadingTable = true;
         const masters = await this.$api.inventoryApi.searchMaster({
-          deptId: this.loggedInUser.dept.id,
+          deptId: this.loggedInUser.deptId,
         });
         this.items = masters
           .map((m) => {

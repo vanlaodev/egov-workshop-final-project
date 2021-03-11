@@ -66,7 +66,7 @@ export default {
     MessageDialog,
   },
   mounted() {
-    this.depselected = this.loggedInUser.dept.id;
+    this.depselected = this.loggedInUser.deptId;
   },
   data() {
     return {
@@ -102,7 +102,7 @@ export default {
       try {
         this.saving = true;
         await this.$api.inventoryApi.createMaster({
-          deptId: this.loggedInUser.dept.id,
+          deptId: this.loggedInUser.deptId,
           fromTime: dayjs(this.dtpFrom).format("YYYY/MM/DD"),
           endTime: dayjs(this.dtpTo).format("YYYY/MM/DD"),
           title: this.title,
@@ -134,7 +134,7 @@ export default {
       return this.dtpFrom;
     },
     selectedDept() {
-      return this.deptList.find((d) => d.value == this.loggedInUser.dept.id);
+      return this.deptList.find((d) => d.value == this.loggedInUser.deptId);
     },
   },
 };
