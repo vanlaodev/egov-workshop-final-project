@@ -53,12 +53,19 @@ class InventoryApi {
     } else if (resp.code == -2) {
       bus.$emit("LOGIN_REQUIRED");
       if (!resp.msg) resp.msg = "Login required.";
+    } else if (resp.code == -3) {
+      // reserved - not confirmed whether server side will do permission checking
+      bus.$emit("API_NO_PERMISSION");
+      if (!resp.msg) resp.msg = "Permission denied.";
     }
     throw resp.msg;
   }
 
   _assertUserLoggedIn() {
-    if (!store.state.loggedInUser) throw "User not logged in.";
+    if (!store.state.loggedInUser) {
+      bus.$emit("LOGIN_REQUIRED");
+      throw "Login required.";
+    }
   }
 }
 
