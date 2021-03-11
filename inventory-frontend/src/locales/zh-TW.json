@@ -18,7 +18,7 @@
   "from": "由",
   "to": "至",
   "editInventoryForm": "編輯盤點單",
-  "msg_appStartup": "正在啟動應用，請稍候。",
+  "msg_appStartup": "正在啟動，請稍候。。。",
   "msg_pageNotFound": "頁面不存在。",
   "msg_permissionDenied": "權限不足。",
   "msg_InventoryFormManagement_deleteModal": "刪除盤點單編號",

@@ -55,7 +55,7 @@
         </b-collapse>
       </b-navbar>
       <main role="main" class="container py-4">
-        <router-view />
+        <router-view></router-view>
       </main>
     </div>
   </div>
@@ -71,7 +71,7 @@ body {
 import { mapState, mapMutations, mapActions } from "vuex";
 import SplashView from "./components/SplashView";
 import mainMenu from "./domain/main-menu";
-// import { promiseDelay } from "./utils/helpers";
+import { promiseDelay } from "./utils/helpers";
 
 export default {
   created() {
@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     ...mapActions(["initStore", "updateLocale", "updateLoggedInUser"]),
-    ...mapMutations(["setAppInitialized"]),
+    ...mapMutations(["setAppInitialized", "setInitAppProgress"]),
     navToMainMenuItem(item) {
       this.$router.push({ name: item.routeName }).catch(() => {});
     },
@@ -122,6 +122,7 @@ export default {
     },
     async initializeApp() {
       if (this.appInitialized) return;
+      this.setInitAppProgress(30);
       await this.initStore();
       document.title = this.documentTitle;
       const accessToken = this.$route.query.accessToken ?? "EgovWorkshop2020"; // TODO: for dev only, remove the fake token later
@@ -130,11 +131,11 @@ export default {
           const userInfo = await this.$api.userMgmtApi.getUserInfoByAccessToken(
             accessToken
           );
-          this.$bus.$emit("APP_STARTUP_PROGRESS_UPDATED", 70);
+          this.setInitAppProgress(80);
           if (userInfo) {
             // user info found
             await this.updateLoggedInUser(userInfo);
-            this.$bus.$emit("APP_STARTUP_PROGRESS_UPDATED", 90);
+            this.setInitAppProgress(90);
           } else {
             // redirect to login url if user info not found
             this.redirectToLoginUrl();
@@ -151,9 +152,9 @@ export default {
         this.redirectToLoginUrl();
         return;
       }
-      this.$bus.$emit("APP_STARTUP_PROGRESS_UPDATED", 100);
+      this.setInitAppProgress(100);
 
-      // await promiseDelay(20);
+      await promiseDelay(600);
 
       this.setAppInitialized(true);
 

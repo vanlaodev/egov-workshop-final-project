@@ -18,7 +18,7 @@
     "from": "From",
     "to": "To",
     "editInventoryForm": "Edit inventory form",
-    "msg_appStartup": "Application starting up, please wait.",
+    "msg_appStartup": "Application starting up, please wait...",
     "msg_pageNotFound": "Page not found.",
     "msg_permissionDenied": "Permission denied.",
     "msg_InventoryFormManagement_deleteModal": "Delete inventory No.",

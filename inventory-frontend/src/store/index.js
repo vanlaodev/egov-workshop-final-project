@@ -9,6 +9,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     appInitialized: false,
+    initAppProgress: 0,
     storeInitialized: false,
     loggedInUser: null,
     locale: null,
@@ -27,6 +28,10 @@ const store = new Vuex.Store({
     ],
   },
   mutations: {
+    setInitAppProgress(state, progress) {
+      if (state.appInitialized) return;
+      state.initAppProgress = progress;
+    },
     setAppInitialized(state) {
       state.appInitialized = true;
     },
@@ -52,9 +57,9 @@ const store = new Vuex.Store({
         (await localforage.getItem("locale")) ??
         process.env.VUE_APP_I18N_LOCALE ?? "zh-TW"
       );
-      bus.$emit('APP_STARTUP_PROGRESS_UPDATED', 25);
+      commit('setInitAppProgress', 45);
       commit("setLoggedInUser", await localforage.getItem("loggedInUser"));
-      bus.$emit('APP_STARTUP_PROGRESS_UPDATED', 50);
+      commit('setInitAppProgress', 60);
       commit("setStoreInitialized");
     },
     async updateLoggedInUser({
