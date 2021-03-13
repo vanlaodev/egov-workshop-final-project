@@ -85,5 +85,24 @@ export default {
       };
     },
   },
+  methods: {
+    loadDashboardData() {
+      this.$api.inventoryApi
+        .getDashboardProgress()
+        .then((p) => console.log(p))
+        .catch((e) => console.error(e));
+      this.$api.inventoryApi
+        .getDashboardMasterCount()
+        .then((p) => console.log(p))
+        .catch((e) => console.error(e));
+      this.$api.inventoryApi
+        .getDashBoardDetailCount()
+        .then((p) => console.log(p))
+        .catch((e) => console.error(e));
+    },
+  },
+  mounted() {
+    this.loadDashboardData();
+  },
 };
 </script>

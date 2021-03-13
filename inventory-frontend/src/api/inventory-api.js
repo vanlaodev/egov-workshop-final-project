@@ -10,6 +10,7 @@ class InventoryApi {
       transformRequest: [
         (data) => {
           if (store.state.loggedInUser) {
+            if (!data) data = {}
             data = Object.assign(data, {
               accessToken: store.state.loggedInUser.accessToken,
             });
@@ -21,6 +22,10 @@ class InventoryApi {
     });
   }
 
+  /*
+   * Inventory master
+   */
+
   async createMaster(master) {
     this._assertUserLoggedIn();
     const resp = await this.httpClient.post("v1/createMaster", master);
@@ -30,6 +35,14 @@ class InventoryApi {
   async searchMaster(searchCriteria) {
     this._assertUserLoggedIn();
     const resp = await this.httpClient.post("v1/searchMaster", searchCriteria);
+    return this._handleResp(resp.data);
+  }
+
+  async getMasterById(masterId) {
+    this._assertUserLoggedIn();
+    const resp = await this.httpClient.post("v1/searchMasterById", {
+      id: masterId
+    });
     return this._handleResp(resp.data);
   }
 
@@ -47,9 +60,65 @@ class InventoryApi {
     return this._handleResp(resp.data);
   }
 
-  _handleResp(resp) {
+  /*
+   * Inventory details
+   */
+
+  async searchDetail(searchCriteria) {
+    this._assertUserLoggedIn();
+    const resp = await this.httpClient.post("v1/searchDetail", searchCriteria);
+    return this._handleResp(resp.data);
+  }
+
+  async createDetail(detail) {
+    this._assertUserLoggedIn();
+    const resp = await this.httpClient.post("v1/createDetail", detail);
+    return this._handleResp(resp.data);
+  }
+
+  async updateDetail(detail) {
+    this._assertUserLoggedIn();
+    const resp = await this.httpClient.post("v1/editDetail", detail);
+    return this._handleResp(resp.data);
+  }
+
+  async deleteDetail(id) {
+    this._assertUserLoggedIn();
+    const resp = await this.httpClient.post("v1/deleteDetail", {
+      id: id
+    });
+    return this._handleResp(resp.data);
+  }
+
+  /*
+   * Dashboard
+   */
+
+  async getDashboardProgress() {
+    this._assertUserLoggedIn();
+    const resp = await this.httpClient.post("v1/dashboardProgress");
+    return this._handleResp(resp.data, null);
+  }
+
+  async getDashboardMasterCount() {
+    this._assertUserLoggedIn();
+    const resp = await this.httpClient.post("v1/dashboardMasterCount");
+    return this._handleResp(resp.data, null);
+  }
+
+  async getDashBoardDetailCount() {
+    this._assertUserLoggedIn();
+    const resp = await this.httpClient.post("v1/dashBoardDetailCount");
+    return this._handleResp(resp.data, null);
+  }
+
+  /*
+   * Helper functions
+   */
+
+  _handleResp(resp, dataField = "data") {
     if (resp.code == 0) {
-      return resp.data;
+      return !dataField ? resp : resp[dataField];
     } else if (resp.code == -2) {
       bus.$emit("LOGIN_REQUIRED");
       if (!resp.msg) resp.msg = "Login required.";

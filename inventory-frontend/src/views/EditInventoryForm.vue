@@ -114,7 +114,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["loggedInUser", "deptList"]),
+    ...mapState(["deptList"]),
     minDtpFrom() {
       return dayjs().format("YYYY-MM-DD");
     },
@@ -150,11 +150,7 @@ export default {
         if (this.loading) return;
         try {
           this.loading = true;
-          const master = (
-            await this.$api.inventoryApi.searchMaster({
-              deptId: this.loggedInUser.deptId,
-            })
-          ).find((m) => m.id == masterId);
+          const master = await this.$api.inventoryApi.getMasterById(masterId);
           if (master) {
             this.title = master.title;
             this.remark = master.remark;
