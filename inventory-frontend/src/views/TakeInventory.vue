@@ -74,6 +74,8 @@
 </style>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   data(){
     return {
@@ -91,13 +93,27 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapState(["loggedInUser"])
+  },
   methods: {
+    async searchMasterByHolder(username) {
+      try {
+        const masterList = await this.$api.inventoryApi.searchMasterByHolder(username);
+        console.log(masterList);
+        // for (let m = 0; m < masterList.length; m++) {
+        // }
+      } catch (err) {
+        await this.showMsgDialog(err, this.$t("error"));
+      }
+    },
     clickMasterLink: function (id) {
       console.log(id);
       this.$router.push({ name: 'TakeInventoryDetail' })
     },
   },
   mounted(){
+    this.searchMasterByHolder(this.loggedInUser.username);
   }
 };
 </script>

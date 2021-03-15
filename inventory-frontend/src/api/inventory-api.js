@@ -41,6 +41,14 @@ class InventoryApi {
         return this._handleResp(resp.data);
     }
 
+    async searchMasterByHolder(username) {
+        this._assertUserLoggedIn();
+        const resp = await this.httpClient.post('v1/searchMasterByHolder', {
+            holderName: username
+        });
+        return this._handleResp(resp.data);
+    }
+
     _handleResp(resp) {
         if (resp.code == 0) {
             return resp.data;
