@@ -18,7 +18,7 @@
     "from": "From",
     "to": "To",
     "editInventoryForm": "Edit inventory form",
-    "msg_appStartup": "Application starting up, please wait.",
+    "msg_appStartup": "Application starting up, please wait...",
     "msg_pageNotFound": "Page not found.",
     "msg_permissionDenied": "Permission denied.",
     "msg_InventoryFormManagement_deleteModal": "Delete inventory No.",
@@ -46,7 +46,14 @@
     "ok": "OK",
     "error": "Error",
     "confirmation": "Confirmation",
+    "invalid": "Invalid",
+    "transferOfAssets": "Transfer of assets",
+    "assetsManagement": "Assets management",
+    "reports": "Reports",
+    "backToHomePage": "Back to home",
     "msg_operationSuccess": "Operation success.",
     "fmt_msg_error": "Error occurred: {msg}",
-    "fmt_msg_confirmDeleteInventoryMaster": "Are you sure to delete the inventory master no. {id}?"
+    "fmt_msg_confirmDeleteInventoryMaster": "Are you sure to delete the inventory master no. {id}?",
+    "dashboard_counted": "counted",
+    "dashboard_notcounted": "not counted"  
 }

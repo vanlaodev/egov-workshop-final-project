@@ -1,7 +1,7 @@
 <template>
-  <b-card :title="$t('inventoryFormManagement')">
-    <b-form inline class="d-flex flex-row flex-nowrap align-items-center">
-      <b-input-group class="flex-grow-1 my-3">
+  <b-card :title="$t('inventoryFormManagement')" class="shadow-sm">
+    <b-form inline class="d-flex flex-row flex-nowrap align-items-center my-3">
+      <b-input-group class="flex-grow-1">
         <template #prepend>
           <b-input-group-text><b-icon icon="search" /></b-input-group-text>
         </template>
@@ -34,12 +34,7 @@
       @filtered="onFiltered"
     >
       <template #cell(Action)="data">
-        <b-button
-          variant="link"
-          size="sm"
-          @click="editMaster(data.item.id)"
-          class="mr-2"
-        >
+        <b-button variant="link" size="sm" @click="editMaster(data.item.id)">
           <b-icon icon="pencil-fill" aria-hidden="true"></b-icon>
           {{ $t("edit") }}
         </b-button>
@@ -67,38 +62,6 @@
       size="md"
       class="mb-0"
     ></b-pagination>
-
-    <!-- <b-modal ref="delete-modal" id="delete-modal" hide-footer hide-header>
-      <div class="d-block text-center">
-        <h3>
-          <b-icon
-            variant="danger"
-            icon="x-circle-fill"
-            style="width: 80px; height: 80px"
-          ></b-icon>
-        </h3>
-      </div>
-      <div class="d-block text-center delete-title">
-        <h3>
-          {{ $t("fmt_msg_confirmDeleteInventoryMaster", { id: selectedId }) }}
-        </h3>
-      </div>
-      <b-button
-        class="mt-3"
-        variant="outline-success"
-        block
-        @click="deleteMaster"
-        >{{ $t("confirm") }}</b-button
-      >
-      <b-button
-        class="mt-2 close-button"
-        variant="outline-danger"
-        block
-        @click="hideConfirmDeleteMasterModal"
-        >{{ $t("cancel") }}</b-button
-      >
-    </b-modal> -->
-
     <message-dialog :ctx="msgDialogCtx"></message-dialog>
     <confirm-dialog :ctx="confirmDialogCtx"></confirm-dialog>
   </b-card>
@@ -120,7 +83,6 @@ export default {
       items: [],
       currentPage: 1,
       perPage: 10,
-      // selectedId: 0,
       filter: null,
       loadingTable: false,
       msgDialogCtx: {
@@ -170,8 +132,8 @@ export default {
               case "ACTIVE":
                 status = this.$t("active");
                 break;
-              case "INACTIVE":
-                status = this.$t("inactive");
+              case "INVALID":
+                status = this.$t("invalid");
                 break;
               default:
                 status = value;
@@ -216,7 +178,7 @@ export default {
       try {
         this.loadingTable = true;
         const masters = await this.$api.inventoryApi.searchMaster({
-          deptId: this.loggedInUser.dept.id,
+          deptId: this.loggedInUser.deptId,
         });
         this.items = masters
           .map((m) => {
@@ -244,13 +206,6 @@ export default {
         await this.deleteMaster(selectedId);
       }
     },
-    /* showConfirmDeleteMasterModal(data_id) {
-      this.selectedId = data_id;
-      this.$refs["delete-modal"].show();
-    },
-    hideConfirmDeleteMasterModal() {
-      this.$refs["delete-modal"].hide();
-    }, */
     async deleteMaster(selectedId) {
       try {
         await this.$api.inventoryApi.deleteMaster(selectedId);
@@ -260,9 +215,13 @@ export default {
             break;
           }
         }
-        // this.hideConfirmDeleteMasterModal();
+        this.$root.$bvToast.toast(this.$t("msg_operationSuccess"), {
+          title: this.$t("message"),
+          variant: "success",
+          autoHideDelay: 2000,
+          solid: true,
+        });
       } catch (err) {
-        // this.hideConfirmDeleteMasterModal();
         await this.showMsgDialog(err, this.$t("error"));
       }
     },
@@ -279,6 +238,5 @@ export default {
       this.currentPage = 1;
     },
   },
-  props: {},
 };
 </script>

@@ -1,6 +1,17 @@
 <template>
-  <b-card :title="$t('createInventoryForm')">
-    <b-form class="mt-4" @submit.prevent="savedata">
+  <b-card :title="$t('createInventoryForm')" class="shadow-sm">
+    <b-form @submit.prevent="savedata" class="mt-3">
+      <b-form-group
+        :label="$t('department')"
+        label-for="input-dept"
+        v-if="selectedDept"
+      >
+        <b-form-input
+          id="input-dept"
+          :value="selectedDept.text"
+          readonly
+        ></b-form-input>
+      </b-form-group>
       <b-form-group :label="$t('title')" label-for="input-title">
         <b-form-input
           id="input-title"
@@ -8,17 +19,6 @@
           required
           autofocus
         ></b-form-input>
-      </b-form-group>
-      <b-form-group :label="$t('department')" label-for="select-dept">
-        <select id="select-dept" class="form-control" v-model="depselected">
-          <option
-            v-bind:key="dep.value"
-            v-for="dep in deplist"
-            :value="dep.value"
-          >
-            {{ dep.text }}
-          </option>
-        </select>
       </b-form-group>
       <b-form-group :label="$t('from')" label-for="dtp-from">
         <b-form-datepicker
@@ -66,19 +66,13 @@ export default {
     MessageDialog,
   },
   mounted() {
-    this.depselected = this.loggedInUser.dept.id;
+    this.depselected = this.loggedInUser.deptId;
   },
   data() {
     return {
       title: "",
-      depselected: "",
       dtpFrom: dayjs().format("YYYY-MM-DD"),
       dtpTo: dayjs().format("YYYY-MM-DD"),
-      deplist: [
-        { value: "1", text: "DOI" },
-        { value: "2", text: "DAF" },
-        { value: "3", text: "DRC" },
-      ],
       remark: "",
       saving: false,
       msgDialogCtx: {
@@ -108,14 +102,18 @@ export default {
       try {
         this.saving = true;
         await this.$api.inventoryApi.createMaster({
-          deptId: this.depselected,
+          deptId: this.loggedInUser.deptId,
           fromTime: dayjs(this.dtpFrom).format("YYYY/MM/DD"),
           endTime: dayjs(this.dtpTo).format("YYYY/MM/DD"),
           title: this.title,
           remark: this.remark,
-          userName: "test", // TODO: remove this later
         });
-        await this.showMsgDialog(this.$t("msg_operationSuccess"));
+        this.$root.$bvToast.toast(this.$t("msg_operationSuccess"), {
+          title: this.$t("message"),
+          variant: "success",
+          autoHideDelay: 2000,
+          solid: true,
+        });
         this.backToinquiry();
       } catch (err) {
         await this.showMsgDialog(err, this.$t("error"));
@@ -123,20 +121,20 @@ export default {
         this.saving = false;
       }
     },
-    changeEnd() {
-      this.dtpicker2 = this.dtpicker1;
-    },
     backToinquiry() {
       this.$router.replace({ name: "InventoryFormManagement" });
     },
   },
   computed: {
-    ...mapState(["loggedInUser"]),
+    ...mapState(["loggedInUser", "deptList"]),
     minDtpFrom() {
       return dayjs().format("YYYY-MM-DD");
     },
     minDtpTo() {
       return this.dtpFrom;
+    },
+    selectedDept() {
+      return this.deptList.find((d) => d.value == this.loggedInUser.deptId);
     },
   },
 };

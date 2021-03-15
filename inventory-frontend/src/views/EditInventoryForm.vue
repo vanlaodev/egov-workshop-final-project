@@ -1,14 +1,25 @@
 <template>
-  <b-card :title="$t('editInventoryForm')">
+  <b-card :title="$t('editInventoryForm')" class="shadow-sm">
     <b-form
-      class="mt-4"
       @submit.prevent="savedata"
       v-if="originalMaster && !loading"
+      class="mt-3"
     >
       <b-form-group :label="$t('id')" label-for="input-id">
         <b-form-input
           id="input-id"
           :value="originalMaster.id"
+          readonly
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group
+        :label="$t('department')"
+        label-for="input-dept"
+        v-if="selectedDept"
+      >
+        <b-form-input
+          id="input-dept"
+          :value="selectedDept.text"
           readonly
         ></b-form-input>
       </b-form-group>
@@ -19,17 +30,6 @@
           required
           autofocus
         ></b-form-input>
-      </b-form-group>
-      <b-form-group :label="$t('department')" label-for="select-dept">
-        <select id="select-dept" class="form-control" v-model="depselected">
-          <option
-            v-bind:key="dep.value"
-            v-for="dep in deplist"
-            :value="dep.value"
-          >
-            {{ dep.text }}
-          </option>
-        </select>
       </b-form-group>
       <b-form-group :label="$t('from')" label-for="dtp-from">
         <b-form-datepicker
@@ -99,16 +99,9 @@ export default {
       originalMaster: null,
       title: "",
       inventoryid: "",
-      depselected: "",
       dtpFrom: dayjs().format("YYYY-MM-DD"),
       dtpTo: dayjs().format("YYYY-MM-DD"),
-      deplist: [
-        { value: "1", text: "DOI" },
-        { value: "2", text: "DAF" },
-        { value: "3", text: "DRC" },
-      ],
       selectedStatus: "",
-      statusList: [{ value: "ACTIVE", text: this.$t("active") }],
       remark: "",
       saving: false,
       loading: false,
@@ -121,12 +114,22 @@ export default {
     };
   },
   computed: {
-    ...mapState(["loggedInUser"]),
+    ...mapState(["deptList"]),
     minDtpFrom() {
       return dayjs().format("YYYY-MM-DD");
     },
     minDtpTo() {
       return this.dtpFrom;
+    },
+    selectedDept() {
+      if (!this.originalMaster) return null;
+      return this.deptList.find((d) => d.value == this.originalMaster.deptId);
+    },
+    statusList() {
+      return [
+        { value: "ACTIVE", text: this.$t("active") },
+        { value: "INVALID", text: this.$t("invalid") },
+      ];
     },
   },
   mounted() {
@@ -147,17 +150,10 @@ export default {
         if (this.loading) return;
         try {
           this.loading = true;
-          const master = (
-            await this.$api.inventoryApi.searchMaster({
-              deptId: this.loggedInUser.dept.id,
-            })
-          ).find((m) => m.id == masterId);
+          const master = await this.$api.inventoryApi.getMasterById(masterId);
           if (master) {
             this.title = master.title;
             this.remark = master.remark;
-            this.depselected = this.deplist.find(
-              (d) => d.value == master.deptId
-            ).value;
             this.selectedStatus = this.statusList.find(
               (d) => d.value == master.status
             ).value;
@@ -193,24 +189,25 @@ export default {
         this.saving = true;
         await this.$api.inventoryApi.updateMaster({
           id: this.originalMaster.id,
-          deptId: this.depselected,
+          deptId: this.originalMaster.deptId,
           status: this.selectedStatus,
           fromTime: dayjs(this.dtpFrom).format("YYYY/MM/DD"),
           endTime: dayjs(this.dtpTo).format("YYYY/MM/DD"),
           title: this.title,
           remark: this.remark,
-          userName: "test", // TODO: remove this later
         });
-        await this.showMsgDialog(this.$t("msg_operationSuccess"));
+        this.$root.$bvToast.toast(this.$t("msg_operationSuccess"), {
+          title: this.$t("message"),
+          variant: "success",
+          autoHideDelay: 2000,
+          solid: true,
+        });
         this.backToinquiry();
       } catch (err) {
         await this.showMsgDialog(err, this.$t("error"));
       } finally {
         this.saving = false;
       }
-    },
-    changeEnd() {
-      this.dtpicker2 = this.dtpicker1;
     },
     backToinquiry() {
       this.$router.replace({ name: "InventoryFormManagement" });
