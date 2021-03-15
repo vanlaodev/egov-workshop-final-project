@@ -2,16 +2,26 @@
   <div>
     <h1>{{ $t("dashboard") }}</h1>
     <div class="row">
-      <div
+      <!-- <div
         v-for="chartType in chartTypes1"
         :key="chartType"
         class="col-md-6 my-2"
-      >
-        <b-card :header="`Dummy Chart (${chartType})`" class="shadow-sm">
+      > -->
+      <div class="col-md-6 my-2">
+        <b-card :header="`Dummy Chart (bar)`" class="shadow-sm">
           <apexchart
-            :type="chartType"
+            type="bar"
             :options="chartOptions1"
             :series="series1"
+          ></apexchart>
+        </b-card>
+        </div>
+      <div class="col-md-6 my-2">
+        <b-card :header="`Dummy Chart (bar)`" class="shadow-sm">
+          <apexchart
+            type="bar"
+            :options="chartOptions3"
+            :series="series3"
           ></apexchart>
         </b-card>
       </div>
@@ -34,23 +44,41 @@ export default {
   },
   data() {
     return {
-      chartTypes1: ["line", "area", "bar", "scatter", "heatmap", "histogram"],
-      //chartTypes1: ["area"],
+      //chartTypes1: ["line", "area", "bar", "scatter", "heatmap", "histogram"],
+
       chartOptions1: {
         chart: {
           id: "vuechart-example1",
         },
         xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+          categories: [],
         },
       },
       series1: [
         {
-          name: "chart_1",
-          data: [30, 40, 35, 50, 49, 60, 70, 91],
+          name: "已盤點",
+          data: [],
+        },
+        {
+          name: "未盤點",
+          data: [],
         },
       ],
-      series2: [30, 40],
+      series2: [],
+      chartOptions3: {
+        chart: {
+          id: "vuechart-example3",
+        },
+        xaxis: {
+          categories: [],
+        },
+      },
+      series3: [
+        {
+          name: "盤點數目",
+          data: [],
+        },
+      ],
     };
   },
   computed: {
@@ -60,10 +88,11 @@ export default {
           width: "100%",
           type: "pie",
         },
-        labels: [this.$t("dashboard_counted"), this.$t("dashboard_notcounted")],
+        //labels: [this.$t("dashboard_counted"), this.$t("dashboard_notcounted")],
+        labels: [],
         theme: {
           monochrome: {
-            enabled: true,
+            enabled: false,
           },
         },
         plotOptions: {
@@ -89,16 +118,40 @@ export default {
     loadDashboardData() {
       this.$api.inventoryApi
         .getDashboardProgress()
-        .then((p) => console.log(p))
+        .then((p) => this.loadDashboardProgress(p))
         .catch((e) => console.error(e));
       this.$api.inventoryApi
         .getDashboardMasterCount()
-        .then((p) => console.log(p))
+        .then((p) => this.loadDashboardMasterCount(p))
         .catch((e) => console.error(e));
       this.$api.inventoryApi
         .getDashBoardDetailCount()
-        .then((p) => console.log(p))
+        .then((p) => this.loadDashBoardDetailCount(p))
         .catch((e) => console.error(e));
+    },
+    loadDashboardMasterCount(data) {
+      //console.log(data);
+      for (let i = 0; i < data.counter.length; i++) {
+        this.series2[i] = data.counter[i].count;
+        this.chartOptions2.labels[i] = data.counter[i].deptName;
+      }
+    },
+    loadDashboardProgress(data) {
+      //console.log(data);
+      for (let i = 0; i < data.progress.length; i++) {
+        this.series1[0].data[i] = data.progress[i].finishedCount;
+        this.series1[1].data[i] = data.progress[i].nonFinishCount;
+        this.chartOptions1.xaxis.categories[i] = data.progress[i].masterTitle;
+      }
+    },
+    loadDashBoardDetailCount(data) {
+      //console.log(data);
+      for (let i = 0; i < data.detailCount.length; i++) {
+        this.series3[0].data[i] = data.detailCount[i].detailCount;
+        this.chartOptions3.xaxis.categories[i] =
+          data.detailCount[i].masterTitle;
+      }
+      //console.log( this.chartOptions3.xaxis.categories);
     },
   },
   mounted() {
