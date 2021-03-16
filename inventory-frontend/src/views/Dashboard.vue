@@ -49,6 +49,9 @@ export default {
         xaxis: {
           categories: [],
         },
+        noData: {
+          text: "Loading...",
+        },
       },
       series1: [
         {
@@ -67,6 +70,9 @@ export default {
         },
         xaxis: {
           categories: [],
+        },
+        noData: {
+          text: "Loading...",
         },
       },
       series3: [
@@ -111,6 +117,9 @@ export default {
         },
         legend: {
           show: false,
+        },
+        noData: {
+          text: "Loading...",
         },
       };
     },
