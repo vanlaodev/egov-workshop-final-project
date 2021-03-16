@@ -68,7 +68,6 @@
       :per-page="perPage"
       :filter="filter"
       @filtered="onFiltered"
-      small
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
     >
