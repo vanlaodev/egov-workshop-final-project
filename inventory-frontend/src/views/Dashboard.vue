@@ -75,6 +75,12 @@ export default {
           data: [],
         },
       ],
+      msgDialogCtx: {
+        visible: false,
+        title: "",
+        message: "",
+        resolve: null,
+      },
     };
   },
   computed: {

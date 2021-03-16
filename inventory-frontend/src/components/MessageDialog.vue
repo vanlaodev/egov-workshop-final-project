@@ -1,5 +1,6 @@
 <template>
   <b-modal
+    v-if="ctx != null"
     :title="modalTitle"
     v-model="ctx.visible"
     ok-only
@@ -16,14 +17,16 @@ export default {
   props: ["ctx"],
   computed: {
     modalTitle() {
-      return this.ctx.title != null && this.ctx.title.length > 0
+      return this.ctx != null &&
+        this.ctx.title != null &&
+        this.ctx.title.length > 0
         ? this.ctx.title
         : this.$t("message");
     },
   },
   methods: {
     onChange(isVisible) {
-      if (this.ctx.resolve && !isVisible) {
+      if (this.ctx != null && this.ctx.resolve && !isVisible) {
         this.ctx.resolve();
       }
     },
