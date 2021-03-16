@@ -1,5 +1,50 @@
 <template>
   <b-card :title="$t('logs')" class="shadow-sm">
+    <b-form inline class="my-3">
+      <label class="sr-only" for="dtp-from">{{ $t("from") }}</label>
+      <b-form-datepicker
+        id="dtp-from"
+        class="mb-2 mr-sm-2 mb-sm-0"
+        v-model="searchStartDate"
+        @input="onDtpFromUpdated"
+      ></b-form-datepicker>
+
+      <label class="sr-only" for="dtp-to">{{ $t("to") }}</label>
+      <b-form-datepicker
+        id="dtp-to"
+        class="mb-2 mr-sm-2 mb-sm-0"
+        v-model="searchEndDate"
+        :min="minDtpTo"
+      ></b-form-datepicker>
+
+      <label class="sr-only" for="inline-form-input-master-id">{{
+        $t("inventoryFormId")
+      }}</label>
+      <b-form-input
+        type="text"
+        id="inline-form-input-master-id"
+        class="mb-2 mr-sm-2 mb-sm-0"
+        :placeholder="$t('inventoryFormId')"
+        v-model="searchMasterId"
+      ></b-form-input>
+
+      <label class="sr-only" for="inline-form-input-master-title">{{
+        $t("inventoryFormTitle")
+      }}</label>
+      <b-form-input
+        type="text"
+        id="inline-form-input-master-title"
+        class="mb-2 mr-sm-2 mb-sm-0"
+        :placeholder="$t('inventoryFormTitle')"
+        v-model="searchMasterTitle"
+      ></b-form-input>
+
+      <b-button variant="primary" @click="searchLogs">
+        <b-icon icon="search" aria-hidden="true"></b-icon>
+        {{ $t("search") }}
+      </b-button>
+    </b-form>
+
     <b-form inline class="d-flex flex-row flex-nowrap align-items-center my-3">
       <b-input-group class="flex-grow-1">
         <template #prepend>
@@ -95,8 +140,8 @@ export default {
     return {
       searchMasterId: null,
       searchMasterTitle: null,
-      searchStartDate: null,
-      searchEndDate: null,
+      searchStartDate: dayjs().format("YYYY-MM-DD"),
+      searchEndDate: dayjs().format("YYYY-MM-DD"),
       items: [],
       loading: false,
       msgDialogCtx: {
@@ -149,8 +194,16 @@ export default {
         },
       ];
     },
+    minDtpTo() {
+      return this.searchStartDate;
+    },
   },
   methods: {
+    onDtpFromUpdated() {
+      if (this.searchStartDate > this.searchEndDate) {
+        this.searchEndDate = this.searchStartDate;
+      }
+    },
     showMsgDialog(message, title) {
       return new Promise((resolve) => {
         this.msgDialogCtx.title = title;
@@ -167,7 +220,9 @@ export default {
           masterId: this.searchMasterId,
           masterTitle: this.searchMasterTitle,
           startDate: dayjs(this.searchStartDate).format("YYYY/MM/DD"),
-          endDate: dayjs(this.searchEndDate).format("YYYY/MM/DD"),
+          endDate: dayjs(this.searchEndDate)
+            .add("1", "day")
+            .format("YYYY/MM/DD"),
         });
       } catch (err) {
         await this.showMsgDialog(err, this.$t("error"));

@@ -17,7 +17,7 @@ class UserMgmtApi {
     return await new Promise((resolve) => {
       resolve({
         id: "999",
-        username: "DOI_admin",
+        username: "admin",
         accessToken: accessToken,
         refreshToken: null,
         deptId: 1,
