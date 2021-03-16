@@ -73,7 +73,12 @@
       :sort-desc.sync="sortDesc"
     >
       <template #cell(actions)="row">
-        <b-button variant="link" size="sm" @click="row.toggleDetails">
+        <b-button
+          variant="link"
+          size="sm"
+          @click="row.toggleDetails"
+          class="p-0"
+        >
           <b-icon
             :icon="row.detailsShowing ? 'eye-slash-fill' : 'eye-fill'"
             aria-hidden="true"

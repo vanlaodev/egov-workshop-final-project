@@ -11,6 +11,7 @@ const InventoryFormManagement = () =>
 const PageNotFound = () => import("../views/PageNotFound.vue");
 const PermissionDenied = () => import("../views/PermissionDenied.vue");
 const EditInventoryForm = () => import("../views/EditInventoryForm.vue");
+const ViewInventoryForm = () => import("../views/ViewInventoryForm.vue");
 const Logs = () => import("../views/Logs.vue");
 
 Vue.use(VueRouter);
@@ -39,6 +40,10 @@ const routes = [{
     path: "/editInventoryForm/:id",
     name: "EditInventoryForm",
     component: EditInventoryForm,
+  }, {
+    path: "/viewInventoryForm/:id",
+    name: "ViewInventoryForm",
+    component: ViewInventoryForm,
   },
   {
     path: "/inventoryFormManagement",

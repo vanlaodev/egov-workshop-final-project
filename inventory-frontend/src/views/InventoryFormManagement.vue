@@ -31,13 +31,6 @@
           autofocus
         ></b-form-input>
       </b-input-group>
-      <!--       <a href="#" @click.prevent="goToCreateInventoryForm" class="ml-3">
-        <b-icon variant="success" icon="plus-circle" class="h2 m-0"></b-icon>
-      </a> -->
-      <!--   <b-button variant="success" @click="goToCreateInventoryForm" class="ml-2">
-        <b-icon icon="plus-circle" aria-hidden="true"></b-icon>
-        {{ $t("add") }}
-      </b-button> -->
     </b-form>
 
     <b-table
@@ -54,7 +47,21 @@
       :sort-desc.sync="sortDesc"
     >
       <template #cell(Action)="data">
-        <b-button variant="link" size="sm" @click="editMaster(data.item.id)">
+        <!-- <b-button
+          variant="link"
+          size="sm"
+          class="p-0 mr-3"
+          @click="viewMaster(data.item.id)"
+        >
+          <b-icon icon="eye-fill" aria-hidden="true"></b-icon>
+          {{ $t("view") }}
+        </b-button> -->
+        <b-button
+          variant="link"
+          size="sm"
+          @click="editMaster(data.item.id)"
+          class="p-0 mr-3"
+        >
           <b-icon icon="pencil-fill" aria-hidden="true"></b-icon>
           {{ $t("edit") }}
         </b-button>
@@ -62,6 +69,7 @@
           variant="link"
           size="sm"
           @click="showConfirmDeleteMasterModal(data.item.id)"
+          class="p-0"
         >
           <b-icon icon="trash-fill" aria-hidden="true"></b-icon>
           {{ $t("delete") }}
@@ -245,10 +253,16 @@ export default {
         await this.showMsgDialog(err, this.$t("error"));
       }
     },
-    editMaster(inventoryfromid) {
+    editMaster(inventoryFormId) {
       this.$router.push({
         name: "EditInventoryForm",
-        params: { id: inventoryfromid },
+        params: { id: inventoryFormId },
+      });
+    },
+    viewMaster(inventoryFormId) {
+      this.$router.push({
+        name: "ViewInventoryForm",
+        params: { id: inventoryFormId },
       });
     },
     goToCreateInventoryForm() {

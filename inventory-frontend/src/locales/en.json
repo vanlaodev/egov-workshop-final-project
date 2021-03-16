@@ -68,5 +68,7 @@
     "filter": "Filter",
     "inventoryFormId": "Inventory form ID",
     "inventoryFormTitle": "Inventory form title",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "view": "View",
+    "viewInventoryForm": "View inventory form"
 }

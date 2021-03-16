@@ -68,5 +68,7 @@
   "filter": "飾選",
   "inventoryFormId": "盤點單編號",
   "inventoryFormTitle": "盤點單標題",
-  "refresh": "刷新"
+  "refresh": "刷新",
+  "view": "檢視",
+  "viewInventoryForm": "檢視盤點單"
 }
