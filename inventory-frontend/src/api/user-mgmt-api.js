@@ -21,7 +21,7 @@ class UserMgmtApi {
         accessToken: accessToken,
         refreshToken: null,
         deptId: 1,
-        roles: ["DEPT_ADMIN"],
+        roles: ["DEPT_ADMIN", "DEPT_USER", "SYS_ADMIN"],
       });
     });
   }

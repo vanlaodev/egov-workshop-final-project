@@ -12,10 +12,11 @@ class MainMenuItem {
 
 const mainMenu = {
     items: [
-        new MainMenuItem('dashboard', 'Dashboard'),
-        new MainMenuItem('createInventoryForm', 'CreateInventoryForm'),
-        new MainMenuItem('inventoryFormManagement', 'InventoryFormManagement'),
-        new MainMenuItem('takeInventory', 'TakeInventory'),
+        new MainMenuItem('dashboard', 'Dashboard', ['DEPT_USER', 'DEPT_ADMIN']),
+        new MainMenuItem('createInventoryForm', 'CreateInventoryForm', ['DEPT_ADMIN']),
+        new MainMenuItem('inventoryFormManagement', 'InventoryFormManagement', ['DEPT_ADMIN']),
+        new MainMenuItem('takeInventory', 'TakeInventory', ['DEPT_USER', 'DEPT_ADMIN']),
+        new MainMenuItem('logs', 'Logs', ['SYS_ADMIN']),
     ]
 }
 

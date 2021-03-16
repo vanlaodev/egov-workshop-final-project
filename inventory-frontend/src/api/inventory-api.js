@@ -113,6 +113,30 @@ class InventoryApi {
   }
 
   /*
+   * Logs
+   */
+
+  async searchLog(searchCriteria) {
+    this._assertUserLoggedIn();
+    const resp = await this.httpClient.post("v1/searchLog", searchCriteria);
+    const dtos = this._handleResp(resp.data);
+    return dtos == null ? [] : dtos.map(x => {
+      const inputObj = JSON.parse(x.input);
+      if (inputObj) delete inputObj['accessToken'];
+      return {
+        id: x.id,
+        masterId: x.masterId,
+        masterTitle: x.masterTitle,
+        createDate: x.createDate,
+        functionName: x.functionName,
+        userName: x.userName,
+        input: inputObj,
+        output: JSON.parse(x.output)
+      };
+    })
+  }
+
+  /*
    * Helper functions
    */
 

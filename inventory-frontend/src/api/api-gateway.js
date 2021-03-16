@@ -17,9 +17,9 @@ class ApiGateway {
 
     get inventoryApi() {
         return this._inventoryApi;
-    }
-
-    get assetMgmtApi() {
+    }   
+    
+    get assetMgmtApi() {    
         return this._assetMgmtApi;
     }
 }

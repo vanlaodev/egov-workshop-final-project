@@ -32,6 +32,8 @@
       :per-page="perPage"
       :filter="filter"
       @filtered="onFiltered"
+      :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
     >
       <template #cell(Action)="data">
         <b-button variant="link" size="sm" @click="editMaster(data.item.id)">
@@ -52,7 +54,7 @@
       v-else
       :rows="4"
       :columns="6"
-      :table-props="{ bordered: true }"
+      :table-props="{ bordered: false }"
     ></b-skeleton-table>
 
     <b-pagination
@@ -97,6 +99,8 @@ export default {
         message: "",
         resolve: null,
       },
+      sortBy: "id",
+      sortDesc: true,
     };
   },
   computed: {
@@ -180,17 +184,15 @@ export default {
         const masters = await this.$api.inventoryApi.searchMaster({
           deptId: this.loggedInUser.deptId,
         });
-        this.items = masters
-          .map((m) => {
-            return {
-              id: m.id,
-              name: m.title,
-              from: m.fromTime,
-              to: m.endTime,
-              status: m.status,
-            };
-          })
-          .sort((m1, m2) => m2.id - m1.id);
+        this.items = masters.map((m) => {
+          return {
+            id: m.id,
+            name: m.title,
+            from: m.fromTime,
+            to: m.endTime,
+            status: m.status,
+          };
+        });
         this.currentPage = 1;
       } catch (err) {
         await this.showMsgDialog(err, this.$t("error"));

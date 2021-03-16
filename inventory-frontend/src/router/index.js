@@ -11,10 +11,10 @@ const InventoryFormManagement = () =>
 const PageNotFound = () => import("../views/PageNotFound.vue");
 const PermissionDenied = () => import("../views/PermissionDenied.vue");
 const EditInventoryForm = () => import("../views/EditInventoryForm.vue");
+const Logs = () => import("../views/Logs.vue");
 
 Vue.use(VueRouter);
-const routes = [
-  {
+const routes = [{
     path: "/dashboard",
     name: "Dashboard",
     alias: ["/"],
@@ -44,6 +44,11 @@ const routes = [
     path: "/inventoryFormManagement",
     name: "InventoryFormManagement",
     component: InventoryFormManagement,
+  },
+  {
+    path: "/logs",
+    name: "Logs",
+    component: Logs,
   },
   {
     path: "/permissionDenied",
