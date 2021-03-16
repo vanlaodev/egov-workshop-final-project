@@ -46,16 +46,7 @@
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
     >
-      <template #cell(Action)="data">
-        <!-- <b-button
-          variant="link"
-          size="sm"
-          class="p-0 mr-3"
-          @click="viewMaster(data.item.id)"
-        >
-          <b-icon icon="eye-fill" aria-hidden="true"></b-icon>
-          {{ $t("view") }}
-        </b-button> -->
+      <template #cell(actions)="data">
         <b-button
           variant="link"
           size="sm"
@@ -69,7 +60,7 @@
           variant="link"
           size="sm"
           @click="showConfirmDeleteMasterModal(data.item.id)"
-          class="p-0"
+          class="p-0 mr-3"
         >
           <b-icon icon="trash-fill" aria-hidden="true"></b-icon>
           {{ $t("delete") }}
@@ -90,8 +81,9 @@
       size="md"
       class="mb-0"
     ></b-pagination>
-    <message-dialog :ctx="msgDialogCtx"></message-dialog>
+
     <confirm-dialog :ctx="confirmDialogCtx"></confirm-dialog>
+    <message-dialog :ctx="msgDialogCtx"></message-dialog>
   </b-card>
 </template>
 
@@ -174,7 +166,7 @@ export default {
           sortable: true,
         },
         {
-          key: "Action",
+          key: "actions",
           label: this.$t("actions"),
         },
       ];
@@ -256,12 +248,6 @@ export default {
     editMaster(inventoryFormId) {
       this.$router.push({
         name: "EditInventoryForm",
-        params: { id: inventoryFormId },
-      });
-    },
-    viewMaster(inventoryFormId) {
-      this.$router.push({
-        name: "ViewInventoryForm",
         params: { id: inventoryFormId },
       });
     },

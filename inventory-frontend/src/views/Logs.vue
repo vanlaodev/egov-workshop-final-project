@@ -220,9 +220,7 @@ export default {
           masterId: this.searchMasterId,
           masterTitle: this.searchMasterTitle,
           startDate: dayjs(this.searchStartDate).format("YYYY/MM/DD"),
-          endDate: dayjs(this.searchEndDate)
-            .add("1", "day")
-            .format("YYYY/MM/DD"),
+          endDate: dayjs(this.searchEndDate).add(1, "day").format("YYYY/MM/DD"),
         });
       } catch (err) {
         await this.showMsgDialog(err, this.$t("error"));

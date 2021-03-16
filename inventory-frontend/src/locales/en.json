@@ -54,6 +54,7 @@
     "msg_operationSuccess": "Operation success.",
     "fmt_msg_error": "Error occurred: {msg}",
     "fmt_msg_confirmDeleteInventoryMaster": "Are you sure to delete the inventory master no. {id}?",
+    "fmt_msg_confirmDeleteInventoryDetail": "Are you sure to delete the inventory asset {assetId}-{description}?",
     "dashboard_counted": "counted",
     "dashboard_notcounted": "not counted",
     "logs": "Logs",
@@ -70,5 +71,11 @@
     "inventoryFormTitle": "Inventory form title",
     "refresh": "Refresh",
     "view": "View",
-    "viewInventoryForm": "View inventory form"
+    "viewInventoryForm": "View inventory form",
+    "details": "Details",
+    "assets": "Assets",
+    "description": "Description",
+    "brand": "Brand",
+    "notInventoried": "Not inventoried",
+    "result": "Result"
 }

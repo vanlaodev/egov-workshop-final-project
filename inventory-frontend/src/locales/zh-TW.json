@@ -54,6 +54,7 @@
   "msg_operationSuccess": "操作成功。",
   "fmt_msg_error": "發生錯誤：{msg}",
   "fmt_msg_confirmDeleteInventoryMaster": "您是否確定要刪除盤點單{id}？",
+  "fmt_msg_confirmDeleteInventoryDetail": "您是否確定要刪除盤點資產{assetId}-{description}？",
   "dashboard_counted": "已盤點",
   "dashboard_notcounted": "未盤點",
   "logs": "日誌",
@@ -70,5 +71,11 @@
   "inventoryFormTitle": "盤點單標題",
   "refresh": "刷新",
   "view": "檢視",
-  "viewInventoryForm": "檢視盤點單"
+  "viewInventoryForm": "檢視盤點單",
+  "details": "詳情",
+  "assets": "資產",
+  "description": "描述",
+  "brand": "品牌",
+  "notInventoried": "未盤點",
+  "result": "結果"
 }

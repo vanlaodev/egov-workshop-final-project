@@ -20,21 +20,23 @@
           autofocus
         ></b-form-input>
       </b-form-group>
-      <b-form-group :label="$t('from')" label-for="dtp-from">
-        <b-form-datepicker
-          id="dtp-from"
-          v-model="dtpFrom"
-          :min="minDtpFrom"
-          @input="onDtpFromUpdated"
-        ></b-form-datepicker>
-      </b-form-group>
-      <b-form-group :label="$t('to')" label-for="dtp-to">
-        <b-form-datepicker
-          id="dtp-to"
-          v-model="dtpTo"
-          :min="minDtpTo"
-        ></b-form-datepicker>
-      </b-form-group>
+      <div class="row">
+        <b-form-group :label="$t('from')" label-for="dtp-from" class="col-md-6">
+          <b-form-datepicker
+            id="dtp-from"
+            v-model="dtpFrom"
+            :min="minDtpFrom"
+            @input="onDtpFromUpdated"
+          ></b-form-datepicker>
+        </b-form-group>
+        <b-form-group :label="$t('to')" label-for="dtp-to" class="col-md-6">
+          <b-form-datepicker
+            id="dtp-to"
+            v-model="dtpTo"
+            :min="minDtpTo"
+          ></b-form-datepicker>
+        </b-form-group>
+      </div>
       <b-form-group :label="$t('remark')" label-for="input-remark">
         <b-form-textarea id="input-remark" v-model="remark"></b-form-textarea>
       </b-form-group>
