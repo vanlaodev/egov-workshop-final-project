@@ -8,6 +8,7 @@ import router from "./router";
 import store from "./store";
 import bus from "./eventbus";
 import "./api/api-gateway";
+import './registerServiceWorker'
 
 Vue.config.productionTip = false;
 
