@@ -6,15 +6,11 @@
           <b-input-group-text><b-icon icon="filter" /></b-input-group-text>
         </template>
         <b-form-input
+          type="search"
           v-model="filter"
           :placeholder="$t('filter')"
           autofocus
         ></b-form-input>
-        <b-input-group-append v-if="filter">
-          <b-button @click="filter = ''">
-            {{ $t("clear") }}
-          </b-button>
-        </b-input-group-append>
       </b-input-group>
       <a href="#" @click.prevent="goToCreateInventoryForm" class="ml-3">
         <b-icon variant="success" icon="plus-circle" class="h2 m-0"></b-icon>

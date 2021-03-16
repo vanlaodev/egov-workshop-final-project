@@ -1,10 +1,10 @@
 <template>
   <b-card :title="$t('logs')" class="shadow-sm">
-    <b-form inline class="my-3">
+    <b-form inline class="mt-3 mb-1">
       <label class="sr-only" for="dtp-from">{{ $t("from") }}</label>
       <b-form-datepicker
         id="dtp-from"
-        class="mb-2 mr-sm-2 mb-sm-0"
+        class="mb-2 mr-sm-2"
         v-model="searchStartDate"
         @input="onDtpFromUpdated"
       ></b-form-datepicker>
@@ -12,7 +12,7 @@
       <label class="sr-only" for="dtp-to">{{ $t("to") }}</label>
       <b-form-datepicker
         id="dtp-to"
-        class="mb-2 mr-sm-2 mb-sm-0"
+        class="mb-2 mr-sm-2"
         v-model="searchEndDate"
         :min="minDtpTo"
       ></b-form-datepicker>
@@ -23,7 +23,7 @@
       <b-form-input
         type="text"
         id="inline-form-input-master-id"
-        class="mb-2 mr-sm-2 mb-sm-0"
+        class="mb-2 mr-sm-2"
         :placeholder="$t('inventoryFormId')"
         v-model="searchMasterId"
       ></b-form-input>
@@ -34,32 +34,28 @@
       <b-form-input
         type="text"
         id="inline-form-input-master-title"
-        class="mb-2 mr-sm-2 mb-sm-0"
+        class="mb-2 mr-sm-2"
         :placeholder="$t('inventoryFormTitle')"
         v-model="searchMasterTitle"
       ></b-form-input>
 
-      <b-button variant="primary" @click="searchLogs">
+      <b-button variant="primary" @click="searchLogs" class="mb-2 mr-sm-2">
         <b-icon icon="search" aria-hidden="true"></b-icon>
         {{ $t("search") }}
       </b-button>
     </b-form>
 
-    <b-form inline class="d-flex flex-row flex-nowrap align-items-center my-3">
+    <b-form inline class="d-flex flex-row flex-nowrap align-items-center mb-3">
       <b-input-group class="flex-grow-1">
         <template #prepend>
           <b-input-group-text><b-icon icon="filter" /></b-input-group-text>
         </template>
         <b-form-input
+          type="search"
           v-model="filter"
           :placeholder="$t('filter')"
           autofocus
         ></b-form-input>
-        <b-input-group-append v-if="filter">
-          <b-button @click="filter = ''">
-            {{ $t("clear") }}
-          </b-button>
-        </b-input-group-append>
       </b-input-group>
     </b-form>
 
