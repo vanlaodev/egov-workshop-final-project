@@ -38,6 +38,14 @@ class InventoryApi {
     return this._handleResp(resp.data);
   }
 
+  async searchMasterByOwner(owner) {
+    this._assertUserLoggedIn();
+    const resp = await this.httpClient.post("v1/searchMasterByHolder", {
+      holderName: owner
+    });
+    return this._handleResp(resp.data);
+  }
+
   async getMasterById(masterId) {
     this._assertUserLoggedIn();
     const resp = await this.httpClient.post("v1/searchMasterById", {
