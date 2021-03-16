@@ -1,6 +1,25 @@
 <template>
   <b-card :title="$t('inventoryFormManagement')" class="shadow-sm">
-    <b-form inline class="d-flex flex-row flex-nowrap align-items-center my-3">
+    <b-form inline class="mt-3 mb-1">
+      <b-button
+        variant="success"
+        @click="goToCreateInventoryForm"
+        class="mb-2 mr-2"
+      >
+        <b-icon icon="plus-circle" aria-hidden="true"></b-icon>
+        {{ $t("add") }}
+      </b-button>
+      <b-button
+        variant="primary"
+        @click="loadInventoryMasters"
+        class="mb-2 mr-2"
+      >
+        <b-icon icon="arrow-repeat" aria-hidden="true"></b-icon>
+        {{ $t("refresh") }}
+      </b-button>
+    </b-form>
+
+    <b-form inline class="d-flex flex-row flex-nowrap align-items-center mb-3">
       <b-input-group class="flex-grow-1">
         <template #prepend>
           <b-input-group-text><b-icon icon="filter" /></b-input-group-text>
@@ -12,9 +31,13 @@
           autofocus
         ></b-form-input>
       </b-input-group>
-      <a href="#" @click.prevent="goToCreateInventoryForm" class="ml-3">
+      <!--       <a href="#" @click.prevent="goToCreateInventoryForm" class="ml-3">
         <b-icon variant="success" icon="plus-circle" class="h2 m-0"></b-icon>
-      </a>
+      </a> -->
+      <!--   <b-button variant="success" @click="goToCreateInventoryForm" class="ml-2">
+        <b-icon icon="plus-circle" aria-hidden="true"></b-icon>
+        {{ $t("add") }}
+      </b-button> -->
     </b-form>
 
     <b-table

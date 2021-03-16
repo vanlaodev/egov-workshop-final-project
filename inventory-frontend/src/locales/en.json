@@ -67,5 +67,6 @@
     "hideDetails": "Hide details",
     "filter": "Filter",
     "inventoryFormId": "Inventory form ID",
-    "inventoryFormTitle": "Inventory form title"
+    "inventoryFormTitle": "Inventory form title",
+    "refresh": "Refresh"
 }
