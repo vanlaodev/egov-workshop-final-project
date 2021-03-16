@@ -64,5 +64,6 @@
     "action": "Action",
     "inventoryForm": "Inventory form",
     "showDetails": "Show details",
-    "hideDetails": "Hide details"
+    "hideDetails": "Hide details",
+    "filter": "Filter"
 }

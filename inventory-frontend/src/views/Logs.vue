@@ -3,12 +3,11 @@
     <b-form inline class="d-flex flex-row flex-nowrap align-items-center my-3">
       <b-input-group class="flex-grow-1">
         <template #prepend>
-          <b-input-group-text><b-icon icon="search" /></b-input-group-text>
+          <b-input-group-text><b-icon icon="filter" /></b-input-group-text>
         </template>
         <b-form-input
-          type="search"
           v-model="filter"
-          :placeholder="$t('search')"
+          :placeholder="$t('filter')"
           autofocus
         ></b-form-input>
         <b-input-group-append v-if="filter">
@@ -28,22 +27,25 @@
       :per-page="perPage"
       :filter="filter"
       @filtered="onFiltered"
-      striped
       small
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
     >
       <template #cell(actions)="row">
-        <b-button @click="row.toggleDetails" size="sm">{{
-          row.detailsShowing ? $t("hideDetails") : $t("showDetails")
-        }}</b-button>
+        <b-button variant="link" size="sm" @click="row.toggleDetails">
+          <b-icon
+            :icon="row.detailsShowing ? 'eye-slash-fill' : 'eye-fill'"
+            aria-hidden="true"
+          ></b-icon>
+          {{ row.detailsShowing ? $t("hideDetails") : $t("showDetails") }}
+        </b-button>
       </template>
       <template #row-details="row">
-        <b-table-simple small responsive
+        <b-table-simple small responsive bordered
           ><b-thead head-variant="dark">
             <b-tr>
-              <b-th>{{ $t("input") }}</b-th>
-              <b-th>{{ $t("output") }}</b-th>
+              <b-th style="width: 50%">{{ $t("input") }}</b-th>
+              <b-th style="width: 50%">{{ $t("output") }}</b-th>
             </b-tr>
           </b-thead>
           <b-tbody>

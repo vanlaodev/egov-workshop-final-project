@@ -64,5 +64,6 @@
   "action": "動作",
   "inventoryForm": "盤點單",
   "showDetails": "顯示詳情",
-  "hideDetails": "隱藏詳情"
+  "hideDetails": "隱藏詳情",
+  "filter": "飾選"
 }

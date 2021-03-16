@@ -3,12 +3,11 @@
     <b-form inline class="d-flex flex-row flex-nowrap align-items-center my-3">
       <b-input-group class="flex-grow-1">
         <template #prepend>
-          <b-input-group-text><b-icon icon="search" /></b-input-group-text>
+          <b-input-group-text><b-icon icon="filter" /></b-input-group-text>
         </template>
         <b-form-input
-          type="search"
           v-model="filter"
-          :placeholder="$t('search')"
+          :placeholder="$t('filter')"
           autofocus
         ></b-form-input>
         <b-input-group-append v-if="filter">
