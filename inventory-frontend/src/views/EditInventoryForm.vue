@@ -143,8 +143,8 @@
 
 <script>
 import * as dayjs from "dayjs";
-var isSameOrAfter = require("dayjs/plugin/isSameOrAfter");
-dayjs.extend(isSameOrAfter);
+/* var isSameOrAfter = require("dayjs/plugin/isSameOrAfter");
+dayjs.extend(isSameOrAfter); */
 
 import { mapState } from "vuex";
 import MessageDialog from "../components/MessageDialog";
@@ -202,13 +202,14 @@ export default {
     },
     canEditDetails() {
       return (
-        this.originalMaster.status == "ACTIVE" &&
+        /* this.originalMaster.status == "ACTIVE" &&
         dayjs().isSameOrAfter(
           dayjs(this.originalMaster.fromTime, "YYYY/MM/DD")
         ) &&
         dayjs().isBefore(
           dayjs(this.originalMaster.endTime, "YYYY/MM/DD").add(1, "day")
-        )
+        ) */
+        true
       );
     },
     detailsFields() {
