@@ -97,28 +97,28 @@ class InventoryApi {
   async getDashboardProgress() {
     this._assertUserLoggedIn();
     const resp = await this.httpClient.post("v1/dashboardProgress");
-    return this._handleResp(resp.data, null);
+    return this._handleResp(resp.data);
   }
 
   async getDashboardMasterCount() {
     this._assertUserLoggedIn();
     const resp = await this.httpClient.post("v1/dashboardMasterCount");
-    return this._handleResp(resp.data, null);
+    return this._handleResp(resp.data);
   }
 
   async getDashBoardDetailCount() {
     this._assertUserLoggedIn();
     const resp = await this.httpClient.post("v1/dashBoardDetailCount");
-    return this._handleResp(resp.data, null);
+    return this._handleResp(resp.data);
   }
 
   /*
    * Helper functions
    */
 
-  _handleResp(resp, dataField = "data") {
+  _handleResp(resp) {
     if (resp.code == 0) {
-      return !dataField ? resp : resp[dataField];
+      return resp.data;
     } else if (resp.code == -2) {
       bus.$emit("LOGIN_REQUIRED");
       if (!resp.msg) resp.msg = "Login required.";

@@ -2,11 +2,6 @@
   <div>
     <h1>{{ $t("dashboard") }}</h1>
     <div class="row">
-      <!-- <div
-        v-for="chartType in chartTypes1"
-        :key="chartType"
-        class="col-md-6 my-2"
-      > -->
       <div class="col-md-6 my-2">
         <b-card :header="`Dummy Chart (bar)`" class="shadow-sm">
           <apexchart
@@ -44,8 +39,6 @@ export default {
   },
   data() {
     return {
-      //chartTypes1: ["line", "area", "bar", "scatter", "heatmap", "histogram"],
-
       chartOptions1: {
         chart: {
           id: "vuechart-example1",
@@ -88,7 +81,6 @@ export default {
           width: "100%",
           type: "pie",
         },
-        //labels: [this.$t("dashboard_counted"), this.$t("dashboard_notcounted")],
         labels: [],
         theme: {
           monochrome: {
@@ -130,14 +122,14 @@ export default {
         .catch((e) => console.error(e));
     },
     loadDashboardMasterCount(data) {
-      let records = data.data.counter;
+      let records = data.counter;
       for (let i = 0; i < records.length; i++) {
         this.series2[i] = records[i].count;
         this.chartOptions2.labels[i] = records[i].deptName;
       }
     },
     loadDashboardProgress(data) {
-      let records = data.data.progress;
+      let records = data.progress;
       for (let i = 0; i < records.length; i++) {
         this.series1[0].data[i] = records[i].finishedCount;
         this.series1[1].data[i] = records[i].nonFinishCount;
@@ -145,7 +137,7 @@ export default {
       }
     },
     loadDashBoardDetailCount(data) {
-      let records = data.data.detailCount;
+      let records = data.detailCount;
       for (let i = 0; i < records.length; i++) {
         this.series3[0].data[i] = records[i].detailCount;
         this.chartOptions3.xaxis.categories[i] = records[i].masterTitle;
