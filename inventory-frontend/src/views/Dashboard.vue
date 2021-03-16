@@ -15,7 +15,7 @@
             :series="series1"
           ></apexchart>
         </b-card>
-        </div>
+      </div>
       <div class="col-md-6 my-2">
         <b-card :header="`Dummy Chart (bar)`" class="shadow-sm">
           <apexchart
@@ -130,28 +130,26 @@ export default {
         .catch((e) => console.error(e));
     },
     loadDashboardMasterCount(data) {
-      //console.log(data);
-      for (let i = 0; i < data.counter.length; i++) {
-        this.series2[i] = data.counter[i].count;
-        this.chartOptions2.labels[i] = data.counter[i].deptName;
+      let records = data.data.counter;
+      for (let i = 0; i < records.length; i++) {
+        this.series2[i] = records[i].count;
+        this.chartOptions2.labels[i] = records[i].deptName;
       }
     },
     loadDashboardProgress(data) {
-      //console.log(data);
-      for (let i = 0; i < data.progress.length; i++) {
-        this.series1[0].data[i] = data.progress[i].finishedCount;
-        this.series1[1].data[i] = data.progress[i].nonFinishCount;
-        this.chartOptions1.xaxis.categories[i] = data.progress[i].masterTitle;
+      let records = data.data.progress;
+      for (let i = 0; i < records.length; i++) {
+        this.series1[0].data[i] = records[i].finishedCount;
+        this.series1[1].data[i] = records[i].nonFinishCount;
+        this.chartOptions1.xaxis.categories[i] = records[i].masterTitle;
       }
     },
     loadDashBoardDetailCount(data) {
-      //console.log(data);
-      for (let i = 0; i < data.detailCount.length; i++) {
-        this.series3[0].data[i] = data.detailCount[i].detailCount;
-        this.chartOptions3.xaxis.categories[i] =
-          data.detailCount[i].masterTitle;
+      let records = data.data.detailCount;
+      for (let i = 0; i < records.length; i++) {
+        this.series3[0].data[i] = records[i].detailCount;
+        this.chartOptions3.xaxis.categories[i] = records[i].masterTitle;
       }
-      //console.log( this.chartOptions3.xaxis.categories);
     },
   },
   mounted() {
