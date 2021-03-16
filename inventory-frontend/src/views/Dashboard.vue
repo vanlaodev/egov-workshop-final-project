@@ -3,7 +3,7 @@
     <h1>{{ $t("dashboard") }}</h1>
     <div class="row">
       <div class="col-md-6 my-2">
-        <b-card :header="`Dummy Chart (bar)`" class="shadow-sm">
+        <b-card header="Progress" class="shadow-sm">
           <apexchart
             type="bar"
             :options="chartOptions1"
@@ -12,7 +12,7 @@
         </b-card>
       </div>
       <div class="col-md-6 my-2">
-        <b-card :header="`Dummy Chart (bar)`" class="shadow-sm">
+        <b-card header="Master count" class="shadow-sm">
           <apexchart
             type="bar"
             :options="chartOptions3"
@@ -22,20 +22,23 @@
       </div>
 
       <div class="col-md-6 my-2">
-        <b-card :header="`Dummy Chart (pie)`" class="shadow-sm">
+        <b-card header="Detail count" class="shadow-sm">
           <apexchart :options="chartOptions2" :series="series2"></apexchart>
         </b-card>
       </div>
     </div>
+    <message-dialog :ctx="msgDialogCtx"></message-dialog>
   </div>
 </template>
 
 <script>
 import VueApexCharts from "vue-apexcharts";
+import MessageDialog from "../components/MessageDialog";
 
 export default {
   components: {
     apexchart: VueApexCharts,
+    MessageDialog,
   },
   data() {
     return {
@@ -107,19 +110,27 @@ export default {
     },
   },
   methods: {
+    showMsgDialog(message, title) {
+      return new Promise((resolve) => {
+        this.msgDialogCtx.title = title;
+        this.msgDialogCtx.message = message;
+        this.msgDialogCtx.resolve = resolve;
+        this.msgDialogCtx.visible = true;
+      });
+    },
     loadDashboardData() {
       this.$api.inventoryApi
         .getDashboardProgress()
         .then((p) => this.loadDashboardProgress(p))
-        .catch((e) => console.error(e));
+        .catch((e) => this.showMsgDialog(e, this.$t("error")));
       this.$api.inventoryApi
         .getDashboardMasterCount()
         .then((p) => this.loadDashboardMasterCount(p))
-        .catch((e) => console.error(e));
+        .catch((e) => this.showMsgDialog(e, this.$t("error")));
       this.$api.inventoryApi
         .getDashBoardDetailCount()
         .then((p) => this.loadDashBoardDetailCount(p))
-        .catch((e) => console.error(e));
+        .catch((e) => this.showMsgDialog(e, this.$t("error")));
     },
     loadDashboardMasterCount(data) {
       let records = data.counter;
