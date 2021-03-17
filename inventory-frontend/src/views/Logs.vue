@@ -167,6 +167,9 @@ export default {
           key: "createDate",
           label: this.$t("time"),
           sortable: true,
+          formatter: (value) => {
+            return value.format("YYYY-MM-DD HH:mm:ss");
+          },
         },
         {
           key: "inventoryForm",

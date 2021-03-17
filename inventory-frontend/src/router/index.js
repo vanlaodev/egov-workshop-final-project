@@ -31,7 +31,7 @@ const routes = [{
     component: TakeInventory,
   },
   {
-    path: "/takeInventoryDetail",
+    path: "/takeInventoryDetail/:id",
     name: "TakeInventoryDetail",
     component: TakeInventoryDetail,
   },

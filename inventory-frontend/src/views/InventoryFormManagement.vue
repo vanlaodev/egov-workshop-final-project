@@ -131,19 +131,25 @@ export default {
           sortable: true,
         },
         {
-          key: "name",
+          key: "title",
           label: this.$t("title"),
           sortable: true,
         },
         {
-          key: "from",
+          key: "fromTime",
           label: this.$t("from"),
           sortable: true,
+          formatter: (value) => {
+            return value.format("YYYY-MM-DD");
+          },
         },
         {
-          key: "to",
+          key: "endTime",
           label: this.$t("to"),
           sortable: true,
+          formatter: (value) => {
+            return value.format("YYYY-MM-DD");
+          },
         },
         {
           key: "status",
@@ -202,15 +208,7 @@ export default {
         const masters = await this.$api.inventoryApi.searchMaster({
           deptId: this.loggedInUser.deptId,
         });
-        this.items = masters.map((m) => {
-          return {
-            id: m.id,
-            name: m.title,
-            from: m.fromTime,
-            to: m.endTime,
-            status: m.status,
-          };
-        });
+        this.items = masters;
         this.currentPage = 1;
       } catch (err) {
         await this.showMsgDialog(err, this.$t("error"));
@@ -219,8 +217,12 @@ export default {
       }
     },
     async showConfirmDeleteMasterModal(selectedId) {
+      const master = this.items.find((x) => x.id == selectedId);
       const confirmed = await this.showConfirmDialog(
-        this.$t("fmt_msg_confirmDeleteInventoryMaster", { id: selectedId })
+        this.$t("fmt_msg_confirmDeleteInventoryMaster", {
+          id: selectedId,
+          title: master.title,
+        })
       );
       if (confirmed) {
         await this.deleteMaster(selectedId);

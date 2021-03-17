@@ -15,7 +15,7 @@ class UserMgmtApi {
     // TODO
     await promiseDelay(1000);
     const users = [{
-        username: 'user',
+        username: 'john',
         type: "User",
         accessToken: "EgovWorkshop2020",
         deptId: 1,

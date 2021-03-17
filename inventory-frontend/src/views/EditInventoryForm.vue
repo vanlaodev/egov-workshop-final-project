@@ -126,7 +126,7 @@
       >
         <template #cell(actions)="data">
           <b-button
-            v-if="canEditDetails && data.item.canEdit"
+            v-if="canEditDetails && data.item.canEdit()"
             variant="link"
             size="sm"
             @click="showConfirmDeleteDetailModal(data.item.id)"
@@ -143,9 +143,6 @@
 
 <script>
 import * as dayjs from "dayjs";
-/* var isSameOrAfter = require("dayjs/plugin/isSameOrAfter");
-dayjs.extend(isSameOrAfter); */
-
 import { mapState } from "vuex";
 import MessageDialog from "../components/MessageDialog";
 import ConfirmDialog from "../components/ConfirmDialog";
@@ -201,16 +198,7 @@ export default {
       ];
     },
     canEditDetails() {
-      return (
-        /* this.originalMaster.status == "ACTIVE" &&
-        dayjs().isSameOrAfter(
-          dayjs(this.originalMaster.fromTime, "YYYY/MM/DD")
-        ) &&
-        dayjs().isBefore(
-          dayjs(this.originalMaster.endTime, "YYYY/MM/DD").add(1, "day")
-        ) */
-        true
-      );
+      return true;
     },
     detailsFields() {
       return [
@@ -325,31 +313,12 @@ export default {
             this.selectedStatus = this.statusList.find(
               (d) => d.value == master.status
             ).value;
-            this.dtpFrom = dayjs(master.fromTime, "YYYY/MM/DD").format(
-              "YYYY-MM-DD"
-            );
-            this.dtpTo = dayjs(master.endTime, "YYYY/MM/DD").format(
-              "YYYY-MM-DD"
-            );
+            this.dtpFrom = master.fromTime.format("YYYY-MM-DD");
+            this.dtpTo = master.endTime.format("YYYY-MM-DD");
             const details = await this.$api.inventoryApi.searchDetail({
               masterId: masterId,
             });
-            this.details =
-              details == null
-                ? []
-                : details.map((x) => {
-                    return {
-                      id: x.id,
-                      assetId: x.assetId,
-                      description: x.description,
-                      remarkZh: x.remarkCn,
-                      remarkPt: x.remarkPt,
-                      brand: x.brand,
-                      actionResult: x.actionResult,
-                      // canEdit: !x.actionResult,
-                      canEdit: true,
-                    };
-                  });
+            this.details = details == null ? [] : details;
             this.originalMaster = master;
           } else {
             await this.showMsgDialog(this.$t("msg_recordNotFound"));
