@@ -145,6 +145,16 @@ class InventoryApi {
   }
 
   /*
+   * Permissions
+   */
+
+  async getPermission() {
+    this._assertUserLoggedIn();
+    const resp = await this.httpClient.post("v1/getPermission");
+    return this._handleResp(resp.data);
+  }
+
+  /*
    * Helper functions
    */
 

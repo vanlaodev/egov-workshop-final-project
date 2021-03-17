@@ -9,7 +9,12 @@
 
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
-            <b-nav-item-dropdown :text="$t('inventoryOfAssets')">
+            <b-nav-item-dropdown
+              :text="$t('inventoryOfAssets')"
+              v-if="
+                mainMenuItemsAllowToNav && mainMenuItemsAllowToNav.length > 0
+              "
+            >
               <b-dropdown-item
                 v-for="(item, index) in mainMenuItemsAllowToNav"
                 :key="index"
@@ -17,6 +22,9 @@
                 >{{ $t(item.titleI18nKey) }}</b-dropdown-item
               >
             </b-nav-item-dropdown>
+            <b-nav-item v-else href="#">{{
+              $t("inventoryOfAssets")
+            }}</b-nav-item>
             <b-nav-item href="#">{{ $t("assetsManagement") }}</b-nav-item>
             <b-nav-item>{{ $t("transferOfAssets") }}</b-nav-item>
             <b-nav-item href="#">{{ $t("reports") }}</b-nav-item>
@@ -117,17 +125,24 @@ export default {
         this.redirectToLoginUrl();
       }
     },
-    redirectToLoginUrl() {
-      window.location = `${process.env.VUE_APP_LOGIN_URL}?redirectUrl=${window.location}&locale=${this.locale}`;
+    async redirectToLoginUrl() {
+      // window.location = `${process.env.VUE_APP_LOGIN_URL}?redirectUrl=${window.location}&locale=${this.locale}`;
+
+      // for temp sign in - remove later
+      await this.$router.push({
+        name: "TempSignIn",
+      });
+      this.setAppInitialized(true);
     },
     async initializeApp() {
       if (this.appInitialized) return;
       this.setInitAppProgress(30);
       await this.initStore();
       document.title = this.documentTitle;
-      const accessToken = this.$route.query.accessToken ?? "EgovWorkshop2020"; // TODO: for dev only, remove the fake token later
+      const accessToken = this.$route.query.accessToken;
       if (accessToken) {
         try {
+          window.history.replaceState(null, null, window.location.pathname);
           const userInfo = await this.$api.userMgmtApi.getUserInfoByAccessToken(
             accessToken
           );
@@ -154,7 +169,7 @@ export default {
       }
       this.setInitAppProgress(100);
 
-      await promiseDelay(600);
+      await promiseDelay(550);
 
       this.setAppInitialized(true);
 

@@ -140,7 +140,7 @@ export default {
     return {
       searchMasterId: null,
       searchMasterTitle: null,
-      searchStartDate: dayjs().format("YYYY-MM-DD"),
+      searchStartDate: dayjs().add(-1, "week").format("YYYY-MM-DD"),
       searchEndDate: dayjs().format("YYYY-MM-DD"),
       items: [],
       loading: false,

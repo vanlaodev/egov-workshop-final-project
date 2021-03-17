@@ -14,16 +14,30 @@ class UserMgmtApi {
   async getUserInfoByAccessToken(accessToken) {
     // TODO
     await promiseDelay(1000);
-    return await new Promise((resolve) => {
-      resolve({
-        id: "999",
-        username: "admin",
-        accessToken: accessToken,
-        refreshToken: null,
+    const users = [{
+        username: 'user',
+        type: "User",
+        accessToken: "EgovWorkshop2020",
         deptId: 1,
-        roles: ["DEPT_ADMIN", "DEPT_USER", "SYS_ADMIN"],
-      });
-    });
+        roles: ["DEPT_USER"]
+      },
+      {
+        username: 'admin',
+        type: "Admin",
+        accessToken: "EgovWorkshop2020Admin",
+        deptId: 1,
+        roles: ["DEPT_ADMIN", "DEPT_USER", "SYS_ADMIN"]
+      },
+    ];
+    const user = users.find(u => u.accessToken == accessToken);
+    if (!user) return null;
+    return {
+      username: user.username,
+      accessToken: user.accessToken,
+      refreshToken: null,
+      deptId: user.deptId,
+      roles: user.roles,
+    };
   }
 
   async signOut() {

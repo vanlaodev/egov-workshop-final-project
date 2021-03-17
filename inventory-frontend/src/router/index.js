@@ -12,6 +12,7 @@ const PageNotFound = () => import("../views/PageNotFound.vue");
 const PermissionDenied = () => import("../views/PermissionDenied.vue");
 const EditInventoryForm = () => import("../views/EditInventoryForm.vue");
 const Logs = () => import("../views/Logs.vue");
+const TempSignIn = () => import("../views/TempSignIn.vue");
 
 Vue.use(VueRouter);
 const routes = [{
@@ -19,6 +20,10 @@ const routes = [{
     name: "Dashboard",
     alias: ["/"],
     component: Dashboard,
+  }, {
+    path: "/tempSignIn",
+    name: "TempSignIn",
+    component: TempSignIn,
   },
   {
     path: "/takeInventory",
