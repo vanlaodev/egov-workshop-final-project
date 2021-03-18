@@ -115,6 +115,10 @@
       class="shadow-sm mt-3"
       v-if="!loading"
     >
+      <b-button variant="success" @click="openModal" class="mb-2 mr-2">
+        <b-icon icon="plus-circle" aria-hidden="true"></b-icon>
+        {{ $t("add") }}
+      </b-button>
       <b-table
         responsive
         hover
@@ -138,8 +142,35 @@
         </template>
       </b-table>
     </b-card>
+
+    <b-modal id="insert-modal" size="lg" :title="$t('add')">
+      <b-table
+        responsive
+        hover
+        :items="adddetails"
+        :fields="detailsFields"
+        class="mt-3"
+        :sort-by.sync="detailsSortBy"
+        :sort-desc.sync="detailsSortDesc"
+      >
+        <template #cell(actions)>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+            <label class="form-check-label" for="flexCheckDefault">
+              {{ $t("add") }}
+            </label>
+          </div>
+        </template>
+      </b-table>
+    </b-modal>
   </div>
 </template>
+
 
 <script>
 import * as dayjs from "dayjs";
@@ -177,6 +208,7 @@ export default {
       details: [],
       detailsSortBy: "assetId",
       detailsSortDesc: false,
+      adddetails: [],
     };
   },
   computed: {
@@ -368,6 +400,13 @@ export default {
     backToinquiry() {
       this.$router.replace({ name: "InventoryFormManagement" });
     },
+    openModal() {
+      this.$bvModal.show("insert-modal");
+      this.loadAddData();
+    },
+    loadAddData() {
+
+    }
   },
 };
 </script>
