@@ -7,23 +7,29 @@
         class="mt-3"
       >
         <div class="row">
-          <b-form-group :label="$t('id')" label-for="input-id" class="col-md-6">
+          <b-form-group
+            :label="$t('id')"
+            label-for="input-id"
+            class="col-md-6 required"
+          >
             <b-form-input
               id="input-id"
               :value="originalMaster.id"
               readonly
+              required
             ></b-form-input>
           </b-form-group>
           <b-form-group
             :label="$t('department')"
             label-for="input-dept"
             v-if="selectedDept"
-            class="col-md-6"
+            class="col-md-6 required"
           >
             <b-form-input
               id="input-dept"
               :value="selectedDept.text"
               readonly
+              required
             ></b-form-input>
           </b-form-group>
         </div>
@@ -32,7 +38,7 @@
           <b-form-group
             :label="$t('title')"
             label-for="input-title"
-            class="col-md-6"
+            class="col-md-6 required"
           >
             <b-form-input
               id="input-title"
@@ -45,7 +51,7 @@
           <b-form-group
             :label="$t('status')"
             label-for="select-status"
-            class="col-md-6"
+            class="col-md-6 required"
           >
             <select
               id="select-status"
@@ -67,7 +73,7 @@
           <b-form-group
             :label="$t('from')"
             label-for="dtp-from"
-            class="col-md-6"
+            class="col-md-6 required"
           >
             <b-form-datepicker
               id="dtp-from"
@@ -76,7 +82,11 @@
               @input="onDtpFromUpdated"
             ></b-form-datepicker>
           </b-form-group>
-          <b-form-group :label="$t('to')" label-for="dtp-to" class="col-md-6">
+          <b-form-group
+            :label="$t('to')"
+            label-for="dtp-to"
+            class="col-md-6 required"
+          >
             <b-form-datepicker
               id="dtp-to"
               v-model="dtpTo"
@@ -404,9 +414,7 @@ export default {
       this.$bvModal.show("insert-modal");
       this.loadAddData();
     },
-    loadAddData() {
-
-    }
+    loadAddData() {},
   },
 };
 </script>

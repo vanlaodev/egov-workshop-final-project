@@ -78,5 +78,6 @@
   "description": "描述",
   "brand": "品牌",
   "notInventoried": "未盤點",
-  "result": "結果"
+  "result": "結果",
+  "inventoryStatistics": "盤點統計資料"
 }

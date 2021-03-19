@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1>{{ $t("dashboard") }}</h1>
+    <h1>{{ $t("inventoryStatistics") }}</h1>
     <div class="row">
       <div class="col-md-6 my-2">
-        <b-card header="Progress" class="shadow-sm">
+        <b-card header="盤點狀況" class="shadow-sm">
           <apexchart
             type="bar"
             :options="chartOptions1"
@@ -12,7 +12,7 @@
         </b-card>
       </div>
       <div class="col-md-6 my-2">
-        <b-card header="Master count" class="shadow-sm">
+        <b-card header="盤點數量" class="shadow-sm">
           <apexchart
             type="bar"
             :options="chartOptions3"
@@ -22,7 +22,7 @@
       </div>
 
       <div class="col-md-6 my-2">
-        <b-card header="Detail count" class="shadow-sm">
+        <b-card header="盤點數量分佈" class="shadow-sm">
           <apexchart :options="chartOptions2" :series="series2"></apexchart>
         </b-card>
       </div>

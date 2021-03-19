@@ -9,6 +9,7 @@ import store from "./store";
 import bus from "./eventbus";
 import "./api/api-gateway";
 import './registerServiceWorker'
+import 'iframe-resizer/js/iframeResizer.contentWindow'
 
 Vue.config.productionTip = false;
 

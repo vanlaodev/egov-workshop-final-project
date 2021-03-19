@@ -2,7 +2,7 @@
   <div id="app">
     <splash-view v-if="!appInitialized"></splash-view>
     <div v-else>
-      <b-navbar toggleable="lg" type="dark" variant="primary">
+      <b-navbar toggleable="lg" type="dark" variant="dark">
         <b-navbar-brand href="#">{{ $t("assetMgmtSystem") }}</b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -72,6 +72,11 @@
 <style>
 body {
   background-color: #eff4f7;
+}
+
+.form-group.required > label:after {
+  content: "*";
+  color: red;
 }
 </style>
 

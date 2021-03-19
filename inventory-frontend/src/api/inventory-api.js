@@ -137,17 +137,7 @@ class InventoryApi {
     const dtos = this._handleResp(resp.data);
     return dtos == null ? [] : dtos.map(this._mapLogDto);
   }
-
-  /*
-   * Permissions
-   */
-
-  async getPermission() {
-    this._assertUserLoggedIn();
-    const resp = await this.httpClient.post("v1/getPermission");
-    return this._handleResp(resp.data);
-  }
-
+  
   /*
    * Helper functions
    */

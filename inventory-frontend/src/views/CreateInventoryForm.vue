@@ -5,14 +5,20 @@
         :label="$t('department')"
         label-for="input-dept"
         v-if="selectedDept"
+        class="required"
       >
         <b-form-input
           id="input-dept"
           :value="selectedDept.text"
           readonly
+          required
         ></b-form-input>
       </b-form-group>
-      <b-form-group :label="$t('title')" label-for="input-title">
+      <b-form-group
+        :label="$t('title')"
+        label-for="input-title"
+        class="required"
+      >
         <b-form-input
           id="input-title"
           v-model="title"
@@ -21,7 +27,7 @@
         ></b-form-input>
       </b-form-group>
       <div class="row">
-        <b-form-group :label="$t('from')" label-for="dtp-from" class="col-md-6">
+        <b-form-group :label="$t('from')" label-for="dtp-from" class="col-md-6 required">
           <b-form-datepicker
             id="dtp-from"
             v-model="dtpFrom"
@@ -29,7 +35,7 @@
             @input="onDtpFromUpdated"
           ></b-form-datepicker>
         </b-form-group>
-        <b-form-group :label="$t('to')" label-for="dtp-to" class="col-md-6">
+        <b-form-group :label="$t('to')" label-for="dtp-to" class="col-md-6 required">
           <b-form-datepicker
             id="dtp-to"
             v-model="dtpTo"
