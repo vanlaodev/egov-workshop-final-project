@@ -137,7 +137,7 @@ class InventoryApi {
     const dtos = this._handleResp(resp.data);
     return dtos == null ? [] : dtos.map(this._mapLogDto);
   }
-  
+
   /*
    * Helper functions
    */

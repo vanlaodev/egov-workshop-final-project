@@ -144,30 +144,35 @@ export default {
         .catch((e) => this.showMsgDialog(e, this.$t("error")));
       this.$api.inventoryApi
         .getDashBoardDetailCount()
-        .then((p) => this.loadDashBoardDetailCount(p))
+        .then((p) => {
+          this.loadDashBoardDetailCount(p);
+        })
         .catch((e) => this.showMsgDialog(e, this.$t("error")));
     },
     loadDashboardMasterCount(data) {
-      let records = data.counter;
+      const records = data.counter;
       for (let i = 0; i < records.length; i++) {
         this.series2[i] = records[i].count;
         this.chartOptions2.labels[i] = records[i].deptName;
       }
+      window.dispatchEvent(new Event("resize")); // quick fix/workaround
     },
     loadDashboardProgress(data) {
-      let records = data.progress;
+      const records = data.progress;
       for (let i = 0; i < records.length; i++) {
         this.series1[0].data[i] = records[i].finishedCount;
         this.series1[1].data[i] = records[i].nonFinishCount;
         this.chartOptions1.xaxis.categories[i] = records[i].masterTitle;
       }
+      window.dispatchEvent(new Event("resize")); // quick fix/workaround
     },
     loadDashBoardDetailCount(data) {
-      let records = data.detailCount;
+      const records = data.detailCount;
       for (let i = 0; i < records.length; i++) {
         this.series3[0].data[i] = records[i].detailCount;
         this.chartOptions3.xaxis.categories[i] = records[i].masterTitle;
       }
+      window.dispatchEvent(new Event("resize")); // quick fix/workaround
     },
   },
   mounted() {

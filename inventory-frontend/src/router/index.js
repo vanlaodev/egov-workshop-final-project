@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store";
 import mainMenu from "../domain/main-menu";
-const Dashboard = () => import("../views/Dashboard.vue");
+import Dashboard from "../views/Dashboard.vue";
 const TakeInventory = () => import("../views/TakeInventory.vue");
 const TakeInventoryDetail = () => import("../views/TakeInventoryDetail.vue");
 const CreateInventoryForm = () => import("../views/CreateInventoryForm.vue");
