@@ -5,8 +5,12 @@ http://172.105.234.200/
 
 or
 
-https://vanlaodev.github.io/
+https://vanlaodev.github.io/ (https)
 
 
 ## api
-http://172.105.234.200:443/
+http://172.105.234.200:81/
+
+or
+
+https://vps.vanlao.com/ (https)
