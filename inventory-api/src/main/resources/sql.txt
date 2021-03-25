@@ -1,0 +1,36 @@
+﻿INSERT INTO asset (id, asset_num, asset_type, brand, budget_year, dept_id, description, DIMENSION, economic_class, feature, location, model_num, remark_cn, remark_pt, retrieval_method, serial_num, supplier, user_name, VALUE, year)
+VALUES (1, 1, 1, 'SAMSUNG', 2020, 1, 'MONITOR', '50*60', null, null, NULL, '999', '電腦螢幕', 'monitor', 1, '689', 'SAMSUNG', 'JOHN', 0, 2021);
+
+INSERT INTO asset (id, asset_num, asset_type, brand, budget_year, dept_id, description, DIMENSION, economic_class, feature, location, model_num, remark_cn, remark_pt, retrieval_method, serial_num, supplier, user_name, VALUE, year)
+VALUES (2, 2, 1, 'HP', 2019, 2, 'MONITOR', '50*60', null, null, NULL, '888', '電腦螢幕', 'monitor', 1, '111', 'HP', 'LEI', 0, 2021);
+
+INSERT INTO asset (id, asset_num, asset_type, brand, budget_year, dept_id, description, DIMENSION, economic_class, feature, location, model_num, remark_cn, remark_pt, retrieval_method, serial_num, supplier, user_name, VALUE, year)
+VALUES (3, 3, 1, 'SONY', 2018, 3, 'MONITOR', '50*60', null, null, NULL, '777', '電腦螢幕', 'monitor', 1, '222', 'SONY', 'SAM', 0, 2021);
+
+INSERT INTO asset (id, asset_num, asset_type, brand, budget_year, dept_id, description, DIMENSION, economic_class, feature, location, model_num, remark_cn, remark_pt, retrieval_method, serial_num, supplier, user_name, VALUE, year)
+VALUES (4, 4, 2, 'T1', 2020, 1, 'TABLE', '500*30', null, null, NULL, '666', '枱', 'table', 1, 'x1', 'COMPANY X', 'JOHN', 0, 2021);
+
+INSERT INTO asset (id, asset_num, asset_type, brand, budget_year, dept_id, description, DIMENSION, economic_class, feature, location, model_num, remark_cn, remark_pt, retrieval_method, serial_num, supplier, user_name, VALUE, year)
+VALUES (5, 5, 2, 'T2', 2019, 2, 'TABLE', '500*30', null, null, NULL, '555', '枱', 'table', 1, 'x2', 'COMPANY Y', 'LEI', 0, 2021);
+
+INSERT INTO asset (id, asset_num, asset_type, brand, budget_year, dept_id, description, DIMENSION, economic_class, feature, location, model_num, remark_cn, remark_pt, retrieval_method, serial_num, supplier, user_name, VALUE, year)
+VALUES (6, 6, 2, 'T3', 2018, 3, 'TABLE', '500*30', null, null, NULL, '444', '枱', 'table', 1, 'x3', 'COMPANY Z', 'SAM', 0, 2021);
+
+INSERT INTO asset (id, asset_num, asset_type, brand, budget_year, dept_id, description, DIMENSION, economic_class, feature, location, model_num, remark_cn, remark_pt, retrieval_method, serial_num, supplier, user_name, VALUE, year)
+VALUES (7, 7, 3, 'C1', 2020, 1, 'CHAIR', '40*60', null, null, NULL, '333', '座椅', 'chair', 1, 'y1', 'COMPANY 1', 'JOHN', 0, 2021);
+
+INSERT INTO asset (id, asset_num, asset_type, brand, budget_year, dept_id, description, DIMENSION, economic_class, feature, location, model_num, remark_cn, remark_pt, retrieval_method, serial_num, supplier, user_name, VALUE, year)
+VALUES (8, 8, 3, 'C2', 2019, 2, 'CHAIR', '40*60', null, null, NULL, '222', '座椅', 'chair', 1, 'y2', 'COMPANY 2', 'LEI', 0, 2021);
+
+INSERT INTO asset (id, asset_num, asset_type, brand, budget_year, dept_id, description, DIMENSION, economic_class, feature, location, model_num, remark_cn, remark_pt, retrieval_method, serial_num, supplier, user_name, VALUE, year)
+VALUES (9, 9, 3, 'C3', 2018, 3, 'CHAIR', '40*60', null, null, NULL, '111', '座椅', 'chair', 1, 'y3', 'COMPANY 3', 'SAM', 0, 2021);
+
+
+insert into department (id, name_cn, name_pt)
+values (1, 'DOI', 'DOI');
+
+insert into department (id, name_cn, name_pt)
+values (2, 'CA', 'CA');
+
+insert into department (id, name_cn, name_pt)
+values (3, 'CS', 'CS');
